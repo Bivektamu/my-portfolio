@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import About from "./components/about";
+import Banner from "./components/banner";
+import Layout from "./components/layout";
+import Project from "./components/project";
+import Skill from "./components/skill";
+import Contact from "./components/contact";
+import Seo from "./components/seo";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Seo
+        description="This is a portfolio website for Bivek Jang Gurung."
+        lang="eng-Au"
+        meta=""
+        title="Bivek | Bivek Jang Gurung | Bivek Portfolio"
+        author="Bivek Jang Gurung"
+      />
+      <Banner />
+      <About />
+      <Project />
+      <Skill />
+      <Contact />
+    </Layout>
   );
 }
 
