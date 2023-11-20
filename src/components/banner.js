@@ -65,7 +65,7 @@ const Banner = () => {
             <Container id="hire-btn">
                 <Flex>
                     <div className="grid__6 site__title">
-                        <H3>Hey</H3>
+                        <H3>Hi</H3>
                         <H1>I am Bivek</H1>
                         <H4 style={{ marginBottom: "40px" }}>Front End Developer</H4>
                         <Btn>
