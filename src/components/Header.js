@@ -80,7 +80,7 @@ const Header = () => {
 
       <Container>
         <Logo>
-          <a to='/'>BIV</a>
+          <a href='/'>BIV</a>
 
           <span onMouseEnter={() => { setSettings({ ...settings, cursor: 'hovered border__red' }) }}
             onMouseLeave={() => {
@@ -92,7 +92,7 @@ const Header = () => {
           >
           </span>
 
-          <a to='/' > EK</a>
+          <a href='/' > EK</a>
         </Logo>
 
         <a className="nav-link hvr-buzz-out tel mob" id="mob-tel" href="tel:+61452424565">

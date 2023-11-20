@@ -22,9 +22,6 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
 
-    console.log(theme)
-
-
     if (!(theme)) {
       localStorage.setItem('theme', 'light')
       setSettings({ ...settings, theme: localStorage.getItem('theme') })

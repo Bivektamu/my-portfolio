@@ -8,8 +8,7 @@ const NavItem = ({ anchorTo, index, max, activenav, setActiveNav }) => {
         if (index === max - 1) {
             setSettings({ ...settings, loading: false })
         }
-
-    }, [])
+    }, [index])
 
 
     const onClick = (e) => {
@@ -32,7 +31,7 @@ const NavItem = ({ anchorTo, index, max, activenav, setActiveNav }) => {
     return (
         <li className={(anchorTo === 'home') ? "active" : ''}>
 
-            <a to={`#${anchorTo}`} className="nav-link" data-anchor={anchorTo} onClick={(e) => onClick(e)}
+            <a href={`#${anchorTo}`} className="nav-link" data-anchor={anchorTo} onClick={(e) => onClick(e)}
                 onMouseEnter={() => setSettings({ ...settings, cursor: 'hovered' })}
                 onMouseLeave={() => setSettings({ ...settings, cursor: '' })}
             >{anchorTo}</a>

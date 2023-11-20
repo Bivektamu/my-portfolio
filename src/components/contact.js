@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, {  useState } from "react"
 
 import { ContactSection } from '../styles/contactStyles'
 import { Container, H2 } from '../styles/globalStyles'
@@ -7,14 +7,10 @@ import { SiGmail } from 'react-icons/si'
 
 import { ExternalLink } from 'react-external-link';
 
-import GlobalContext from "../context"
-
 const Contact = () => {
 
     const [flag, setflag] = useState(false)
-    const { settings } = useContext(GlobalContext)
 
-    const { loading } = settings
 
         document.addEventListener('scroll', scrolled)
 
