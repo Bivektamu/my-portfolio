@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 
-import { Container, Flex, H2 } from "../styles/globalStyles"
+import { Container, Flex, H2, Btn } from "../styles/globalStyles"
 import { AboutSection } from "../styles/aboutStyles"
+
+import { ExternalLink } from 'react-external-link'
 
 
 const About = () => {
@@ -55,10 +57,18 @@ const About = () => {
               6+ years of extensive professional experience and skills in HTML5, CSS3, SASS/SCSS, less, React.js, e.t.c. and specializing in PSD to HTML5 semantic conversion with keen attention to details. Working knowledge of design tools such as Sketch, Illustrator and Photoshop. Currently working as a freelancer and looking for full time opportunity.<br /><br />
               I believe anything can be overcome through commitment and hardwork. Always up for learning new things.
             </p>
+            <br />
+            <Btn>
+                {/* setSettings */}
+                <ExternalLink href="/pdf/Resume.pdf">
+                    My Resume
+                </ExternalLink>
+            </Btn>
           </div>
 
           <div className="grid__6 about-image">
             <img src="../images/about-me.png" alt="" />
+            
           </div>
 
         </Flex>
