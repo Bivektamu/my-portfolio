@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
     else {
       localStorage.setItem('theme', theme)
     }
-  }, [theme])
+  }, [theme, settings])
 
 
 
