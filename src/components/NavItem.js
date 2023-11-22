@@ -8,8 +8,8 @@ const NavItem = ({ anchorTo, index, max, activenav, setActiveNav }) => {
         if (index === max - 1) {
             setSettings({ ...settings, loading: false })
         }
-    }, [index, max, settings, setSettings])
-
+        // eslint-disable-next-line 
+    }, [index, max]) 
 
     const onClick = (e) => {
         e.preventDefault()

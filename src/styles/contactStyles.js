@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const ContactSection = styled.section`
-    background-position: left 50%!important;
+    background-position: bottom!important;
     background-repeat: no-repeat!important;
+    background-size: 100% auto;
     padding:0;
 
     h2 {
