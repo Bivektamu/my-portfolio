@@ -54,8 +54,8 @@ const About = () => {
           <div className="grid__6 site__title">
             <H2 style={{ marginBottom: "20px" }}>LET ME INTRODUCE MYSELF</H2>
             <p style={{ width: "70%" }}>
-              6+ years of extensive professional experience and skills in HTML5, CSS3, SASS/SCSS, less, React.js, e.t.c. and specializing in PSD to HTML5 semantic conversion with keen attention to details. Working knowledge of design tools such as Sketch, Illustrator and Photoshop. Currently working as a freelancer and looking for full time opportunity.<br /><br />
-              I believe anything can be overcome through commitment and hardwork. Always up for learning new things.
+              Hi, I am Bivek. I am a front end developer with 6+ years of extensive professional experience and skills in HTML5, CSS3, SASS/SCSS, less, React.js, etc. I have professional experience on design tools such as Sketch, Figma, Photoshop, Illustrator, etc. Currently, open for full time opportunity.
+              {/* I believe anything can be overcome through commitment and hardwork. Always up for learning new things. */}
             </p>
             <br />
             <Btn>

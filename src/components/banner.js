@@ -66,7 +66,7 @@ const Banner = () => {
                     <div className="grid__6 site__title">
                         <H3>Hi there,</H3>
                         <H1>I am Bivek</H1>
-                        <H4 style={{ marginBottom: "40px" }}>Front End Developer</H4>
+                        {/* <H4 style={{ marginBottom: "40px" }}>Front End Developer</H4> */}
                         
                     </div>
 
