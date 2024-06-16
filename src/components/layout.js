@@ -17,16 +17,8 @@ const Layout = ({ children }) => {
         ? localStorage.getItem("theme") || "light"
         : "light",
   });
-  const [windowReady, setWindowReady] = useState(false);
 
   const { theme, loading } = settings;
-
-  useEffect(() => {
-    window.addEventListener("load", loaded);
-    return () => {
-      window.removeEventListener("load", loaded);
-    };
-  }, []);
 
   useEffect(() => {
     if (!theme) {
@@ -38,7 +30,7 @@ const Layout = ({ children }) => {
   }, [theme, settings]);
 
   useEffect(() => {
-    if (loading || !windowReady) return;
+    if (loading) return;
 
     const flag = preloader();
 
@@ -83,11 +75,8 @@ const Layout = ({ children }) => {
     return () => {
       document.removeEventListener("scroll", scrolled);
     };
-  }, [windowReady, loading]);
+  }, [loading]);
 
-  function loaded() {
-    setWindowReady(true);
-  }
 
   function preloader() {
     const blob = document.getElementById("blob");

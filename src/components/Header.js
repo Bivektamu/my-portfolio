@@ -12,30 +12,23 @@ import GlobalContext from "../context/";
 const Header = () => {
   const [activeNav, setActiveNav] = useState(false);
   const [navItems, setNavItems] = useState(null);
-  const [windowReady, setWindowReady] = useState(false)
 
   const [sections, setSections] = useState([]);
 
   const { settings, setSettings } = useContext(GlobalContext);
 
+  const {loading} = settings
 
-  useEffect(()=> {
-    window.addEventListener('load', loaded)
-    return(()=> {
-    window.removeEventListener('load', loaded)
-    })
-  }, [])
 
   useEffect(() => {
-    if(!windowReady) return
     const secs = document.querySelectorAll("main > section");
 
     setSections(Array.prototype.slice.call(secs));
-   
-  }, [windowReady]);
+  }, []);
 
   useEffect(() => {
     if (sections.length > 0) {
+
       let tempNavItems = sections.map((sec, index) => {
         const secId = sec.getAttribute("id");
         if (secId) {
@@ -54,27 +47,22 @@ const Header = () => {
         }
       });
 
-      setNavItems([...tempNavItems])
-
+      setNavItems([...tempNavItems]);
     }
-// eslint-disable-next-line
+    // eslint-disable-next-line
   }, [sections]);
-
 
   function changeTheme() {
     const { theme } = settings;
     setSettings({ ...settings, theme: theme === "light" ? "dark" : "light" });
   }
 
-
-  function loaded() {
-    setWindowReady(true)
-  }
-
   return (
     <HeaderWrapper
       id="header"
-      className={`header ${windowReady?'':'hide'}  ${activeNav?'activeNav': ''}`}
+      className={`header ${loading? "hide" : ""}  ${
+        activeNav ? "activeNav" : ""
+      }`}
     >
       <Container>
         <Logo>

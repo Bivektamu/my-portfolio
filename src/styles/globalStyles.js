@@ -96,6 +96,10 @@ ${normalize}
     overflow-x:hidden;
     padding-top: 106px;
     position:relative;
+    @media screen and (max-width: 760px) {
+    padding-top: 61px;
+        
+    }
   }
 
   section {
