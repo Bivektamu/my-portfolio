@@ -49,7 +49,63 @@ const Project = () => {
         <Flex className="flex__wrap">
           <div className="grid__4">
             <ImageWrapper>
-              <img src="/images/portfolio/restaurant.jpg" className="img" alt="" />
+              <img src="/images/portfolio/la.jpg" alt="" className="img" />
+
+              <div className="link-wrapper">
+                <Btn>
+                  <ExternalLink
+                    onMouseEnter={() =>
+                      setSettings({ ...settings, cursor: "hovered" })
+                    }
+                    onMouseLeave={() =>
+                      setSettings({ ...settings, cursor: "" })
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.lapropertyco.com.au/"
+                  >
+                    View Live&nbsp;&nbsp;
+                    <FaLink />
+                  </ExternalLink>
+                </Btn>
+              </div>
+            </ImageWrapper>
+            <H5 style={{ marginTop: "16px" }}>La Property Co</H5>
+          </div>
+
+          <div className="grid__4">
+            <ImageWrapper>
+              <img src="/images/portfolio/carbon.jpg" alt="" className="img" />
+
+              <div className="link-wrapper">
+                <Btn>
+                  <ExternalLink
+                    onMouseEnter={() =>
+                      setSettings({ ...settings, cursor: "hovered" })
+                    }
+                    onMouseLeave={() =>
+                      setSettings({ ...settings, cursor: "" })
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.carbon8.com.au/"
+                  >
+                    View Live&nbsp;&nbsp;
+                    <FaLink />
+                  </ExternalLink>
+                </Btn>
+              </div>
+            </ImageWrapper>
+            <H5 style={{ marginTop: "16px" }}>Carbon 8</H5>
+          </div>
+
+          <div className="grid__4">
+            <ImageWrapper>
+              <img
+                src="/images/portfolio/restaurant.jpg"
+                className="img"
+                alt=""
+              />
 
               <div className="link-wrapper">
                 <Btn>
@@ -90,91 +146,7 @@ const Project = () => {
             <H5 style={{ marginTop: "16px" }}>RESTAURANT WEB APP</H5>
           </div>
 
-          <div className="grid__4">
-            <ImageWrapper>
-              <img src="/images/portfolio/estate.jpg" alt="" className="img" />
-
-              <div className="link-wrapper">
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://github.com/Bivektamu/real-estate"
-                  >
-                    View Code&nbsp;&nbsp;
-                    <AiFillGithub />
-                  </ExternalLink>
-                </Btn>
-
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://realestate-reactproject.netlify.app/"
-                  >
-                    View Live&nbsp;&nbsp;
-                    <FaLink />
-                  </ExternalLink>
-                </Btn>
-              </div>
-            </ImageWrapper>
-            <H5 style={{ marginTop: "16px" }}>REAL ESTATE WEB APP</H5>
-          </div>
-
-          <div className="grid__4">
-            <ImageWrapper>
-              <img src="/images/portfolio/eshop.jpg" alt="" className="img" />
-
-              <div className="link-wrapper">
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://github.com/Bivektamu/eshop"
-                  >
-                    View Code&nbsp;&nbsp;
-                    <AiFillGithub />
-                  </ExternalLink>
-                </Btn>
-
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://mobilestore-reactproject.netlify.app/"
-                  >
-                    View Live&nbsp;&nbsp;
-                    <FaLink />
-                  </ExternalLink>
-                </Btn>
-              </div>
-            </ImageWrapper>
-            <H5 style={{ marginTop: "16px" }}>MOBILE STORE WEB APP</H5>
-          </div>
+        
         </Flex>
       </Container>
       <br />
@@ -184,7 +156,11 @@ const Project = () => {
         <Flex className="flex__wrap">
           <div className="grid__4">
             <ImageWrapper>
-              <img src="/images/portfolio/fancyslider.jpg" className="img" alt="" />
+              <img
+                src="/images/portfolio/fancyslider.jpg"
+                className="img"
+                alt=""
+              />
 
               <div className="link-wrapper">
                 <Btn>
@@ -227,7 +203,11 @@ const Project = () => {
 
           <div className="grid__4">
             <ImageWrapper>
-              <img src="/images/portfolio/odometer.jpg" className="img" alt="" />
+              <img
+                src="/images/portfolio/odometer.jpg"
+                className="img"
+                alt=""
+              />
 
               <div className="link-wrapper">
                 <Btn>
@@ -270,7 +250,11 @@ const Project = () => {
 
           <div className="grid__4">
             <ImageWrapper>
-              <img src="/images/portfolio/ticker_tape.jpg" className="img" alt="" />
+              <img
+                src="/images/portfolio/ticker_tape.jpg"
+                className="img"
+                alt=""
+              />
 
               <div className="link-wrapper">
                 <Btn>

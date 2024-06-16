@@ -116,13 +116,14 @@ const Skill = () => {
           <div className="grid__6">
             <ExperienceWrapper>
               <Flex className="years__area align__top">
-                <H1 className="years">6<sup>+</sup></H1>
+                <H1 className="years">7</H1>
                 <H2>
-                  <span>Years</span>
-                  <span>Experience</span>
+                  <span>Years of</span>
                   <span>Working</span>
+                  <span>Experience</span>
                 </H2>
               </Flex>
+             
               <Flex className="flex__wrap call__area">
 
                 <a href="tel:+61452424565"><ImPhone /></a>

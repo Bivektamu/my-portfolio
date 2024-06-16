@@ -54,20 +54,19 @@ const About = () => {
           <div className="grid__6 site__title">
             <H2 style={{ marginBottom: "20px" }}>LET ME INTRODUCE MYSELF</H2>
             <p style={{ width: "70%" }}>
-              Hi, I am Bivek. I am a front end developer with 6+ years of extensive professional experience and skills in React.js, Redux, JavaScript, REST api, HTML5, CSS3, SASS/SCSS, less, etc. I have professional experience on design tools such as Sketch, Figma, Photoshop, Illustrator, etc. Currently open for full time opportunity.
-              {/* I believe anything can be overcome through commitment and hardwork. Always up for learning new things. */}
+              Hi, I am Bivek. I am a front end developer with 7 years of extensive professional experience and skills in React, Redux Toolkit, React Context API, Rest API, TypeScript, JavaScript, jQuery, WordPress, PHP, HTML5, CSS3, SASS, LESS, etc.              {/* I believe anything can be overcome through commitment and hardwork. Always up for learning new things. */}
             </p>
             <br />
             <Btn>
                 {/* setSettings */}
-                <ExternalLink href="/pdf/Resume.pdf">
+                <ExternalLink href="/pdf/Bivek_Gurung_Resume.pdf">
                     My Resume
                 </ExternalLink>
             </Btn>
           </div>
 
           <div className="grid__6 about-image">
-            <img src="../images/about-me.png" alt="" />
+            <img src="/images/banner2.svg" alt="" />
             
           </div>
 

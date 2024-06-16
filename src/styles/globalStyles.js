@@ -1,6 +1,5 @@
-import styled, { createGlobalStyle } from 'styled-components'
-import { normalize } from 'styled-normalize'
-
+import styled, { createGlobalStyle } from "styled-components";
+import { normalize } from "styled-normalize";
 
 export const GlobalStyles = createGlobalStyle`
 
@@ -19,12 +18,12 @@ ${normalize}
   body {
     font-family:'Poppins';
     /* background: #fff; */
-    background: ${props => props.theme.background};
+    background: ${(props) => props.theme.background};
     margin:0;
     font-weight: 400;
     font-size: 1.6rem;
     /* color:#777777; */
-    color: ${props => props.theme.color};
+    color: ${(props) => props.theme.color};
     line-height: 1.4;
   }
   
@@ -33,7 +32,7 @@ ${normalize}
     margin: 0;
     margin-bottom: 10px;
     line-height:1.2;
-    color:${props => props.theme.color};
+    color:${(props) => props.theme.color};
   }
 
   .grid__4 {
@@ -102,6 +101,50 @@ ${normalize}
 
   }
 
+  .blob {
+    width: 700px;
+    height: 700px;
+    animation: blob 5s infinite linear;
+    background: #faf8ff;
+    border-radius: 100%;
+    border-width: 100px;
+    border-color: #faf8ff;
+    position:absolute;
+    z-index: -1;
+    top:calc(50vh - 350px);
+    left:45%;
+    &.move {
+      // animation:none;
+      width:250px;
+      height:250px;
+  // border-radius: 71% 35% 58% 46% /  63% 43% 62% 44%;
+
+    }
+  }
+
+  
+@keyframes blob {
+  0%  {
+    transform: rotate(1turn);
+    border-radius: 110%;
+
+  }
+  25% {
+  border-radius: 71% 35% 58% 46% /  63% 43% 62% 44%;
+
+  }
+  50% {
+    border-radius: 48% 64% 57% 54% /  44% 42% 68% 66%;
+  }
+
+  75% {
+    border-radius: 111% 113% 113% 114% /  100% 110% 130% 148%;
+  }
+  100% {
+    border-radius: 80%;
+  }
+  
+}
 
   @media screen and (max-width: 760px) {
     main section:not(:last-of-type)  {
@@ -124,18 +167,16 @@ ${normalize}
       position: absolute;
       right: 50px;
       font-size: 2rem;
-      color: ${props => props.theme.color};
+      color: ${(props) => props.theme.color};
       
     }
 
   }
 
-`
-
-
+`;
 
 export const Container = styled.div`
-  margin:0 auto;
+  margin: 0 auto;
   padding: 0;
   position: relative;
   width: 1660px;
@@ -150,16 +191,14 @@ export const Container = styled.div`
   }
 
   @media screen and (max-width: 1000px) {
-      .grid__6 {
-        width: 100%;
-      }
+    .grid__6 {
+      width: 100%;
     }
-
-`
-
+  }
+`;
 
 export const Flex = styled.div`
-  display:flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
 
@@ -175,62 +214,59 @@ export const Flex = styled.div`
   }
 
   @media screen and (max-width: 1000px) {
-      flex-wrap: wrap;
-    }
+    flex-wrap: wrap;
+  }
 
-    
   @media screen and (max-width: 500px) {
     flex-direction: column;
   }
-`
+`;
 
 export const H1 = styled.h1`
-           font-size: 8rem;
-      text-transform: uppercase;
-      font-weight:700;
-`
-
+  font-size: 8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+`;
 
 export const H2 = styled.h2`
-           font-size: 4rem;
-      text-transform: uppercase;
-      font-weight:700;
-`
-
+  font-size: 4rem;
+  text-transform: uppercase;
+  font-weight: 700;
+`;
 
 export const H3 = styled.h3`
-           font-size:5rem;
-`
+  font-size: 5rem;
+`;
 
 export const H4 = styled.h4`
-           font-size: 2.4rem;
-      text-transform: uppercase;
-      font-weight:700;
-`
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  font-weight: 700;
+`;
 
 export const H5 = styled.h5`
-           font-size: 1.5rem;
-      text-transform: uppercase;
-      font-weight:700;
-`
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+`;
 
 export const Btn = styled.div`
-    padding: 15px 0;
-    position: relative;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    outline: none;
-    width: 150px;
-    cursor: pointer;
-    background: linear-gradient(90deg, #4458dc 0%, #854fee 100%);
-    background-clip: padding-box;
-    box-shadow: 0px 10px 30px rgba(57, 56, 61, 0.205);
-    a {
-      color:#fff;
-      text-transform: uppercase;
-      font-size: 1.5rem;
-      font-weight: 500;
-      display: block;
-      text-align:center;
-    }
-`
+  padding: 15px 0;
+  position: relative;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 150px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #4458dc 0%, #854fee 100%);
+  background-clip: padding-box;
+  box-shadow: 0px 10px 30px rgba(57, 56, 61, 0.205);
+  a {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+  }
+`;

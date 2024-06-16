@@ -71,7 +71,7 @@ const Banner = () => {
                     </div>
 
                     <div className="grid__6 banner-image">
-                        <img src="/images/banner-image.png" alt="banner" />
+                        <img src="/images/banner1.svg" alt="banner" />
                     </div>
                 </Flex>
             </Container>

@@ -35,6 +35,10 @@ const Header = () => {
     }
   }, [])
 
+    
+    function blobAnimate() {
+      // const 
+    } 
 
   function scrolling() {
     if (window.scrollY > 0) {
@@ -44,6 +48,7 @@ const Header = () => {
     else {
       setClsnme('')
     }
+    blobAnimate()
   }
 
 

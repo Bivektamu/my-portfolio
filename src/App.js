@@ -10,6 +10,8 @@ import Seo from "./components/seo";
 function App() {
   return (
     <Layout>
+        <div className="blob"></div>
+
       <Seo
         description="This is a portfolio website for Bivek Jang Gurung."
         lang="eng-Au"
