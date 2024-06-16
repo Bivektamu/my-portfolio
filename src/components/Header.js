@@ -1,132 +1,124 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react";
 
 import { FaMobileAlt } from "react-icons/fa";
 
-import { Container } from "../styles/globalStyles"
-import { HeaderWrapper, Logo, NavMenu } from "../styles/headerStyles"
+import { Container } from "../styles/globalStyles";
+import { HeaderWrapper, Logo, NavMenu } from "../styles/headerStyles";
 
-import NavItem from './NavItem'
+import NavItem from "./NavItem";
 
-import GlobalContext from '../context/'
-
-
+import GlobalContext from "../context/";
 
 const Header = () => {
-
-
-  const [clsnme, setClsnme] = useState('');
   const [activeNav, setActiveNav] = useState(false);
+  const [navItems, setNavItems] = useState(null);
 
+  const [sections, setSections] = useState([]);
 
-  const [sections, setSections] = useState([])
-
-  const { settings, setSettings } = useContext(GlobalContext)
+  const { settings, setSettings } = useContext(GlobalContext);
 
   useEffect(() => {
+    const secs = document.querySelectorAll("main > section");
 
-    const secs = document.querySelectorAll('main > section')
+    setSections(Array.prototype.slice.call(secs));
+   
+  }, [window.load]);
 
-    setSections(Array.prototype.slice.call(secs))
+  useEffect(() => {
+    if (sections.length > 0) {
+      let tempNavItems = sections.map((sec, index) => {
+        const secId = sec.getAttribute("id");
+        if (secId) {
+          return (
+            <NavItem
+              key={index}
+              index={index}
+              max={sections.length}
+              anchorTo={secId}
+              setActiveNav={() => setActiveNav()}
+              activeNav={activeNav}
+            />
+          );
+        } else {
+          return "";
+        }
+      });
 
-    document.addEventListener('scroll', scrolling)
-
-    return () => {
-      window.removeEventListener('scroll', scrolling)
+      setNavItems([...tempNavItems])
     }
-  }, [])
+  }, [sections]);
 
-    
-    function blobAnimate() {
-      // const 
-    } 
-
-  function scrolling() {
-    if (window.scrollY > 0) {
-      setClsnme('fixed')
-    }
-
-    else {
-      setClsnme('')
-    }
-    blobAnimate()
-  }
-
-
-  let navItem;
-  if (sections.length > 0) {
-    navItem = sections.map((sec, index) => {
-      const secId = (sec.getAttribute('id'))
-      if (secId) {
-
-        return <NavItem key={index} index={index} max={sections.length} anchorTo={secId} setActiveNav={() => setActiveNav()} activeNav={activeNav} />
-      }
-      else {
-        return ''
-      }
-    })
-  }
 
   function changeTheme() {
-    const { theme } = settings
-    setSettings({ ...settings, theme: theme === 'light' ? 'dark' : 'light' })
+    const { theme } = settings;
+    setSettings({ ...settings, theme: theme === "light" ? "dark" : "light" });
   }
 
-  let openCls = ''
+  let openCls = "";
   if (activeNav) {
-    openCls = 'active__nav'
+    openCls = "active__nav";
+  } else {
+    openCls = "";
   }
-  else {
-    openCls = ''
-  }
-
 
   return (
-    <HeaderWrapper id="header" className={`${'header ' + clsnme + ' ' + openCls}`} >
-
+    <HeaderWrapper
+      id="header"
+      className={`${"header " + openCls}`}
+    >
       <Container>
         <Logo>
-          <a href='/'>BIV</a>
+          <a href="/">BIV</a>
 
-          <span onMouseEnter={() => { setSettings({ ...settings, cursor: 'hovered border__red' }) }}
+          <span
+            onMouseEnter={() => {
+              setSettings({ ...settings, cursor: "hovered border__red" });
+            }}
             onMouseLeave={() => {
               setSettings({
-                ...settings, cursor: ''
-              })
+                ...settings,
+                cursor: "",
+              });
             }}
             onClick={() => changeTheme()}
-          >
-          </span>
+          ></span>
 
-          <a href='/' > EK</a>
+          <a href="/"> EK</a>
         </Logo>
 
-        <a className="nav-link hvr-buzz-out tel mob" id="mob-tel" href="tel:+61452424565">
+        <a
+          className="nav-link hvr-buzz-out tel mob"
+          id="mob-tel"
+          href="tel:+61452424565"
+        >
           <FaMobileAlt />
         </a>
 
-        <button id="nav__toggle" type="button" onClick={() => setActiveNav(!activeNav)}>
+        <button
+          id="nav__toggle"
+          type="button"
+          onClick={() => setActiveNav(!activeNav)}
+        >
           <span></span>
         </button>
 
         <NavMenu>
           <ul id="nav">
-            {navItem && navItem}
+            {navItems && navItems}
             <li className="desk">
-              <a className="nav-link hvr-buzz-out tel" id="mob-tel" href="tel:+61452424565">
+              <a
+                className="nav-link hvr-buzz-out tel"
+                id="mob-tel"
+                href="tel:+61452424565"
+              >
                 <FaMobileAlt />
               </a>
             </li>
           </ul>
         </NavMenu>
-
       </Container>
+    </HeaderWrapper>
+  );
+};
 
-
-
-
-    </HeaderWrapper >
-  )
-}
-
-
-export default Header
+export default Header;

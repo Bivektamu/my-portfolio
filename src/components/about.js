@@ -8,45 +8,9 @@ import { ExternalLink } from 'react-external-link'
 
 const About = () => {
 
-  const [flag, setflag] = useState(false)
-
-    document.addEventListener('scroll', scrolled)
-
-    
-    function scrolled() {
-      const secRef = document.getElementById('about')
-
-      const indexOfSec = (Array.from(secRef.parentNode.children).indexOf(secRef))
-  
-      const nav = document.getElementById('nav')
-      const navItem = (nav.childNodes[indexOfSec])
-  
-      const headerH = document.getElementById('header').getBoundingClientRect().height
-  
-  
-      const secTop = secRef.offsetTop
-      const secH = secRef.getBoundingClientRect().height
-
-      const scrolledVal = window.scrollY + headerH + 10
-
-      if (scrolledVal > secTop && scrolledVal < secTop + secH) {
-        setflag(true)
-        navItem.classList.add('active')
-      }
-      else {
-        setflag(false)
-        navItem.classList.remove('active')
-
-      }
-
-    }
-
-
-  const classNm = flag ? 'active' : ''
-
   return (
 
-    <AboutSection id='about' className={classNm}>
+    <AboutSection id='about'>
 
       <Container>
         <Flex className="row__reverse">

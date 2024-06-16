@@ -23,9 +23,6 @@ const CustomCursor = () => {
         return () => { window.removeEventListener('mousemove', mousePosition) }
     }, [])
 
-    useEffect(() => {
-        console.log(settings)
-    }, [settings])
 
 
     const { x, y } = cordPos

@@ -13,36 +13,9 @@ import { ExternalLink } from "react-external-link";
 
 const Project = () => {
   const { settings, setSettings } = useContext(GlobalContext);
-  const [flag, setflag] = useState(false);
-
-  document.addEventListener("scroll", scrolled);
-
-  function scrolled() {
-    const secRef = document.getElementById("project");
-
-    const indexOfSec = Array.from(secRef.parentNode.children).indexOf(secRef);
-
-    const nav = document.getElementById("nav");
-
-    const navItem = nav.childNodes[indexOfSec];
-    const secTop = secRef.offsetTop;
-    const secH = secRef.getBoundingClientRect().height;
-    const headerH = document
-      .getElementById("header")
-      .getBoundingClientRect().height;
-    const scrolledVal = window.scrollY + headerH + 10;
-
-    if (scrolledVal > secTop && scrolledVal < secTop + secH) {
-      setflag(true);
-      navItem.classList.add("active");
-    } else {
-      setflag(false);
-      navItem.classList.remove("active");
-    }
-  }
 
   return (
-    <ProjectSection id="project" className={flag && "active"}>
+    <ProjectSection id="project">
       <Container>
         <H2 style={{ marginBottom: "50px" }}>PROJECTS</H2>
 
@@ -149,6 +122,10 @@ const Project = () => {
         
         </Flex>
       </Container>
+      <br />
+      <br />
+      <br />
+      <br />
       <br />
       <Container>
         <H2 style={{ marginBottom: "50px" }}>NPM LIBRARIES</H2>

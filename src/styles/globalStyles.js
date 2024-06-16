@@ -25,6 +25,10 @@ ${normalize}
     /* color:#777777; */
     color: ${(props) => props.theme.color};
     line-height: 1.4;
+    overflow:hidden;
+    &.loaded {
+    overflow:auto;
+    }
   }
   
   h1, h2, h3, h4, h5{
@@ -43,16 +47,17 @@ ${normalize}
   }
 
   main {
-    overflow:hidden;
-    padding-top: 106px
+    overflow-x:hidden;
+    padding-top: 106px;
+    position:relative;
   }
 
   section {
     display: flex;
     width: 100%;
-    min-height: calc(100vh - 106px);
+    // min-height: calc(100vh - 106px);
     align-items: center;
-    padding: 0;
+    padding: 100px 0;
     
   }
 
@@ -147,6 +152,10 @@ ${normalize}
 }
 
   @media screen and (max-width: 760px) {
+
+  section {
+  padding:50px 0;
+  }
     main section:not(:last-of-type)  {
       margin-bottom: 60px;
     }
