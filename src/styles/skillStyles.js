@@ -61,7 +61,7 @@ export const ExperienceWrapper = styled.div`
   .years__area {
     margin-bottom: 100px;
     position: relative;
-
+    flex-direction:row;
     h1 {
       color: #854fee;
       sup {
@@ -80,6 +80,7 @@ export const ExperienceWrapper = styled.div`
 
   .call__area {
     width: 260px;
+    flex-direction:row;
     svg {
       width: 48px;
       height: auto;

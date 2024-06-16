@@ -17,6 +17,9 @@ export const Cursor = styled.div`
   transition: width 0.4s, height 0.4s, border 0.4s,
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s;
   will-change: width, height, border;
+  &.hide {
+    opacity: 0;
+  }
 
   @media screen and (max-width: 1000px) {
     display: none;

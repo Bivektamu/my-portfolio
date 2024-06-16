@@ -39,12 +39,13 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     if (loading || !windowReady) return;
+
+    const flag = preloader();
+
     const sections = document.querySelectorAll("main > section");
     let navItems = document.querySelectorAll("#nav > li");
 
-    document.addEventListener("scroll", scrolled);
-
-    document.querySelector("body")?.classList.add("loaded");
+    if (flag) document.addEventListener("scroll", scrolled);
 
     function scrolled() {
       const headerHeight = document
@@ -79,7 +80,6 @@ const Layout = ({ children }) => {
         }
       }
     }
-
     return () => {
       document.removeEventListener("scroll", scrolled);
     };
@@ -87,6 +87,33 @@ const Layout = ({ children }) => {
 
   function loaded() {
     setWindowReady(true);
+  }
+
+  function preloader() {
+    const blob = document.getElementById("blob");
+    const bannerHeadings = document.querySelectorAll("#hire-btn .wow");
+
+    setTimeout(() => {
+      bannerHeadings[0].classList.add("animated");
+      bannerHeadings[1].classList.add("animated");
+    }, 500);
+
+    setTimeout(() => {
+      blob.classList.remove("scale");
+    }, 1000);
+
+    setTimeout(() => {
+      blob.classList.add("animate");
+    }, 1600);
+
+    setTimeout(() => {
+      document.getElementById("header")?.classList.remove("hide");
+    }, 1800);
+
+    setTimeout(() => {
+      document.querySelector("body")?.classList.add("loaded");
+    }, 2000);
+    return true
   }
 
   const darkTheme = {

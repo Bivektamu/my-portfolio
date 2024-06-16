@@ -6,12 +6,11 @@ import Project from "./components/project";
 import Skill from "./components/skill";
 import Contact from "./components/contact";
 import Seo from "./components/seo";
+import Blob from "./components/Blob";
 
 function App() {
   return (
     <Layout>
-        <div className="blob"></div>
-
       <Seo
         description="This is a portfolio website for Bivek Jang Gurung."
         lang="eng-Au"
@@ -19,6 +18,7 @@ function App() {
         title="Bivek | Bivek Jang Gurung | Bivek Portfolio"
         author="Bivek Jang Gurung"
       />
+      <Blob />
       <Banner />
       <About />
       <Project />

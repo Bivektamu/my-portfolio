@@ -71,15 +71,14 @@ const Header = () => {
     setWindowReady(true)
   }
 
-
   return (
     <HeaderWrapper
       id="header"
-      className={`header ${activeNav?'activeNav': ''}`}
+      className={`header ${windowReady?'':'hide'}  ${activeNav?'activeNav': ''}`}
     >
       <Container>
         <Logo>
-          <a href="/">BIV</a>
+          <p>BIV</p>
 
           <span
             onMouseEnter={() => {
@@ -94,7 +93,7 @@ const Header = () => {
             onClick={() => changeTheme()}
           ></span>
 
-          <a href="/"> EK</a>
+          <p> EK</p>
         </Logo>
 
         <a

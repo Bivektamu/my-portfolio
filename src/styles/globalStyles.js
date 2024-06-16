@@ -9,6 +9,54 @@ ${normalize}
     /* cursor: none; */
   }
 
+
+.wow {
+  visibility: hidden;
+}
+
+.wow.animated {
+  animation-duration: 0.8s;
+  animation-fill-mode: both;
+  animation-name: fadeIn;
+  visibility: visible;
+}
+.wow.animated.fadeInUp {
+  animation-name: fadeInUp;
+}
+
+.wow.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.wow.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.wow.delay-3 {
+  animation-delay: 0.3s;
+}
+
+.wow.delay-4 {
+  animation-delay: 0.4s;
+}
+
+
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+
+
   html {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
@@ -105,51 +153,6 @@ ${normalize}
     }
 
   }
-
-  .blob {
-    width: 700px;
-    height: 700px;
-    animation: blob 5s infinite linear;
-    background: #faf8ff;
-    border-radius: 100%;
-    border-width: 100px;
-    border-color: #faf8ff;
-    position:absolute;
-    z-index: -1;
-    top:calc(50vh - 350px);
-    left:45%;
-    &.move {
-      // animation:none;
-      width:250px;
-      height:250px;
-  // border-radius: 71% 35% 58% 46% /  63% 43% 62% 44%;
-
-    }
-  }
-
-  
-@keyframes blob {
-  0%  {
-    transform: rotate(1turn);
-    border-radius: 110%;
-
-  }
-  25% {
-  border-radius: 71% 35% 58% 46% /  63% 43% 62% 44%;
-
-  }
-  50% {
-    border-radius: 48% 64% 57% 54% /  44% 42% 68% 66%;
-  }
-
-  75% {
-    border-radius: 111% 113% 113% 114% /  100% 110% 130% 148%;
-  }
-  100% {
-    border-radius: 80%;
-  }
-  
-}
 
   @media screen and (max-width: 760px) {
 
