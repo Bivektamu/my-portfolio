@@ -1,5 +1,3 @@
-import React, {  useState } from "react"
-
 import { ContactSection } from '../styles/contactStyles'
 import { Container, H2 } from '../styles/globalStyles'
 import { FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa'

@@ -17,8 +17,16 @@ const Layout = ({ children }) => {
         ? localStorage.getItem("theme") || "light"
         : "light",
   });
+  const [windowReady, setWindowReady] = useState(false);
 
   const { theme, loading } = settings;
+
+  useEffect(() => {
+    window.addEventListener("load", loaded);
+    return () => {
+      window.removeEventListener("load", loaded);
+    };
+  }, []);
 
   useEffect(() => {
     if (!theme) {
@@ -30,7 +38,7 @@ const Layout = ({ children }) => {
   }, [theme, settings]);
 
   useEffect(() => {
-    if(loading) return
+    if (loading || !windowReady) return;
     const sections = document.querySelectorAll("main > section");
     let navItems = document.querySelectorAll("#nav > li");
 
@@ -75,7 +83,11 @@ const Layout = ({ children }) => {
     return () => {
       document.removeEventListener("scroll", scrolled);
     };
-  }, [window.onload, loading]);
+  }, [windowReady, loading]);
+
+  function loaded() {
+    setWindowReady(true);
+  }
 
   const darkTheme = {
     color: "#fff",

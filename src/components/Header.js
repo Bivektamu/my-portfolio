@@ -12,17 +12,27 @@ import GlobalContext from "../context/";
 const Header = () => {
   const [activeNav, setActiveNav] = useState(false);
   const [navItems, setNavItems] = useState(null);
+  const [windowReady, setWindowReady] = useState(false)
 
   const [sections, setSections] = useState([]);
 
   const { settings, setSettings } = useContext(GlobalContext);
 
+
+  useEffect(()=> {
+    window.addEventListener('load', loaded)
+    return(()=> {
+    window.removeEventListener('load', loaded)
+    })
+  }, [])
+
   useEffect(() => {
+    if(!windowReady) return
     const secs = document.querySelectorAll("main > section");
 
     setSections(Array.prototype.slice.call(secs));
    
-  }, [window.load]);
+  }, [windowReady]);
 
   useEffect(() => {
     if (sections.length > 0) {
@@ -45,7 +55,9 @@ const Header = () => {
       });
 
       setNavItems([...tempNavItems])
+
     }
+// eslint-disable-next-line
   }, [sections]);
 
 
@@ -54,17 +66,16 @@ const Header = () => {
     setSettings({ ...settings, theme: theme === "light" ? "dark" : "light" });
   }
 
-  let openCls = "";
-  if (activeNav) {
-    openCls = "active__nav";
-  } else {
-    openCls = "";
+
+  function loaded() {
+    setWindowReady(true)
   }
+
 
   return (
     <HeaderWrapper
       id="header"
-      className={`${"header " + openCls}`}
+      className={`header ${activeNav?'activeNav': ''}`}
     >
       <Container>
         <Logo>

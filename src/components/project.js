@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 
 import { Btn, Container, Flex, H2, H5 } from "../styles/globalStyles";
 import { ProjectSection, ImageWrapper } from "../styles/projectStyles";

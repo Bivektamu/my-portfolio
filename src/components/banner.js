@@ -1,13 +1,6 @@
-import React, { useEffect, useState, useContext } from "react"
 
 import { Container, Flex, H1, H3 } from "../styles/globalStyles"
 import { BannerSection } from "../styles/bannerStyles"
-
-
-import GlobalContext from "../context"
-
-
-
 
 const Banner = () => {
 

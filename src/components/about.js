@@ -1,4 +1,3 @@
-import React, { useState } from "react"
 
 import { Container, Flex, H2, Btn } from "../styles/globalStyles"
 import { AboutSection } from "../styles/aboutStyles"

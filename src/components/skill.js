@@ -1,4 +1,3 @@
-import React, {useState } from "react"
 
 import { Container, Flex, H2, H1, H4 } from "../styles/globalStyles"
 import { SkillSection, ExperienceWrapper } from "../styles/skillStyles"
