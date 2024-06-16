@@ -15,5 +15,11 @@ export const AboutSection = styled.section`
         width: 100%;
       }
     }
+      @media screen and (max-width: 1000px) {
+      img {
+        width: 100%;
+        heigt:auto;
+      }
+    }
   }
 `;

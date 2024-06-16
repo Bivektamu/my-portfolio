@@ -57,8 +57,8 @@ const Layout = ({ children }) => {
 
       for (let i = 0; i < sections.length; i++) {
         if (
-          sections[i].getBoundingClientRect().top <= headerHeight &&
-          sections[i].getBoundingClientRect().bottom >= headerHeight &&
+          sections[i].getBoundingClientRect().top < headerHeight &&
+          sections[i].getBoundingClientRect().bottom > headerHeight &&
           sections[i].classList.value.indexOf("active") < 0
         ) {
           const activeSec = document.querySelector("main  section.active");

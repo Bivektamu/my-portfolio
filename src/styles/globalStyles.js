@@ -158,12 +158,16 @@ ${normalize}
 
   @media screen and (max-width: 760px) {
 
+  html, body, #root, main {
+    // height:100%;
+  }
+
   section {
   padding:50px 0;
   }
-    main section:not(:last-of-type)  {
-      margin-bottom: 60px;
-    }
+    // main section:not(:last-of-type)  {
+    //   margin-bottom: 60px;
+    // }
 
     .grid__4 {
       width: 100%;
