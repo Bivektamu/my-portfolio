@@ -41,8 +41,6 @@ ${normalize}
 }
 
 
-
-
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -56,7 +54,6 @@ ${normalize}
 }
 
 
-
   html {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
@@ -65,17 +62,18 @@ ${normalize}
 
   body {
     font-family:'Poppins';
-    /* background: #fff; */
     background: ${(props) => props.theme.background};
     margin:0;
     font-weight: 400;
     font-size: 1.6rem;
-    /* color:#777777; */
     color: ${(props) => props.theme.color};
     line-height: 1.4;
     overflow:hidden;
+    @media screen and (max-width: 760px) {
+        overflow:auto;
+    }
     &.loaded {
-    overflow:auto;
+      overflow:auto;
     }
   }
   
