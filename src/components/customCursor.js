@@ -1,33 +1,67 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from "react";
 
-import { Cursor } from '../styles/cursorStyles'
+import { Cursor } from "../styles/cursorStyles";
 
-import GlobalContext from '../context'
+import GlobalContext from "../context";
 
 const CustomCursor = () => {
+  const { settings } = useContext(GlobalContext);
 
-    const { settings } = useContext(GlobalContext)
-    const [cordPos, setCordPos] = useState({ x: 20, y: 0 })
+  
+const [cursor, setCursor] = useState({
+    x: 0,
+    y: 0,
+  })
+  
+  const [mouse, setMouse] = useState({
+    x: 0,
+    y: 0,
+  });
 
-    useEffect(() => {
+  const [diff, setDiff] = useState({
+    x: 0,
+    y: 0,
+  });
 
-        window.addEventListener('mousemove', mousePosition)
+  
+  useEffect(() => {
+    window.addEventListener("mousemove", mousePosition);
 
-        function mousePosition(e) {
-            if (window.innerWidth > 999) {
-                    setCordPos({ x: e.clientX, y: e.clientY })
-            }
+    function mousePosition(e) {
+      if (window.innerWidth > 999) {
+        setMouse( { x: e.clientX, y: e.clientY })
+      }
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", mousePosition);
+    };
+  }, []);
+
+  useEffect(() => {
+      const diffX = mouse.x - cursor.x;
+      const diffY = mouse.y - cursor.y;
+      setDiff({ x: diffX, y: diffY });
+  }, [mouse.x, mouse.y, cursor.x, cursor.y]);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+        if(diff.x !== 0 || diff.y !== 0) {
+            setCursor(prev=> ({ x: prev.x + diff.x * 0.07, y: prev.y + diff.y * 0.07 }));
         }
 
-        return () => { window.removeEventListener('mousemove', mousePosition) }
-    }, [])
+    });
+  }, [diff.x, diff.y])
 
+  const { x, y } = cursor;
 
+  return (
+    <Cursor
+      id="custom_cursor"
+      className={` ${settings.cursor}`}
+      style={{ transform: `translate3d(${x}px, ${y}px, 0)` }}
+    />
+  );
+};
 
-    const { x, y } = cordPos
-    return (
-        <Cursor id="custom_cursor" className={` ${settings.cursor}`} style={{ transform: `translate3d(${x}px, ${y}px, 0)` }} />
-    )
-}
-
-export default CustomCursor
+export default CustomCursor;
