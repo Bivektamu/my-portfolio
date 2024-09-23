@@ -26,7 +26,7 @@ const CustomCursor = () => {
 
     const { x, y } = cordPos
     return (
-        <Cursor id="custom_cursor" className={`hide ${settings.cursor}`} style={{ transform: `translate3d(${x}px, ${y}px, 0)` }} />
+        <Cursor id="custom_cursor" className={` ${settings.cursor}`} style={{ transform: `translate3d(${x}px, ${y}px, 0)` }} />
     )
 }
 

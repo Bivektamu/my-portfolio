@@ -14,8 +14,8 @@ export const Cursor = styled.div`
   z-index: 99;
   transform: translate(-50%, -50%);
   /* transform: scale(2) */
-  transition: width 0.4s, height 0.4s, border 0.4s,
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s;
+  transition: width 0.4s, height 0.4s, border 0.4s;
+    transform: 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s;
   will-change: width, height, border;
   &.hide {
     opacity: 0;
