@@ -20,12 +20,12 @@ const About = () => {
               Hi, I am Bivek. I am a front end developer with 7 years of extensive professional experience and skills in React, Redux Toolkit, React Context API, Rest API, TypeScript, JavaScript, jQuery, WordPress, PHP, HTML5, CSS3, SASS, LESS, etc.              {/* I believe anything can be overcome through commitment and hardwork. Always up for learning new things. */}
             </p>
             <br />
-            <Btn>
-                {/* setSettings */}
+            
+            {/* <Btn>
                 <ExternalLink href="/pdf/Bivek_Gurung_Resume.pdf">
                     My Resume
                 </ExternalLink>
-            </Btn>
+            </Btn> */}
           </div>
 
           <div className="grid__6 about-image">
