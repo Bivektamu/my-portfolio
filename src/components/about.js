@@ -1,8 +1,6 @@
 
-import { Container, Flex, H2, Btn } from "../styles/globalStyles"
+import { Container, Flex, H2 } from "../styles/globalStyles"
 import { AboutSection } from "../styles/aboutStyles"
-
-import { ExternalLink } from 'react-external-link'
 
 
 const About = () => {
