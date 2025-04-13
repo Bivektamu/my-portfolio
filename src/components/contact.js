@@ -1,6 +1,6 @@
 import { ContactSection } from '../styles/contactStyles'
 import { Container, H2 } from '../styles/globalStyles'
-import { FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa'
+import { FaFacebook,  FaLinkedin } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
 import { ExternalLink } from 'react-external-link';
@@ -29,9 +29,9 @@ const Contact = () => {
                         <FaLinkedin />
                     </ExternalLink>
 
-                    <ExternalLink className='github' href="https://github.com/bivektamu/">
+                    {/* <ExternalLink className='github' href="https://github.com/bivektamu/">
                         <FaGithub />
-                    </ExternalLink>
+                    </ExternalLink> */}
                 </div>
             </Container>
         </ContactSection >

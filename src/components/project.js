@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Btn, Container, Flex, H2, H5 } from "../styles/globalStyles";
 import { ProjectSection, ImageWrapper } from "../styles/projectStyles";
 
-import { AiFillGithub } from "react-icons/ai";
+// import { AiFillGithub } from "react-icons/ai";
 import { FaLink } from "react-icons/fa";
 import { SiNpm } from "react-icons/si";
 
@@ -24,24 +24,14 @@ const Project = () => {
             <ImageWrapper>
               <img src="/images/portfolio/la.jpg" alt="" className="img" />
 
-              <div className="link-wrapper">
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://www.lapropertyco.com.au/"
-                  >
-                    View Live&nbsp;&nbsp;
-                    <FaLink />
-                  </ExternalLink>
-                </Btn>
-              </div>
+              <ExternalLink
+                className="link-wrapper"
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.lapropertyco.com.au/"
+              >
+                &nbsp;
+              </ExternalLink>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>La Property Co</H5>
           </div>
@@ -50,23 +40,15 @@ const Project = () => {
             <ImageWrapper>
               <img src="/images/portfolio/carbon.jpg" alt="" className="img" />
 
-              <div className="link-wrapper">
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://www.carbon8.com.au/"
-                  >
-                    View Live&nbsp;&nbsp;
-                    <FaLink />
-                  </ExternalLink>
-                </Btn>
+              <div>
+                <ExternalLink
+                  className="link-wrapper"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.carbon8.com.au/"
+                >
+                  &nbsp;
+                </ExternalLink>
               </div>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>Carbon 8</H5>
@@ -80,46 +62,17 @@ const Project = () => {
                 alt=""
               />
 
-              <div className="link-wrapper">
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://github.com/Bivektamu/Restaurant-Webapp-V2"
-                  >
-                    View Code&nbsp;&nbsp;
-                    <AiFillGithub />
-                  </ExternalLink>
-                </Btn>
-
-                <Btn>
-                  <ExternalLink
-                    onMouseEnter={() =>
-                      setSettings({ ...settings, cursor: "hovered" })
-                    }
-                    onMouseLeave={() =>
-                      setSettings({ ...settings, cursor: "" })
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://restaurantapp.netlify.app/"
-                  >
-                    View Live&nbsp;&nbsp;
-                    <FaLink />
-                  </ExternalLink>
-                </Btn>
-              </div>
+              <ExternalLink
+                className="link-wrapper"
+                target="_blank"
+                rel="noreferrer"
+                href="https://restaurantapp.netlify.app/"
+              >
+                &nbsp;
+              </ExternalLink>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>RESTAURANT WEB APP</H5>
           </div>
-
-        
         </Flex>
       </Container>
       <br />
