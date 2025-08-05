@@ -10,8 +10,9 @@ import Blob from "./components/Blob";
 import TagManager from "react-gtm-module";
 
 function App() {
+
   const tagManagerArgs = {
-    gtmId: import.meta.env.VITE_GTM_ID,
+    gtmId: process.env.REACT_APP_GTM_ID,
   };
 
   TagManager.initialize(tagManagerArgs);
