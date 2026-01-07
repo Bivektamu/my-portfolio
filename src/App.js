@@ -7,16 +7,11 @@ import Skill from "./components/skill";
 import Contact from "./components/contact";
 import Seo from "./components/seo";
 import Blob from "./components/Blob";
-import TagManager from "react-gtm-module";
 
 function App() {
+// process.env.REACT_APP_GTM_ID,
 
-  const tagManagerArgs = {
-    gtmId: process.env.REACT_APP_GTM_ID,
-  };
-
-  TagManager.initialize(tagManagerArgs);
-
+  
   return (
     <Layout>
       <Seo
