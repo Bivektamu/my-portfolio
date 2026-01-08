@@ -1,6 +1,6 @@
 import { ContactSection } from '../styles/contactStyles'
 import { Container, H2 } from '../styles/globalStyles'
-import { FaFacebook,  FaGithub,  FaLinkedin } from 'react-icons/fa'
+import { FaGithub,  FaLinkedin } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
 import { ExternalLink } from 'react-external-link';
