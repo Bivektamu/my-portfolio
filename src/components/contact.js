@@ -1,6 +1,6 @@
 import { ContactSection } from '../styles/contactStyles'
 import { Container, H2 } from '../styles/globalStyles'
-import { FaFacebook,  FaLinkedin } from 'react-icons/fa'
+import { FaFacebook,  FaGithub,  FaLinkedin } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
 import { ExternalLink } from 'react-external-link';
@@ -17,8 +17,8 @@ const Contact = () => {
                 <div className="social">
                     <H2>Contact</H2>
 
-                    <ExternalLink className='fb' href="https://www.facebook.com/bivek.tamu.5">
-                        <FaFacebook />
+                    <ExternalLink className='fb' href="https://github.com/Bivektamu/">
+                        <FaGithub />
                     </ExternalLink>
 
                     <ExternalLink className='gmail' href="mailto:bivek.tamu@gmail.com">
