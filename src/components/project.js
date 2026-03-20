@@ -38,20 +38,20 @@ const Project = () => {
 
           <div className="grid__4">
             <ImageWrapper>
-              <img src="/images/portfolio/carbon.jpg" alt="" className="img" />
+              <img src="/images/portfolio/mobje_commerce.png" alt="" className="img" />
 
               <div>
                 <ExternalLink
                   className="link-wrapper"
                   target="_blank"
                   rel="noreferrer"
-                  href="https://www.carbon8.com.au/"
+                  href="https://mobjecommerce.netlify.app/"
                 >
                   &nbsp;
                 </ExternalLink>
               </div>
             </ImageWrapper>
-            <H5 style={{ marginTop: "16px" }}>Carbon 8</H5>
+            <H5 style={{ marginTop: "16px" }}>Mobje Commerce</H5>
           </div>
 
           <div className="grid__4">
