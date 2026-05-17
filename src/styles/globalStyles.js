@@ -68,12 +68,18 @@ ${normalize}
     font-size: 1.6rem;
     color: ${(props) => props.theme.color};
     line-height: 1.4;
+    opacity: 0;
     overflow:hidden;
+    height:100vh;
     @media screen and (max-width: 760px) {
         overflow:auto;
     }
+    &.show {
+      opacity:1;
+    }
     &.loaded {
       overflow:auto;
+      height:auto;
     }
   }
   
@@ -277,8 +283,14 @@ export const Btn = styled.div`
   width: 150px;
   cursor: pointer;
   background: linear-gradient(90deg, #4458dc 0%, #854fee 100%);
+  background-position:100%;
+  background-size:200% 100%;
+  transition: background-position 0.5s ease; /* CONTROL TIMING HERE */
   background-clip: padding-box;
   box-shadow: 0px 10px 30px rgba(57, 56, 61, 0.205);
+  &:hover {
+  background-position: -200%;
+  }
   a {
     color: #fff;
     text-transform: uppercase;

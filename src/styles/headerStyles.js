@@ -159,8 +159,26 @@ export const NavMenu = styled.nav`
         color: ${(props) => props.theme.color};
         font-size: 1.5rem;
         font-weight: 500;
+        position: relative;
+        display: block;
+        overflow: hidden;
+        span {
+          position: relative;
+          display: block;
+          transition: all 0.3s ease;
+
+          &:after {
+            position: absolute;
+            content: attr(data-text);
+            color: #854fee;
+            transform: translateY(-120%);
+            left: 0;
+          }
+        }
         &:hover {
-          color: #854fee;
+          span {
+            transform: translateY(120%);
+          }
         }
 
         &.tel {
@@ -172,7 +190,9 @@ export const NavMenu = styled.nav`
       }
 
       &.active a {
-        color: #854fee;
+        span {
+          transform: translateY(120%);
+        }
       }
     }
   }

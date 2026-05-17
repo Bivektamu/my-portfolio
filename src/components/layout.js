@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
+import Lenis from "lenis";
 import Header from "./Header";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "../styles/globalStyles";
@@ -17,6 +18,38 @@ const Layout = ({ children }) => {
         ? localStorage.getItem("theme") || "light"
         : "light",
   });
+
+  const lenisRef = useRef(null);
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2, // 👈 controls "slowness"
+      smoothWheel: true,
+      smoothTouch: false,
+    });
+
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+
+    lenisRef?.current?.scrollTo(0, {
+      duration:1
+      // immediate: true,
+      // force: true,
+    });
+
+    setTimeout(()=>{
+    document.querySelector("body")?.classList.add("show");
+
+    }, 1000)
+
+    return () => lenis.destroy();
+  }, []);
 
   const { theme, loading } = settings;
 
@@ -51,7 +84,6 @@ const Layout = ({ children }) => {
       }
 
       if (!navItems) {
-        console.log("asdf");
         navItems = document.querySelectorAll("#nav > li");
       }
 
@@ -77,10 +109,12 @@ const Layout = ({ children }) => {
     };
   }, [loading]);
 
-
   function preloader() {
     const blob = document.getElementById("blob");
     const bannerHeadings = document.querySelectorAll("#hire-btn .wow");
+    setTimeout(() => {
+      document.querySelector("body")?.classList.remove("hide");
+    }, 500);
 
     setTimeout(() => {
       bannerHeadings[0].classList.add("animated");
@@ -101,8 +135,10 @@ const Layout = ({ children }) => {
 
     setTimeout(() => {
       document.querySelector("body")?.classList.add("loaded");
+      lenisRef?.current?.start();
     }, 2000);
-    return true
+
+    return true;
   }
 
   const darkTheme = {
@@ -119,7 +155,10 @@ const Layout = ({ children }) => {
     boxShadow: "0px 10px 30px rgb(57 56 61 / 21%)",
   };
 
-  const value = useMemo(() => ({ settings, setSettings }), [settings]);
+  const value = useMemo(
+    () => ({ settings, setSettings, lenisRef }),
+    [settings, lenisRef],
+  );
 
   return (
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
@@ -127,8 +166,9 @@ const Layout = ({ children }) => {
         <GlobalStyles />
         <Header />
         <CustomCursor />
-
+        {/* <SmoothScrollProvider> */}
         <main>{children}</main>
+        {/* </SmoothScrollProvider> */}
       </GlobalContext.Provider>
     </ThemeProvider>
   );

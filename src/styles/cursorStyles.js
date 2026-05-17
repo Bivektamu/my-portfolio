@@ -4,11 +4,11 @@ export const Cursor = styled.div`
   /* background: red; */
   width: 20px;
   height: 20px;
-  top: -10px;
-  left: -10px;
+  top: -20px;
+  left: -20px;
   border-radius: 100%;
   background: none;
-  border: 2px solid #141313;
+  border: 2px solid ${props=>props.theme.color};
   position: fixed;
   pointer-events: none;
   z-index: 99;

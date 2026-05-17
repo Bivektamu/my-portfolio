@@ -6,8 +6,6 @@ export const SkillSection = styled.section`
   }
   .single__brand {
     border: 1px solid ${(props) => props.theme.borderColor};
-    /* border: 1px solid #fff; */
-    /* background: #fff; */
     text-align: center;
     padding: 15px 0;
     margin: 20px 0;
@@ -44,11 +42,20 @@ export const SkillSection = styled.section`
 
 export const ExperienceWrapper = styled.div`
   padding: 40px;
-  background: #e029290a;
   width: 350px;
   max-width: 100%;
   display: block;
   margin-left: 10vw;
+  position: relative;
+  .bg-panel {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #e029290a;
+  }
   @media screen and (max-width: 1000px) {
     margin-left: 0;
   }
@@ -57,11 +64,11 @@ export const ExperienceWrapper = styled.div`
     padding: 40px 20px;
     width: auto;
   }
-  /* margin-left: auto; */
+
   .years__area {
     margin-bottom: 100px;
     position: relative;
-    flex-direction:row;
+    flex-direction: row;
     h1 {
       color: #854fee;
       sup {
@@ -72,6 +79,7 @@ export const ExperienceWrapper = styled.div`
     h2 {
       font-weight: normal;
       text-transform: capitalize;
+
       span {
         display: block;
       }
@@ -80,7 +88,7 @@ export const ExperienceWrapper = styled.div`
 
   .call__area {
     width: 260px;
-    flex-direction:row;
+    flex-direction: row;
     svg {
       width: 48px;
       height: auto;

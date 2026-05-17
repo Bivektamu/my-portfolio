@@ -69,6 +69,6 @@ export const ImageWrapper = styled.div`
             }
 
         }
-            
+
         
 `

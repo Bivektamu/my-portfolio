@@ -10,6 +10,7 @@ import { SiNpm } from "react-icons/si";
 import GlobalContext from "../context";
 
 import { ExternalLink } from "react-external-link";
+import ProjectCard from "./ProjectCard";
 
 const Project = () => {
   const { settings, setSettings } = useContext(GlobalContext);
@@ -20,7 +21,7 @@ const Project = () => {
         <H2 style={{ marginBottom: "50px" }}>PROJECTS</H2>
 
         <Flex className="flex__wrap">
-          <div className="grid__4">
+          <ProjectCard amount={0.33}>
             <ImageWrapper>
               <img src="/images/portfolio/la.jpg" alt="" className="img" />
 
@@ -29,16 +30,24 @@ const Project = () => {
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.lapropertyco.com.au/"
+                onMouseEnter={() =>
+                  setSettings({ ...settings, cursor: "hovered" })
+                }
+                onMouseLeave={() => setSettings({ ...settings, cursor: "" })}
               >
                 &nbsp;
               </ExternalLink>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>La Property Co</H5>
-          </div>
+          </ProjectCard>
 
-          <div className="grid__4">
+          <ProjectCard amount={0.66}>
             <ImageWrapper>
-              <img src="/images/portfolio/mobje_commerce.png" alt="" className="img" />
+              <img
+                src="/images/portfolio/mobje_commerce.png"
+                alt=""
+                className="img"
+              />
 
               <div>
                 <ExternalLink
@@ -46,15 +55,19 @@ const Project = () => {
                   target="_blank"
                   rel="noreferrer"
                   href="https://mobjecommerce.netlify.app/"
+                  onMouseEnter={() =>
+                  setSettings({ ...settings, cursor: "hovered" })
+                }
+                onMouseLeave={() => setSettings({ ...settings, cursor: "" })}
                 >
                   &nbsp;
                 </ExternalLink>
               </div>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>Mobje Commerce</H5>
-          </div>
+          </ProjectCard>
 
-          <div className="grid__4">
+          <ProjectCard amount={1}>
             <ImageWrapper>
               <img
                 src="/images/portfolio/restaurant.jpg"
@@ -67,12 +80,16 @@ const Project = () => {
                 target="_blank"
                 rel="noreferrer"
                 href="https://restaurantapp.netlify.app/"
+                onMouseEnter={() =>
+                  setSettings({ ...settings, cursor: "hovered" })
+                }
+                onMouseLeave={() => setSettings({ ...settings, cursor: "" })}
               >
                 &nbsp;
               </ExternalLink>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>RESTAURANT WEB APP</H5>
-          </div>
+          </ProjectCard>
         </Flex>
       </Container>
       <br />
@@ -84,7 +101,7 @@ const Project = () => {
         <H2 style={{ marginBottom: "50px" }}>NPM LIBRARIES</H2>
 
         <Flex className="flex__wrap">
-          <div className="grid__4">
+          <ProjectCard amount={0.33}>
             <ImageWrapper>
               <img
                 src="/images/portfolio/fancyslider.jpg"
@@ -129,9 +146,9 @@ const Project = () => {
               </div>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>Fancyslider Library</H5>
-          </div>
+          </ProjectCard>
 
-          <div className="grid__4">
+          <ProjectCard amount={0.66}>
             <ImageWrapper>
               <img
                 src="/images/portfolio/odometer.jpg"
@@ -176,9 +193,9 @@ const Project = () => {
               </div>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>Odometer Library</H5>
-          </div>
+          </ProjectCard>
 
-          <div className="grid__4">
+          <ProjectCard amount={1}>
             <ImageWrapper>
               <img
                 src="/images/portfolio/ticker_tape.jpg"
@@ -215,6 +232,7 @@ const Project = () => {
                     target="_blank"
                     rel="noreferrer"
                     href="https://tickertapedemo.netlify.app/"
+                    
                   >
                     View Live&nbsp;&nbsp;
                     <FaLink />
@@ -223,7 +241,7 @@ const Project = () => {
               </div>
             </ImageWrapper>
             <H5 style={{ marginTop: "16px" }}>Fancyslider Library</H5>
-          </div>
+          </ProjectCard>
         </Flex>
       </Container>
     </ProjectSection>
