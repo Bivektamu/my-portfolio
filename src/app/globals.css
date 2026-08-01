@@ -1,0 +1,79 @@
+:root {
+  /* Light theme (default) */
+  --color-bg: #fff;
+  --color-text: #24292f;
+  --color-border: #201f1f17;
+  --color-shadow: rgb(57 56 61 / 21%);
+  --color-accent: #ff014f;
+  --color-muted: #666;
+
+  /* Typography */
+  --font-family: var(--font-poppins), "Poppins", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 3rem;
+
+  /* Spacing */
+  --space-section: 100px;
+  --space-container: 1200px;
+
+  /* Layout */
+  --header-height: 70px;
+}
+
+[data-theme="dark"] {
+  --color-bg: #24292f;
+  --color-text: #fff;
+  --color-border: rgba(225, 225, 225, 0.1);
+  --color-shadow: rgb(0 0 0 / 50%);
+  --color-muted: #aaa;
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Scroll margin for sections (accounts for fixed header) */
+section {
+  scroll-margin-top: var(--header-height);
+}
