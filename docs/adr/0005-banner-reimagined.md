@@ -1,6 +1,6 @@
 # 0005 — Banner Reimagined
 
-**Status**: Accepted
+**Status**: Superseded by 0008 (banner completely redesigned for code-editor aesthetic)
 **Feature**: Banner reimagined (Roadmap #18)
 **Date**: 2026-08-24
 

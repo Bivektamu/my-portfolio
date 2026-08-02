@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
     setTheme(document.documentElement.dataset.theme || "light");

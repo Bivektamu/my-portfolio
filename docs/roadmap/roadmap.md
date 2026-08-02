@@ -1,4 +1,4 @@
-# Portfolio Site — Next.js Migration
+﻿# Portfolio Site — Next.js Migration
 
 Build approach: Skateboard — ship the thinnest usable whole first, then layer in polish
 
@@ -31,6 +31,20 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 23 | Advanced micro-interactions | Slice 2 | medium | no | done |
 | 24 | Page transitions & noise overlay | Slice 2 | medium | no | done |
 | 25 | Performance optimization | Slice 3 | lean | no | done |
+| 26 | Design system v3 (Code-editor aesthetic) | Foundation | medium | yes | done |
+| 27 | Extract content data to JSON | Foundation | lean | no | done |
+| 28 | Header redesign (Tab nav, Fira Code) | Skateboard | medium | no | done |
+| 29 | Home / Banner redesign | Skateboard | medium | yes | done |
+| 30 | Snake game (playable, scored) | Skateboard | full | yes | done |
+| 31 | About redesign (File explorer, code snippets, gists) | Skateboard | medium | yes | done |
+| 32 | Projects redesign (Tech filters, new cards) | Skateboard | medium | no | done |
+| 33 | Skills redesign | Skateboard | lean | no | done |
+| 34 | Contact redesign (Form with validation states) | Skateboard | medium | no | done |
+| 35 | Contact form backend (API route + email) | Slice 2 | medium | yes | done |
+| 36 | 404 page | Skateboard | lean | no | done |
+| 37 | Responsive polish & mobile QA | Slice 3 | lean | no | done |
+| 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | done |
+| 39 | Performance optimization v2 | Slice 3 | lean | no | done |
 
 ## Foundation
 
@@ -256,10 +270,140 @@ Done when: Lighthouse Performance score is 90+, the 3D element lazy loads and do
 
 - [x] `/develop Performance optimization`
 
+## Foundation — Code-Editor Redesign
+
+### 26. Design system v3 (Code-editor aesthetic) `done`
+
+Intent: Replace the current Awwwards glassmorphism design system with a code-editor and terminal inspired visual language. New font stack (Fira Code for display and headings, Inter for body), a dark code-editor color palette drawn from the design tokens (`#020618` background, `#0f172b` surfaces, `#f8fafc` text, accent colors `#615fff` blue, `#00d5be` green, `#c27aff` purple, `#ffb86a` orange, `#46ecd5` teal), 8px border radius tokens, and blur effect tokens. CSS custom properties in globals.css replace the v2 tokens. The design is dark-first with a light theme alternative. Existing components (cursor, noise overlay, scroll spy, preloader) are retained and adapted to the new tokens.
+
+Done when: globals.css defines the full v3 token set, Fira Code and Inter load via next/font/google, all existing sections render with the new tokens, and the theme toggle still switches light/dark.
+
+- [x] Design it: `/blueprint Design system v3 (Code-editor aesthetic)` — [ADR 0007](../adr/0007-design-system-v3.md)
+- [x] Build it: `/develop Design system v3`
+  - Update font loading in layout.js (AC-1)
+  - Rewrite globals.css with v3 tokens (AC-2 to AC-6)
+  - Remove 3D blob and clean up references (AC-7)
+  - Adapt surviving components to v3 tokens (AC-7)
+  - Verify token coverage against tokens.json
+- [x] Verify it: `/verify Design system v3`
+- [x] Test it: `/test Design system v3`
+
+### 27. Extract content data to JSON
+
+Intent: Move all hardcoded content (projects array, skills array, social links, personal info text) out of section components into static JSON files under `src/data/`. Each section imports its data file. This makes content edits trivial and keeps components focused on rendering.
+
+Done when: `src/data/projects.json`, `src/data/skills.json`, `src/data/socials.json`, and `src/data/personal.json` exist and are imported by their respective section components. No content strings remain hardcoded in JSX.
+
+- [x] `/develop Extract content data to JSON`
+
+## Skateboard — All Sections Redesigned
+
+### 28. Header redesign (Tab nav, Fira Code)
+
+Intent: A code-editor inspired header. The logo "BIVEK" in Fira Code with a tab-like container, navigation menu items rendered as editor tabs with an active orange stroke (`#ffb86a`). On mobile, a hamburger menu opens a full dropdown. The header sits inside the foreground container matching the design's 70px padding frame.
+
+Done when: header renders with Fira Code logo in a tab container, nav links are styled as editor tabs, active section has the orange stroke indicator, mobile hamburger opens a dropdown menu, and the header is fixed on scroll.
+
+- [x] `/develop Header redesign (Tab nav, Fira Code)`
+
+### 29. Home / Banner redesign · Needs ADR
+
+Intent: A split home section. Left side: the developer introduction ("Hi there, I'm"), name in large Fira Code display, job title, and a row of social link buttons. Right side: the interactive snake game area (feature 30). Below, a secondary row with call-to-action links. The layout sits inside the home foreground container with the design's background blur effects (blue and green blurs at 174px).
+
+Done when: introduction text, name (48px Fira Code), job title, and social link buttons render on the left, the snake game area is positioned on the right, background blurs are present, and the layout matches the design on desktop and mobile.
+
+- [x] Design it: `/blueprint Home / Banner redesign`
+
+### 30. Snake game (playable, scored) · Needs ADR · full
+
+Intent: A fully playable Snake game embedded in the home section. The player controls a snake that eats food to grow, avoiding walls and its own tail. Features: arrow key and on-screen button controls, score tracking, game-over state with "Game Over" display and a "Start Again" button, and a "Well Done" state on reaching a high score. The game board uses the dark code-editor background (`#011627`) with teal snake body (`#46ecd5`). Built as a self-contained client component so it does not block the page.
+
+Done when: snake moves with arrow keys and on-screen buttons, eating food increases score and snake length, collision with walls or self triggers game-over state, start-again resets the game, and the game runs at smooth frame rate without affecting page scroll.
+
+- [x] Design it: `/blueprint Snake game`
+
+### 31. About redesign (File explorer, code snippets, gists) · Needs ADR
+
+Intent: A code-editor file-explorer layout. Left sidebar: a vertical accordion of pages (personal-info, professional-info, hobbies) with folder icons and expandable file items. Main area: editor tabs at the top, and two panels side by side. The left panel shows a code-snippet styled bio with line numbers and a scrollbar. The right panel shows GitHub gist style cards (user avatar, username, timestamp, star count, code block preview) showcasing code snippets. Clicking a sidebar file switches the main content.
+
+Done when: file explorer sidebar renders with expandable folders and file items, clicking a file opens the corresponding content, bio panel renders with line numbers and scroll, gist cards render with avatar, username, stars, and code preview, and the layout matches the design on desktop and mobile.
+
+- [x] Design it: `/blueprint About redesign`
+
+### 32. Projects redesign (Tech filters, new cards)
+
+Intent: A projects section with a technology filter sidebar. Left sidebar: checkboxes for each technology (React, HTML, CSS, Vue, Angular, Gatsby, Flutter, etc.) with check icons. Main area: a grid of project cards with rounded top images, card bodies with project title and description, and a link icon button. Selecting technologies filters the visible projects. Cards have hover states with an elevated shadow effect.
+
+Done when: technology checkboxes render and filter projects on click, project cards render with images, titles, descriptions, and link buttons, hover states show the elevated effect, and the layout is responsive.
+
+- [x] `/develop Projects redesign (Tech filters, new cards)`
+
+### 33. Skills redesign
+
+Intent: The skills section adapted to the new code-editor aesthetic. Skills are displayed as technology tags with icon and label, matching the design's technology chip style (icon + name in a bordered container). The experience panel with "7 Years of Working Experience" and the call button is retained but restyled with the new tokens.
+
+Done when: skill chips render with icons and labels in the new style, the experience panel is restyled with v3 tokens, and the layout matches the design on desktop and mobile.
+
+- [x] `/develop Skills redesign`
+
+### 34. Contact redesign (Form with validation states)
+
+Intent: A contact section split into two panels. Left panel: a form with name, email, and message fields in the code-editor input style (dark background, border stroke, error states with red border and error icon). Right panel: a live code snippet display that updates based on form input values. The form validates on submit and shows inline error messages. On successful validation, a thank-you message replaces the form.
+
+Done when: form renders with styled inputs, validation shows inline errors with red borders and error icons, the code snippet panel updates as the user types, submit shows a thank-you state, and all states (empty, filling, error, submitted, thank-you) match the design.
+
+- [x] `/develop Contact redesign (Form with validation states)`
+
+### 35. Contact form backend (API route + email) · Needs ADR
+
+Intent: A Next.js API route or server action that receives the contact form submission, validates the data server-side, and sends an email notification. Uses a transactional email service. Rate limiting prevents abuse.
+
+Done when: submitting the form sends a real email, server-side validation catches bad inputs, rate limiting is in place, and errors are handled gracefully with user-facing messages.
+
+- [x] Design it: `/blueprint Contact form backend`
+
+### 36. 404 page
+
+Intent: A custom 404 page matching the code-editor aesthetic. Shows "404" in large Fira Code display text, a "Page not found" message styled as a code comment, and a link back home styled as a terminal command. The page sits within the same foreground container and dark background as the rest of the site.
+
+Done when: navigating to a non-existent route shows the 404 page, the design matches the reference image, and the home link works.
+
+- [x] `/develop 404 page`
+
+## Slice 2 — Interactive Features
+
+(Features 30 and 35 are the interactive features; they are designed and built during the Skateboard phase. This slice is reserved for any follow-up enhancements.)
+
+## Slice 3 — Polish & Ship
+
+### 37. Responsive polish & mobile QA
+
+Intent: Test every redesigned section on real mobile viewports (375px per the design files), fix layout issues, verify touch targets, and ensure the snake game, file explorer, and form work on mobile. The mobile designs in the reference images are the acceptance baseline.
+
+Done when: every section matches its mobile reference image at 375px, touch interactions work for the snake game buttons, file explorer accordion, and form inputs, and there are no horizontal overflow issues.
+
+- [ ] `/develop Responsive polish & mobile QA`
+
+### 38. Accessibility audit (WCAG AA)
+
+Intent: Audit the full site against WCAG AA. Ensure color contrast meets minimum ratios (the dark code-editor palette must be verified), all interactive elements are keyboard accessible (snake game has keyboard controls, form fields have labels, file explorer is navigable), and screen readers can parse the code-snippet and gist content meaningfully.
+
+Done when: automated audit (axe or Lighthouse) passes WCAG AA, manual keyboard testing covers all interactive features, and any contrast or focus issues are resolved.
+
+- [ ] `/develop Accessibility audit (WCAG AA)`
+
+### 39. Performance optimization v2
+
+Intent: With the new design system and snake game in place, audit Core Web Vitals. Ensure Fira Code and Inter fonts load efficiently, the snake game does not cause layout shift or block the main thread, all images use next/image, and the contact form code-snippet panel does not cause expensive re-renders.
+
+Done when: Lighthouse Performance score is 90+, the snake game initializes without blocking first paint, font loading uses optimal strategy (swap, size-adjust), and interaction to Next Paint is under 200ms.
+
+- [ ] `/develop Performance optimization v2`
+
 ## Legend
 
 **Status**: `planned` (not started) · `in-progress` (building) · `done` (built and verified) · `existing` (pre-dates this workflow) · `dropped` (de-scoped)
 
 **Weight**: `lean` (skip design review and harden) · `medium` (normal path) · `full` (design review and harden required)
 
-**Phase**: `Foundation` (scaffolding, standards, design system) · `Skateboard` (thinnest usable whole) · `Slice 2` · `Slice 3` · `Slice 4` · `Slice 5` · `Slice 6` (Awwwards visual upgrade) · `Slice 7` (3D & advanced interactions) · `Slice 8` (final polish)
+**Phase**: `Foundation` (scaffolding, standards, design system) · `Skateboard` (thinnest usable whole) · `Slice 2` (interactive features) · `Slice 3` (polish and ship) · (Legacy phases: `Slice 4`–`Slice 8` — completed migration and Awwwards upgrade)

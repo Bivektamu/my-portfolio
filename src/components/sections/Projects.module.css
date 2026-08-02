@@ -1,133 +1,215 @@
+/* ── Projects — Tech Filter Layout ── */
+
 .projects {
-  padding: var(--space-section) 0;
+  padding: var(--foreground-padding);
 }
 
-.container {
-  max-width: var(--space-container);
+.foreground {
+  max-width: var(--foreground-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--foreground-radius);
+  display: flex;
+  overflow: hidden;
 }
 
-.heading {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
+/* ── Sidebar ── */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebarTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-muted);
+}
+
+.techList {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.techItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color var(--duration-fast) var(--ease-out-expo);
+}
+
+.techItem:hover {
   color: var(--color-text);
-  margin-bottom: 50px;
-  letter-spacing: -0.5px;
 }
 
-/* ── Grid ── */
+.techItem.checked {
+  color: var(--color-accent-teal);
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.checkIcon {
+  color: var(--color-accent-teal);
+}
+
+/* ── Main area ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  padding: 12px 24px;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-tab-stroke);
+  border-bottom: 2px solid var(--color-tab-stroke);
+}
+
+/* ── Project grid ── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
-  margin-bottom: 80px;
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 /* ── Card ── */
 .card {
-  border-radius: var(--radius-lg);
-  overflow: hidden;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  transition:
-    transform var(--duration-normal) var(--ease-out-expo),
-    border-color var(--duration-normal) var(--ease-out-expo),
-    box-shadow var(--duration-normal) var(--ease-out-expo);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo);
 }
 
 .card:hover {
-  transform: translateY(-4px);
   border-color: var(--color-border-hover);
-  box-shadow: 0 20px 50px var(--color-shadow),
-    0 0 30px var(--color-shadow-glow);
+  transform: translateY(-2px);
 }
 
-/* ── Image ── */
-.imageWrapper {
+.cardImage {
   position: relative;
+  height: 160px;
   overflow: hidden;
-  aspect-ratio: 16 / 10;
 }
 
-.imageWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s var(--ease-out-expo);
+.cardImage img {
+  transition: transform 0.4s var(--ease-out-expo);
 }
 
-.card:hover .imageWrapper img {
-  transform: scale(1.08);
-}
-
-/* ── Overlay ── */
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 10, 15, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out-expo);
-}
-
-.card:hover .overlay {
-  opacity: 1;
-}
-
-.overlayLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 20px;
-  background: var(--gradient-accent);
-  color: #fff;
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  transition:
-    transform var(--duration-fast) var(--ease-spring),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
-}
-
-.overlayLink:hover {
+.card:hover .cardImage img {
   transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
 }
 
-/* ── Card body ── */
 .cardBody {
-  padding: 18px 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .cardTitle {
-  font-size: var(--font-size-base);
-  font-weight: 600;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
   color: var(--color-text);
-  letter-spacing: 0.2px;
+  font-weight: 500;
+}
+
+.cardDesc {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-dev-note);
+  color: var(--color-text-muted);
+}
+
+.cardLinks {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cardLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-dev-note);
+  color: var(--color-text-secondary);
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+}
+
+.cardLink:hover {
+  border-color: var(--color-accent-teal);
+  color: var(--color-accent-teal);
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+@media (max-width: 768px) {
+  .projects {
+    padding: 16px;
   }
-}
 
-@media (max-width: 600px) {
+  .foreground {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .techList {
+    flex-direction: row;
+    padding: 8px 12px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
   .grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .heading {
-    font-size: var(--font-size-2xl);
+    padding: 16px;
   }
 }

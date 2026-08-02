@@ -1,0 +1,14 @@
+{
+  "name": "Bivek Gurung",
+  "jobTitle": "Front End Developer",
+  "intro": "Hi there, I'm",
+  "bio": [
+    "I'm a passionate front-end developer based in Australia with a focus on creating modern, performant web applications.",
+    "I specialize in React, Next.js, and the modern JavaScript ecosystem. I love building clean, accessible interfaces that feel great to use and look beautiful.",
+    "When I'm not coding, you'll find me exploring new technologies, contributing to open-source, or hiking in the great outdoors."
+  ],
+  "phone": "+61452424565",
+  "email": "bivekgurung9@gmail.com",
+  "location": "Australia",
+  "experienceYears": 7
+}

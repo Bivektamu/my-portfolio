@@ -1,3 +1,5 @@
+/* ── Header — Code-Editor Tab Style ── */
+
 .header {
   position: fixed;
   top: 0;
@@ -7,81 +9,86 @@
   height: var(--header-height);
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
-  transition: background-color 0.3s ease;
 }
 
 .container {
-  max-width: var(--space-container);
+  max-width: var(--foreground-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--foreground-padding);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+/* ── Logo ── */
 .logo {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 10px;
+  padding: 16px 24px;
+  font-family: var(--font-family-display);
+  text-decoration: none;
+  color: var(--color-text);
 }
 
-.logo button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.logoText {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-logo);
+  line-height: var(--line-height-logo);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
+.logo:hover .logoText {
+  color: var(--color-text);
+}
+
+/* ── Desktop nav (tab style) ── */
 .nav {
   display: flex;
   align-items: center;
 }
 
-.nav ul {
+.navHeader {
+  display: none;
+}
+
+.navList {
   display: flex;
-  gap: 32px;
+  gap: 0;
   list-style: none;
 }
 
-.nav a {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
-  padding: 8px 0;
+.navLink {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-navigate);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: var(--tab-padding);
+  display: block;
   position: relative;
+  border-bottom: 2px solid transparent;
+  transition: color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo);
 }
 
-.nav a:hover,
-.nav a.active {
-  color: var(--color-accent);
+.navLink:hover {
+  color: var(--color-text);
 }
 
-.nav a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--color-accent);
-  transition: width 0.3s ease;
+.navLink.active {
+  color: var(--color-tab-stroke);
+  border-bottom-color: var(--color-tab-stroke);
 }
 
-.nav a:hover::after,
-.nav a.active::after {
-  width: 100%;
-}
-
+/* ── Hamburger ── */
 .hamburger {
   display: none;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 16px;
   flex-direction: column;
   gap: 5px;
   z-index: 1001;
@@ -91,12 +98,13 @@
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--color-text);
+  background: var(--color-text-secondary);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .hamburger.open span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
+  background: var(--color-text);
 }
 
 .hamburger.open span:nth-child(2) {
@@ -105,17 +113,15 @@
 
 .hamburger.open span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
+  background: var(--color-text);
 }
 
-.phoneLink {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--font-size-lg);
-  color: var(--color-accent);
-}
-
+/* ── Mobile nav ── */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
   .hamburger {
     display: flex;
   }
@@ -127,26 +133,42 @@
     width: 280px;
     height: 100vh;
     background: var(--color-bg);
-    padding: 100px 40px 40px;
-    transition: right 0.3s ease;
     border-left: 1px solid var(--color-border);
-    box-shadow: -5px 0 30px var(--color-shadow);
+    transition: right 0.3s ease;
+    flex-direction: column;
+    padding: 0;
   }
 
   .nav.open {
     right: 0;
   }
 
-  .nav ul {
+  .navHeader {
+    display: flex;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .navLabel {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-navigate);
+    color: var(--color-text-secondary);
+  }
+
+  .navList {
     flex-direction: column;
-    gap: 24px;
+    padding: 12px 0;
   }
 
-  .nav a {
-    font-size: var(--font-size-lg);
+  .navLink {
+    padding: 12px 24px;
+    font-size: var(--font-size-navigate);
+    border-bottom: none;
+    border-left: 2px solid transparent;
   }
 
-  .phoneLink {
-    display: none;
+  .navLink.active {
+    border-bottom: none;
+    border-left-color: var(--color-tab-stroke);
   }
 }

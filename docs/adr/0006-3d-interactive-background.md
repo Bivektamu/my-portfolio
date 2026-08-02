@@ -1,6 +1,6 @@
 # 0006 — 3D Interactive Background
 
-**Status**: Accepted
+**Status**: Superseded by 0007 (3D blob removed in v3 code-editor redesign)
 **Feature**: 3D interactive background (Roadmap #22)
 **Date**: 2026-08-24
 

@@ -4,8 +4,8 @@
 
 - **Language / Runtime**: JavaScript (ES6+), Node 20+
 - **Framework**: Next.js 16.2 (App Router), React 19.2
-- **Key dependencies**: motion 12 (framer-motion), lenis 1.3 (smooth scroll), react-icons 4, @react-three/fiber + @react-three/drei + three (3D blob)
-- **Styling**: CSS Modules (new) + CSS custom properties for theming. Legacy styled-components remain in package.json during migration.
+- **Key dependencies**: motion 12 (framer-motion), react-icons 4, next/font/google (Fira Code + Inter)
+- **Styling**: CSS Modules + CSS custom properties (Design System v3 — code-editor aesthetic). Legacy styled-components remain in package.json during migration.
 - **Package manager**: npm
 
 ## Build approach
@@ -34,6 +34,12 @@ npm run lint
 npm test
 ```
 
+## Context files
+
+- [src/components/AGENTS.md](src/components/AGENTS.md) — Shared component conventions and legacy migration notes
+- [src/components/sections/AGENTS.md](src/components/sections/AGENTS.md) — Section specific conventions
+- [src/components/snake/AGENTS.md](src/components/snake/AGENTS.md) — Snake game component conventions
+
 ## ADRs
 
 Stored in `docs/adr/`. Active:
@@ -41,22 +47,26 @@ Stored in `docs/adr/`. Active:
 - [0002 — Scroll Parallax](./docs/adr/0002-scroll-parallax.md)
 - [0003 — Scroll Spy](./docs/adr/0003-scroll-spy.md)
 - [0004 — Theme Toggle](./docs/adr/0004-theme-toggle.md)
-- [0005 — Banner Reimagined](./docs/adr/0005-banner-reimagined.md)
-- [0006 — 3D Interactive Background](./docs/adr/0006-3d-interactive-background.md)
+- [0005 — Banner Reimagined](./docs/adr/0005-banner-reimagined.md) (Superseded by 0008)
+- [0006 — 3D Interactive Background](./docs/adr/0006-3d-interactive-background.md) (Superseded — 3D blob removed in v3)
+- [0007 — Design System v3 (Code-Editor Aesthetic)](./docs/adr/0007-design-system-v3.md)
+- [0008 — Banner Redesign](./docs/adr/0008-banner-redesign.md)
+- [0009 — Snake Game](./docs/adr/0009-snake-game.md)
+- [0010 — About Redesign (File Explorer)](./docs/adr/0010-about-redesign.md)
+- [0011 — Contact Form Backend](./docs/adr/0011-contact-form-backend.md)
 
 ## Rules
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
-- **Section architecture**: 5 `<section>` blocks (home, about, project, skill, contact) composed in `src/app/page.js`. Each section in `src/components/sections/` with a co-located CSS Module. Sections that use motion hooks (parallax, stagger reveals) carry `"use client"` directly. RevealOnScroll from `src/components/animations/` wraps sections that only need entrance animations.
+- **Section architecture**: 5 `<section>` blocks (home, about, project, skill, contact) composed in `src/app/page.js`. Each section in `src/components/sections/` with a co-located CSS Module. Sections carry `"use client"` directly — no RevealOnScroll wrapper.
 - **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact`. These match nav anchors. Do not change them. Note: the projects section uses `project` id (singular), not `projects`.
-- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` / `[data-theme="dark"]` for theming. Dark-first: default theme is dark (tokens on `:root`). Light theme lives under `[data-theme="light"]`. Use `--glass-bg`, `--glass-border`, `--glass-blur` tokens for backdrop-filter cards and panels. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
-- **Theme**: `data-theme` attribute on `<html>`. Set via inline script in root layout (before paint, no flash). Client components read/write via `localStorage`. No React context for theme.
-- **Fonts**: `next/font/google` in root layout — Poppins, loaded as CSS variable.
-- **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections (skateboard slice). Lenis reassessed in Slice 2.
-- **Animation wrapper pattern**: RevealOnScroll wraps sections that only need entrance animations. Sections with parallax or stagger carry `"use client"` directly. 3D components (R3F) are lazy loaded via `next/dynamic({ ssr: false })` and skip on mobile.
+- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` / `[data-theme="dark"]` for theming (Design System v3 — code-editor aesthetic). Dark-first: default theme is dark (tokens on `:root`). Light theme lives under `[data-theme="light"]`. Pattern tokens for tabs, code blocks, inputs, file explorers, gist cards, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
+- **Theme**: `data-theme` attribute on `<html>`. Default is dark. Set via inline script in root layout (before paint, no flash). Client components read/write via `localStorage`. No React context for theme.
+- **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
+- **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
 - **Motion imports**: always from `motion/react`, not `framer-motion`.
-- **R3F components**: lazy load via `next/dynamic({ ssr: false })`, skip on mobile (`innerWidth < 768`), respect `prefers-reduced-motion`. R3F (~150KB) is code-split.
-- **Data**: static JSON files in `src/data/` (projects, skills, social). Imported directly in server components — no API routes, no database. Note: currently data is hardcoded in section components; `src/data/` directory does not exist yet.
+- **Data**: static JSON files in `src/data/` (projects.json, skills.json, socials.json, personal.json). Imported directly in components — no API routes for data, no database.
+- **Contact form**: POST `/api/contact` with server-side validation and rate limiting. Nodemailer-ready for email sending (needs SMTP credentials in env).
 - **Images**: use Next.js `Image` from `next/image` with explicit `width`/`height` and `sizes` attribute.
 - **File naming**: PascalCase for components. One CSS Module per component: `Banner.js` + `Banner.module.css`.
 
@@ -64,20 +74,23 @@ Stored in `docs/adr/`. Active:
 
 | Directory / File | Owns | Status |
 |---|---|---|
-| `src/app/layout.js` | Root layout, fonts, metadata, inline theme script, preloader, noise overlay | Done |
-| `src/app/page.js` | Composes 5 sections | Done |
-| `src/app/globals.css` | CSS custom properties, reset, design tokens | Done |
-| `src/components/sections/Banner.js` | Hero — character stagger reveal, animated gradient bg, glass CTA, 3D blob, 3-layer parallax | Done |
-| `src/components/sections/About.js` | About — creative image frame, staggered paragraph reveals, scroll parallax | Done |
-| `src/components/sections/Projects.js` | Projects grid — glass cards, backdrop-blur overlays, staggered entrance | Done |
-| `src/components/sections/Skills.js` | Skills grid — animated cards, gradient accent experience panel | Done |
-| `src/components/sections/Contact.js` | Contact — animated social pills, gradient hover states | Done |
-| `src/components/header/` | Header, MobileNav, ThemeToggle | Done |
-| `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection | Done |
+| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, inline theme script, preloader, noise overlay, skip-to-content link | Done |
+| `src/app/page.js` | Composes 5 sections (no wrapper components) | Done |
+| `src/app/globals.css` | Design System v3 CSS custom properties, reset, pattern tokens, scrollbar, focus-visible, skip-link | Done |
+| `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
+| `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
+| `src/components/sections/Banner.js` | Home — split layout: intro text (Fira Code), social links, CTA, plus snake game | Done |
+| `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, code-snippet bio, GitHub gist cards | Done |
+| `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar, project cards with hover effects | Done |
+| `src/components/sections/Skills.js` | Skills — tech chips with icons, experience panel with year count | Done |
+| `src/components/sections/Contact.js` | Contact — form with validation states, live code snippet preview, social strip | Done |
+| `src/components/header/` | Header, MobileNav, ThemeToggle (code-editor tab style) | Done |
+| `src/components/snake/` | SnakeGame — canvas-based, arrow keys + on-screen buttons, score, game-over/win states | Done |
+| `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection (teal accent) | Done |
 | `src/components/preloader/` | Intro preloader sequence (blob animation) | Done |
 | `src/components/animations/` | RevealOnScroll, ScrollSpy, NoiseOverlay (SVG grain texture) | Done |
-| `src/components/3d/` | BlobScene (R3F morphing blob, mouse parallax, mobile skip) | Done |
 | `src/components/hooks/` | useMagnetic (magnetic hover hook, radius + strength config) | Done |
+| `src/data/` | Static JSON: projects.json, skills.json, socials.json, personal.json | Done |
 
 ## Legacy CRA files
 
@@ -94,15 +107,19 @@ Stored in `docs/adr/`. Active:
 | `src/components/index.js` | Unused IndexPage duplicate | Legacy |
 | `src/components/hooks/useScrollSpy.js` | IntersectionObserver scroll spy hook | Migrated to `animations/ScrollSpy.js` |
 | `src/styles/*.js` | styled-components theme objects | Legacy, do not touch |
+| `src/components/3d/` | BlobScene (R3F morphing blob) | Removed in v3 — replaced by CSS background blurs |
 
 ## Gotchas
 
 - **Migration complete**: new and old code coexist. Do not import from old CRA into new Next.js.
 - **Legacy CSS**: `src/styles/*.js` are for old CRA components. Do not touch them.
 - **Test script is CRA-era**: `npm test` still uses `react-scripts test`.
-- **3D blob**: R3F (~150KB) is code-split via `next/dynamic`. Never loads on mobile (`innerWidth < 768`). The `::before` CSS gradient dims when 3D is active via `[data-3d]`.
-- **data/ directory**: no JSON data files exist yet. Projects, skills, and social data are hardcoded in section components.
-- **Preloader**: gates body visibility. Banner `animate` prop fires after preloader unblocks children.
+- **3D blob removed**: R3F/three.js dependency removed. Background blurs in Banner.module.css replace it. The `src/components/3d/` directory is deleted.
+- **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Default theme is dark. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, gist cards, and foreground containers.
+- **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. page.js composes sections directly.
+- **Preloader**: gates body visibility. Uses code-editor accent colors.
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
-- **`react-icons/fi`**: used in Contact section for social links (FiGithub, FiLinkedin, FiMail, FiTwitter).
+- **`react-icons/fi`**: used in Contact and Banner sections for social links (FiGithub, FiLinkedin, FiMail, FiTwitter).
 - **`react-icons/im`**: used in Skills section for phone icon (ImPhone).
+- **Snake game**: canvas-based, self-contained client component. Arrow keys and on-screen buttons. Does not block page scroll.
+- **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Logs to console by default; needs SMTP_USER and SMTP_PASS env vars for email sending via Nodemailer.

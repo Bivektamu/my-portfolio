@@ -1,0 +1,111 @@
+/* ── Snake Game ── */
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 260px;
+}
+
+.label,
+.score {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-muted);
+}
+
+.board {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  background: var(--code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.canvas {
+  display: block;
+}
+
+/* ── Overlays ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(2, 6, 24, 0.85);
+  border-radius: var(--radius-md);
+}
+
+.overlayTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-game-over);
+  color: var(--color-text);
+}
+
+.overlayBtn {
+  padding: var(--tab-padding);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+}
+
+.overlayBtn:hover {
+  border-color: var(--color-accent-teal);
+  color: var(--color-accent-teal);
+}
+
+/* ── Directional controls ── */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ctrlRow {
+  display: flex;
+  gap: 4px;
+}
+
+.ctrlBtn {
+  width: 48px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color var(--duration-fast) var(--ease-out-expo);
+}
+
+.ctrlBtn:hover {
+  border-color: var(--color-accent-teal);
+}
+
+@media (min-width: 769px) {
+  .controls {
+    display: none;
+  }
+}

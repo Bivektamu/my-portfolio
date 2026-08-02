@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FaMobileAlt } from "react-icons/fa";
 import { useActiveSection } from "@/components/animations/ScrollSpy";
 import styles from "./Header.module.css";
 
@@ -9,7 +8,7 @@ export default function MobileNav({ links }) {
   const [open, setOpen] = useState(false);
   const activeSection = useActiveSection();
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     setOpen(false);
   };
 
@@ -26,23 +25,21 @@ export default function MobileNav({ links }) {
       </button>
 
       <nav className={`${styles.nav} ${open ? styles.open : ""}`}>
-        <ul>
+        <div className={styles.navHeader}>
+          <span className={styles.navLabel}>navigate</span>
+        </div>
+        <ul className={styles.navList}>
           {links.map((link) => (
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                className={link.id === activeSection ? styles.active : ""}
+                className={`${styles.navLink} ${link.id === activeSection ? styles.active : ""}`}
                 onClick={handleClick}
               >
                 {link.label}
               </a>
             </li>
           ))}
-          <li>
-            <a href="tel:+61452424565" className={styles.phoneLink}>
-              <FaMobileAlt />
-            </a>
-          </li>
         </ul>
       </nav>
     </>

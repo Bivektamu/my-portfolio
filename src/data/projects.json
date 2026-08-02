@@ -1,0 +1,45 @@
+{
+  "projects": [
+    {
+      "title": "La Property Co",
+      "image": "/images/portfolio/la.jpg",
+      "link": "https://www.lapropertyco.com.au/",
+      "npm": null,
+      "live": "https://www.lapropertyco.com.au/"
+    },
+    {
+      "title": "Mobje Commerce",
+      "image": "/images/portfolio/mobje_commerce.png",
+      "link": "https://mobjecommerce.netlify.app/",
+      "npm": null,
+      "live": "https://mobjecommerce.netlify.app/"
+    },
+    {
+      "title": "RESTAURANT WEB APP",
+      "image": "/images/portfolio/restaurant.jpg",
+      "link": "https://restaurantapp.netlify.app/",
+      "npm": null,
+      "live": "https://restaurantapp.netlify.app/"
+    }
+  ],
+  "libraries": [
+    {
+      "title": "Fancyslider Library",
+      "image": "/images/portfolio/fancyslider.jpg",
+      "npm": "https://www.npmjs.com/package/react-fancyslider",
+      "live": "https://fancysliderdemo.netlify.app/"
+    },
+    {
+      "title": "Odometer Library",
+      "image": "/images/portfolio/odometer.jpg",
+      "npm": "https://www.npmjs.com/package/react-simple-odometer",
+      "live": "https://simpleodometerdemo.netlify.app/"
+    },
+    {
+      "title": "Ticker Tape Library",
+      "image": "/images/portfolio/ticker_tape.jpg",
+      "npm": "https://www.npmjs.com/package/react-ticker-tape",
+      "live": "https://tickertapedemo.netlify.app/"
+    }
+  ]
+}

@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { FaMobileAlt } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 import MobileNav from "./MobileNav";
 import styles from "./Header.module.css";
 
 const NAV_LINKS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "project", label: "Projects" },
-  { id: "skill", label: "Skills" },
-  { id: "contact", label: "Contact" },
+  { id: "home", label: "_hello" },
+  { id: "about", label: "_about-me" },
+  { id: "project", label: "_projects" },
+  { id: "skill", label: "_skills" },
+  { id: "contact", label: "_contact-me" },
 ];
 
 export default function Header() {
@@ -17,9 +16,8 @@ export default function Header() {
     <header id="header" className={styles.header}>
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
-          <p>BIV</p>
+          <span className={styles.logoText}>bivek_gurung</span>
           <ThemeToggle />
-          <p>EK</p>
         </Link>
 
         <MobileNav links={NAV_LINKS} />

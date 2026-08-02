@@ -1,195 +1,218 @@
+/* ── Banner — Code-Editor Home ── */
+
 .banner {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: var(--header-height);
-  position: relative;
+  justify-content: center;
   overflow: hidden;
-  isolation: isolate;
+  padding: var(--foreground-padding);
 }
 
-/* ── Animated gradient background ── */
-.banner::before {
-  content: "";
+/* ── Background blurs ── */
+.blurBlue,
+.blurGreen {
   position: absolute;
-  inset: -20%;
-  z-index: 0;
+  border-radius: 50%;
+  filter: var(--blur-blue);
   pointer-events: none;
-  opacity: 0.4;
-  background:
-    radial-gradient(circle at 20% 30%, var(--color-accent-2), transparent 50%),
-    radial-gradient(circle at 80% 70%, var(--color-accent), transparent 50%),
-    radial-gradient(circle at 50% 50%, var(--color-accent-3), transparent 40%);
-  background-size: 120% 120%;
-  background-position: 0% 0%, 100% 100%, 50% 50%;
-  animation: bgShift 20s ease-in-out infinite alternate;
-  transform: translateY(var(--bg-y, 0px));
-  will-change: transform;
+  z-index: 0;
 }
 
-[data-theme="light"] .banner::before {
+.blurBlue {
+  width: 439px;
+  height: 418px;
+  background: var(--color-accent-blue);
   opacity: 0.15;
+  top: -100px;
+  left: -100px;
 }
 
-/* When 3D blob is active, dim the CSS gradient */
-.banner[data-3d]::before {
-  opacity: 0.06;
+.blurGreen {
+  width: 439px;
+  height: 418px;
+  background: var(--color-accent-green);
+  opacity: 0.12;
+  bottom: -100px;
+  right: -100px;
 }
 
-[data-theme="light"] .banner[data-3d]::before {
-  opacity: 0.04;
-}
-
-@keyframes bgShift {
-  0% {
-    background-position: 0% 0%, 100% 100%, 50% 50%;
-  }
-  100% {
-    background-position: 100% 20%, 0% 80%, 80% 30%;
-  }
-}
-
-/* ── Reduced motion ── */
-@media (prefers-reduced-motion: reduce) {
-  .banner::before {
-    animation: none;
-  }
-}
-
-.container {
-  max-width: var(--space-container);
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
+/* ── Foreground container ── */
+.foreground {
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: var(--foreground-max-width);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--foreground-radius);
+  padding: 64px;
 }
 
-.row {
+/* ── Content split ── */
+.content {
   display: flex;
   align-items: center;
-  gap: 60px;
+  gap: 80px;
 }
 
-.textCol {
+.intro {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Typography ── */
+.comment {
+  color: var(--color-text-muted);
 }
 
 .greeting {
-  font-size: var(--font-size-xl);
-  font-weight: 400;
-  color: var(--color-muted);
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-intro);
+  line-height: var(--line-height-intro);
+  color: var(--color-text-secondary);
 }
 
 .name {
-  font-size: var(--font-size-5xl);
-  font-weight: 700;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-name);
+  line-height: var(--line-height-name);
   color: var(--color-text);
-  line-height: 1.05;
-  margin-bottom: 36px;
+  font-weight: 500;
+}
+
+.jobTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-job-title);
+  line-height: var(--line-height-job-title);
+  color: var(--color-accent-teal);
+  margin-bottom: 16px;
+}
+
+/* ── Social link buttons ── */
+.socialLinks {
   display: flex;
+  gap: 8px;
   flex-wrap: wrap;
-  perspective: 400px;
 }
 
-.name span {
-  display: inline-block;
-}
-
-.space {
-  width: 0.35em;
-}
-
-/* ── CTA button ── */
-.cta {
-  display: inline-flex;
+.socialBtn {
+  display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: var(--color-text);
-  background: transparent;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  position: relative;
-  overflow: hidden;
-  transition:
-    border-color var(--duration-normal) var(--ease-out-expo),
-    box-shadow var(--duration-normal) var(--ease-out-expo),
-    color var(--duration-normal) var(--ease-out-expo);
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-secondary);
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
 }
 
-.cta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--gradient-accent);
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out-expo);
-  z-index: -1;
+.socialBtn:hover {
+  border-color: var(--color-accent-teal);
+  color: var(--color-accent-teal);
+}
+
+/* ── CTA buttons ── */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cta {
+  padding: 10px 20px;
+  background: var(--color-accent-teal);
+  color: var(--color-bg);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  font-weight: 500;
+  transition: opacity var(--duration-fast) var(--ease-out-expo);
 }
 
 .cta:hover {
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 0 30px var(--color-shadow-glow),
-    0 0 60px rgba(99, 102, 241, 0.08);
+  opacity: 0.85;
 }
 
-.cta:hover::before {
-  opacity: 1;
+.resume {
+  padding: 10px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-secondary);
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
 }
 
-.ctaArrow {
-  display: inline-block;
-  transition: transform var(--duration-normal) var(--ease-spring);
+.resume:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
 }
 
-.cta:hover .ctaArrow {
-  transform: translateY(3px);
+/* ── Right column: Snake game ── */
+.gameArea {
+  flex: 0 0 auto;
 }
 
-/* ── Image ── */
-.imageCol {
-  flex: 1;
+.gamePlaceholder {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.imageCol img {
-  max-width: 100%;
-  height: auto;
-  filter: drop-shadow(0 0 40px var(--color-shadow-glow));
+.gameLabel {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.gameBoard {
+  width: 260px;
+  height: 260px;
+  background: var(--color-bg-code);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-    text-align: center;
+@media (max-width: 1024px) {
+  .content {
     gap: 40px;
   }
 
+  .foreground {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 16px;
+  }
+
+  .foreground {
+    padding: 24px;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 32px;
+  }
+
   .name {
-    justify-content: center;
+    font-size: 32px;
   }
 
-  .imageCol {
-    order: -1;
-  }
-
-  .imageCol img {
-    max-width: 260px;
-  }
-
-  .cta {
-    padding: 12px 28px;
+  .gameBoard {
+    width: 200px;
+    height: 200px;
   }
 }

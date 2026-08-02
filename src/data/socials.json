@@ -1,0 +1,8 @@
+{
+  "socials": [
+    { "href": "https://github.com/bivekgurung", "icon": "FiGithub", "label": "GitHub" },
+    { "href": "https://www.linkedin.com/in/bivek-gurung-145880145/", "icon": "FiLinkedin", "label": "LinkedIn" },
+    { "href": "mailto:bivekgurung9@gmail.com", "icon": "FiMail", "label": "Email" },
+    { "href": "#", "icon": "FiTwitter", "label": "Twitter" }
+  ]
+}

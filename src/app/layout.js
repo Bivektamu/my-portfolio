@@ -1,4 +1,4 @@
-import { Poppins } from "next/font/google";
+import { Fira_Code, Inter } from "next/font/google";
 import Header from "@/components/header/Header";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import Preloader from "@/components/preloader/Preloader";
@@ -6,11 +6,18 @@ import ScrollSpy from "@/components/animations/ScrollSpy";
 import NoiseOverlay from "@/components/animations/NoiseOverlay";
 import "./globals.css";
 
-const poppins = Poppins({
+const firaCode = Fira_Code({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-poppins",
+  variable: "--font-fira-code",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
 const SECTION_IDS = ["home", "about", "project", "skill", "contact"];
@@ -31,14 +38,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en-AU" className={poppins.variable} suppressHydrationWarning>
+    <html lang="en-AU" className={`${firaCode.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('theme') || 'light';
+                  var theme = localStorage.getItem('theme') || 'dark';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
               })();
@@ -47,12 +54,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <Preloader>
           <ScrollSpy sectionIds={SECTION_IDS}>
             <Header />
             <CustomCursor />
             <NoiseOverlay />
-            <main>{children}</main>
+            <main id="main-content" role="main">{children}</main>
           </ScrollSpy>
         </Preloader>
       </body>

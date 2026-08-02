@@ -1,82 +1,158 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Design System v3 — Code-Editor Aesthetic
+   Dark-first (default), light alternative under [data-theme="light"]
+   ═══════════════════════════════════════════════════════════════════════ */
+
 :root {
-  /* Dark theme (default — Awwwards style) */
-  --color-bg: #0a0a0f;
-  --color-bg-alt: #0f0f18;
-  --color-surface: #14141f;
-  --color-surface-elevated: #1a1a2e;
-  --color-text: #f0f0f5;
-  --color-text-secondary: #c0c0d0;
-  --color-muted: #6b6b80;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-hover: rgba(255, 255, 255, 0.12);
-  --color-shadow: rgba(0, 0, 0, 0.5);
-  --color-shadow-glow: rgba(99, 102, 241, 0.15);
+  /* ── Backgrounds ── */
+  --color-bg: #020618;
+  --color-bg-alt: #0f172b;
+  --color-bg-code: #011627;
+  --color-surface: #0f172b;
+  --color-surface-elevated: #1a2744;
 
-  /* Accent & gradients */
-  --color-accent: #6366f1;
-  --color-accent-2: #a855f7;
-  --color-accent-3: #ec4899;
-  --gradient-accent: linear-gradient(135deg, #6366f1, #a855f7);
-  --gradient-warm: linear-gradient(135deg, #ec4899, #f97316);
-  --gradient-subtle: linear-gradient(180deg, rgba(99, 102, 241, 0.08), transparent);
+  /* ── Text ── */
+  --color-text: #f8fafc;
+  --color-text-secondary: #90a1b9;
+  --color-text-muted: #607b9b;
 
-  /* Glass surfaces */
-  --glass-bg: rgba(20, 20, 31, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 20px;
+  /* ── Accents ── */
+  --color-accent-blue: #615fff;
+  --color-accent-green: #00d5be;
+  --color-accent-purple: #c27aff;
+  --color-accent-orange: #ffb86a;
+  --color-accent-teal: #46ecd5;
 
-  /* Typography — fluid scale */
-  --font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
-  --font-size-xs: clamp(0.7rem, 1vw, 0.75rem);
-  --font-size-sm: clamp(0.8rem, 1.2vw, 0.875rem);
-  --font-size-base: clamp(0.9rem, 1.4vw, 1rem);
-  --font-size-lg: clamp(1rem, 1.8vw, 1.125rem);
-  --font-size-xl: clamp(1.1rem, 2.2vw, 1.35rem);
-  --font-size-2xl: clamp(1.4rem, 3vw, 1.8rem);
-  --font-size-3xl: clamp(2rem, 4.5vw, 3rem);
-  --font-size-4xl: clamp(2.8rem, 6vw, 4.5rem);
-  --font-size-5xl: clamp(3.5rem, 8vw, 6rem);
-  --font-size-display: clamp(4rem, 10vw, 8rem);
+  /* Default accent (used by cursor, selection, etc.) */
+  --color-accent: var(--color-accent-teal);
 
-  /* Spacing */
+  /* ── Borders & strokes ── */
+  --color-border: #314158;
+  --color-border-hover: #607b9b;
+  --color-tab-stroke: #ffb86a;
+
+  /* ── Pattern: Tabs ── */
+  --tab-bg: transparent;
+  --tab-active-stroke: #ffb86a;
+  --tab-padding: 16px 32px;
+  --tab-gap: 10px;
+
+  /* ── Pattern: Code blocks ── */
+  --code-bg: #011627;
+  --code-radius: 8px;
+  --code-line-number-color: #607b9b;
+  --code-padding: 16px;
+
+  /* ── Pattern: Inputs & textareas ── */
+  --input-bg: #0f172b;
+  --input-border: #314158;
+  --input-border-focus: #615fff;
+  --input-error-border: #ff5555;
+  --input-radius: 8px;
+  --input-padding: 12px;
+
+  /* ── Pattern: Foreground container ── */
+  --foreground-padding: 70px;
+  --foreground-radius: 8px;
+  --foreground-max-width: 1780px;
+
+  /* ── Pattern: Gist cards ── */
+  --gist-bg: #0f172b;
+  --gist-radius: 6px;
+  --gist-padding: 26px 32px;
+
+  /* ── Pattern: File explorer ── */
+  --explorer-bg: transparent;
+  --explorer-item-padding: 12px;
+  --explorer-item-gap: 8px;
+  --explorer-icon-size: 16px;
+
+  /* ── Spacing ── */
+  --space-section-gap: 10px;
+  --space-container-padding: 70px;
   --space-section: clamp(80px, 10vw, 140px);
   --space-container: 1280px;
 
-  /* Layout */
+  /* ── Layout ── */
   --header-height: 70px;
 
-  /* Animation */
+  /* ── Effects ── */
+  --blur-blue: blur(174px);
+  --blur-green: blur(174px);
+  --shadow-game: 0px 2px 0px 0px #ffffff;
+  --shadow-code: 1px 5px 11px 0px #02121b;
+
+  /* ── Radii ── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 33px;
+  --radius-image-top: 16px 16px 0 0;
+  --radius-image-bottom: 0 0 16px 16px;
+
+  /* ── Typography ── */
+  --font-family-display: var(--font-fira-code), "Fira Code", "Fira Mono", "Courier New", monospace;
+  --font-family-body: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Fira Code sizes (from tokens.json) */
+  --font-size-logo: 16px;
+  --font-size-intro: 18px;
+  --font-size-name: 48px;
+  --font-size-job-title: 20px;
+  --font-size-button: 14px;
+  --font-size-game-over: 24px;
+  --font-size-navigate: 16px;
+
+  /* Inter sizes */
+  --font-size-dev-note: 12px;
+  --font-size-body-sm: 14px;
+
+  /* Line heights */
+  --line-height-logo: 24px;
+  --line-height-intro: 27px;
+  --line-height-name: 1.2;
+  --line-height-job-title: 30px;
+  --line-height-button: 1.4;
+  --line-height-game-over: 1.4;
+  --line-height-body: 1.5;
+
+  /* ── Animation (kept from v2) ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.22, 0.61, 0.36, 1);
   --duration-fast: 0.2s;
   --duration-normal: 0.4s;
   --duration-slow: 0.7s;
   --duration-reveal: 0.9s;
-
-  /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
 }
 
+/* ── Light theme ── */
 [data-theme="light"] {
-  --color-bg: #fafafa;
-  --color-bg-alt: #f0f0f5;
+  --color-bg: #f0f2f5;
+  --color-bg-alt: #e2e5ea;
+  --color-bg-code: #f8f9fa;
   --color-surface: #ffffff;
-  --color-surface-elevated: #f5f5fa;
+  --color-surface-elevated: #f0f2f5;
   --color-text: #1a1a2e;
   --color-text-secondary: #3d3d5c;
-  --color-muted: #6b6b80;
-  --color-border: rgba(0, 0, 0, 0.06);
-  --color-border-hover: rgba(0, 0, 0, 0.12);
-  --color-shadow: rgba(0, 0, 0, 0.08);
-  --color-shadow-glow: rgba(99, 102, 241, 0.12);
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(0, 0, 0, 0.06);
+  --color-text-muted: #6b6b80;
+  --color-border: #d1d5db;
+  --color-border-hover: #9ca3af;
+  --color-tab-stroke: #ff6a00;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-border-focus: #615fff;
+  --code-bg: #f8f9fa;
+  --gist-bg: #ffffff;
+  --tab-active-stroke: #ff6a00;
+  --shadow-game: 0px 2px 0px 0px #1a1a2e;
+  --shadow-code: 1px 3px 8px 0px rgba(0, 0, 0, 0.08);
+  --color-accent: var(--color-accent-blue);
 }
 
-/* ── Reset ── */
+/* ═══════════════════════════════════════════════════════════════════════
+   Reset
+   ═══════════════════════════════════════════════════════════════════════ */
+
 *,
 *::before,
 *::after {
@@ -91,9 +167,9 @@ html {
 }
 
 body {
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  line-height: 1.7;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
   color: var(--color-text);
   background-color: var(--color-bg);
   transition: background-color var(--duration-slow) var(--ease-out-expo),
@@ -125,6 +201,52 @@ section {
 
 /* ── Selection ── */
 ::selection {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--color-accent-teal);
+  color: #020618;
+}
+
+/* ── Scrollbar (code-editor style) ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+/* ── Skip to content ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 10002;
+  padding: 12px 24px;
+  background: var(--color-accent-teal);
+  color: var(--color-bg);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-button);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+/* ── Focus visible ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent-teal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }

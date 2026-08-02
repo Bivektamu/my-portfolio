@@ -1,90 +1,209 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion } from "motion/react";
 import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
+import { socials } from "@/data/socials.json";
 import styles from "./Contact.module.css";
 
-const SOCIALS = [
-  { href: "https://github.com/bivekgurung", icon: FiGithub, label: "GitHub" },
-  {
-    href: "https://www.linkedin.com/in/bivek-gurung-145880145/",
-    icon: FiLinkedin,
-    label: "LinkedIn",
-  },
-  { href: "mailto:bivekgurung9@gmail.com", icon: FiMail, label: "Email" },
-  { href: "#", icon: FiTwitter, label: "Twitter" },
-];
+const ICON_MAP = { FiGithub, FiLinkedin, FiMail, FiTwitter };
 
-const linkVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.08,
-      duration: 0.4,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  }),
-};
+function validateForm(data) {
+  const errors = {};
+  if (!data.name || data.name.length < 2) errors.name = "Name must be at least 2 characters.";
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
+    errors.email = "Please enter a valid email.";
+  if (!data.message || data.message.length < 10)
+    errors.message = "Message must be at least 10 characters.";
+  return errors;
+}
 
 export default function Contact() {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
+  };
+
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      const validationErrors = validateForm(form);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+
+      setStatus("submitting");
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          if (data.errors) {
+            setErrors(data.errors);
+            setStatus("idle");
+          } else {
+            setStatus("error");
+          }
+          return;
+        }
+
+        setStatus("success");
+      } catch {
+        setStatus("error");
+      }
+    },
+    [form]
+  );
+
+  // Generate code snippet preview from form data
+  const codeSnippet = `const message = {
+  name: "${form.name || "John Doe"}",
+  email: "${form.email || "john@example.com"}",
+  message: "${form.message || "Hello, I'd like to connect!"}",
+};`;
+
   return (
-    <section
-      id="contact"
-      className={styles.contact}
-      style={{ backgroundImage: "url(/images/footer-bg.png)" }}
-    >
-      <div className={styles.container}>
-        <motion.h2
-          className={styles.heading}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Let&apos;s Connect
-        </motion.h2>
-
-        <motion.p
-          className={styles.subtitle}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Have a project in mind? Let&apos;s build something great together.
-        </motion.p>
-
-        <div className={styles.social}>
-          {SOCIALS.map((social, i) => (
-            <motion.a
-              key={social.label}
-              href={social.href}
-              target={social.href.startsWith("mailto") ? undefined : "_blank"}
-              rel="noreferrer"
-              className={styles.socialLink}
-              aria-label={social.label}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={linkVariants}
-            >
-              <social.icon />
-            </motion.a>
-          ))}
+    <section id="contact" className={styles.contact}>
+      <div className={styles.foreground}>
+        <div className={styles.tabs}>
+          <div className={styles.tab}>
+            <span>contact.ts</span>
+          </div>
         </div>
 
-        <motion.p
-          className={styles.copyright}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          &copy; {new Date().getFullYear()} Bivek Gurung. All rights reserved.
-        </motion.p>
+        <div className={styles.panels}>
+          {/* Form panel */}
+          <div className={styles.formPanel}>
+            {status === "success" ? (
+              <motion.div
+                className={styles.thankYou}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <h2 className={styles.thankYouTitle}>Thank You!</h2>
+                <p className={styles.thankYouText}>
+                  Your message has been accepted. You will receive an answer very soon.
+                </p>
+              </motion.div>
+            ) : (
+              <form className={styles.form} onSubmit={handleSubmit} noValidate>
+                <div className={`${styles.field} ${errors.name ? styles.fieldError : ""}`}>
+                  <label className={styles.label}>_name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    className={styles.input}
+                    placeholder="Your name"
+                  />
+                  {errors.name && (
+                    <span className={styles.errorMsg}>
+                      <span className={styles.errorIcon}>!</span>
+                      {errors.name}
+                    </span>
+                  )}
+                </div>
+
+                <div className={`${styles.field} ${errors.email ? styles.fieldError : ""}`}>
+                  <label className={styles.label}>_email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    className={styles.input}
+                    placeholder="your@email.com"
+                  />
+                  {errors.email && (
+                    <span className={styles.errorMsg}>
+                      <span className={styles.errorIcon}>!</span>
+                      {errors.email}
+                    </span>
+                  )}
+                </div>
+
+                <div className={`${styles.field} ${errors.message ? styles.fieldError : ""}`}>
+                  <label className={styles.label}>_message</label>
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    className={styles.textarea}
+                    placeholder="Your message..."
+                    rows={5}
+                  />
+                  {errors.message && (
+                    <span className={styles.errorMsg}>
+                      <span className={styles.errorIcon}>!</span>
+                      {errors.message}
+                    </span>
+                  )}
+                </div>
+
+                {status === "error" && (
+                  <p className={styles.errorMsg}>
+                    Something went wrong. Please try again.
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={status === "submitting"}
+                >
+                  {status === "submitting" ? "Sending..." : "Send Message"}
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Code snippet panel */}
+          <div className={styles.codePanel}>
+            <div className={styles.codePanelHeader}>
+              <span className={styles.codePanelLabel}>{"// message.ts"}</span>
+            </div>
+            <pre className={styles.codePreview}>{codeSnippet}</pre>
+          </div>
+        </div>
+
+        {/* Social links footer */}
+        <div className={styles.socialStrip}>
+          <span className={styles.findMe}>_find-me-in</span>
+          {socials.map((s) => {
+            const Icon = ICON_MAP[s.icon];
+            if (!Icon) return null;
+            return (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith("mailto") ? undefined : "_blank"}
+                rel="noreferrer"
+                className={styles.socialIcon}
+                aria-label={s.label}
+              >
+                <Icon />
+              </a>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

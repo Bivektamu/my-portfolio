@@ -1,122 +1,68 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useScroll, useTransform, motion } from "motion/react";
+import { socials } from "@/data/socials.json";
+import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
+import SnakeGame from "@/components/snake/SnakeGame";
 import styles from "./Banner.module.css";
 
-const BlobScene = dynamic(() => import("@/components/3d/BlobScene"), {
-  ssr: false,
-  loading: () => null,
-});
+const ICON_MAP = { FiGithub, FiLinkedin, FiMail, FiTwitter };
 
-/* ── Staggered character reveal ── */
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.03, delayChildren: 0.15 },
-  },
-};
-
-const charVariants = {
-  hidden: { opacity: 0, y: 40, rotateX: -90 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-function AnimatedCharacters({ text }) {
-  const chars = Array.from(text);
-  return (
-    <motion.h1
-      className={styles.name}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {chars.map((char, i) => (
-        <motion.span
-          key={i}
-          variants={charVariants}
-          className={char === " " ? styles.space : undefined}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </motion.h1>
-  );
-}
-
-/* ── Banner ── */
 export default function Banner() {
   const { scrollY } = useScroll();
-  const [has3D, setHas3D] = useState(false);
-
-  useEffect(() => {
-    setHas3D(window.innerWidth >= 768);
-  }, []);
-
-  const yText = useTransform(scrollY, [0, 600], [0, -150]);
-  const yImage = useTransform(scrollY, [0, 600], [0, 50]);
-  const yBg = useTransform(scrollY, [0, 600], [0, -30]);
+  const yText = useTransform(scrollY, [0, 600], [0, -80]);
+  const yGame = useTransform(scrollY, [0, 600], [0, 30]);
 
   return (
-    <section
-      id="home"
-      className={styles.banner}
-      style={{ "--bg-y": yBg }}
-      {...(has3D ? { "data-3d": "" } : {})}
-    >
-      {has3D && <BlobScene />}
-      <div className={styles.container}>
-        <div className={styles.row}>
-          <motion.div className={styles.textCol} style={{ y: yText }}>
-            <motion.p
-              className={styles.greeting}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Hi there,
-            </motion.p>
+    <section id="home" className={styles.banner}>
+      {/* Background blurs */}
+      <div className={styles.blurBlue} />
+      <div className={styles.blurGreen} />
 
-            <AnimatedCharacters text="I am Bivek" />
+      <div className={styles.foreground}>
+        <div className={styles.content}>
+          {/* Left column: Introduction */}
+          <motion.div className={styles.intro} style={{ y: yText }}>
+            <p className={styles.greeting}>
+              <span className={styles.comment}>{"// "}</span>
+              Hi there, I&apos;m
+            </p>
+            <h1 className={styles.name}>Bivek Gurung</h1>
+            <p className={styles.jobTitle}>Front End Developer</p>
 
-            <motion.a
-              href="#project"
-              className={styles.cta}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              View My Work
-              <span className={styles.ctaArrow}>&darr;</span>
-            </motion.a>
+            <div className={styles.socialLinks}>
+              {socials.map((s) => {
+                const Icon = ICON_MAP[s.icon];
+                if (!Icon) return null;
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target={s.href.startsWith("mailto") ? undefined : "_blank"}
+                    rel="noreferrer"
+                    className={styles.socialBtn}
+                    aria-label={s.label}
+                  >
+                    <Icon />
+                    <span>{s.label}</span>
+                  </a>
+                );
+              })}
+            </div>
+
+            <div className={styles.actions}>
+              <a href="#project" className={styles.cta}>
+                View My Work
+              </a>
+              <a href="/pdf/Bivek_Gurung_Resume.pdf" className={styles.resume} target="_blank" rel="noreferrer">
+                Resume
+              </a>
+            </div>
           </motion.div>
 
-          <motion.div className={styles.imageCol} style={{ y: yImage }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                delay: 0.3,
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              <Image
-                src="/images/banner1.svg"
-                alt="Banner illustration"
-                width={500}
-                height={500}
-                sizes="(max-width: 768px) 260px, 500px"
-                priority
-              />
-            </motion.div>
+          {/* Right column: Snake game */}
+          <motion.div className={styles.gameArea} style={{ y: yGame }}>
+            <SnakeGame />
           </motion.div>
         </div>
       </div>
