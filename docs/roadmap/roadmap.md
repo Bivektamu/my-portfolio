@@ -22,6 +22,15 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 14 | Intro preloader sequence | Slice 4 | medium | no | done |
 | 15 | SEO metadata | Slice 5 | lean | no | done |
 | 16 | Responsive polish & deploy | Slice 5 | medium | no | done |
+| 17 | Visual design system v2 | Foundation | medium | yes | done |
+| 18 | Banner reimagined | Skateboard | medium | yes | done |
+| 19 | Projects showcase elevated | Skateboard | medium | no | done |
+| 20 | About & Skills sections elevated | Skateboard | lean | no | done |
+| 21 | Contact section elevated | Skateboard | lean | no | done |
+| 22 | 3D interactive background | Slice 2 | full | yes | done |
+| 23 | Advanced micro-interactions | Slice 2 | medium | no | done |
+| 24 | Page transitions & noise overlay | Slice 2 | medium | no | done |
+| 25 | Performance optimization | Slice 3 | lean | no | done |
 
 ## Foundation
 
@@ -163,10 +172,94 @@ Done when: the site looks correct on 320px, 375px, 768px, and 1024px+ viewports,
 
 - [x] `/develop Responsive polish & deploy`
 
+## Slice 6 — Awwwards Visual Upgrade
+
+### 17. Visual design system v2
+
+Intent: Redefine the site's visual language to Awwwards level. A refined, sophisticated color palette (deep dark default with vibrant accents), an expanded typography scale with bold display sizes (clamp based fluid type), glassmorphism surface tokens, gradient presets, and a subtle noise texture token. Every section inherits these new tokens so the whole site feels premium and cohesive.
+
+Done when: new CSS custom properties defined in globals.css (colors, gradients, type scale, glass surfaces, shadows), dark theme is the new default with light as alternative, and all existing sections render correctly with the new tokens.
+
+Needs ADR: yes — the design direction (color palette, typography scale, dark-first strategy) is a decision.
+
+- [x] Design it: `/blueprint Visual design system v2` — design tokens in globals.css
+
+### 18. Banner reimagined
+
+Intent: A striking hero that sets the Awwwards tone immediately. Oversized split text heading with staggered letter/word reveal on load, a gradient or animated mesh background, the profile image with a creative mask or frame, and a sculpted magnetic CTA button. This is the first impression that signals "premium."
+
+Done when: banner renders with bold oversized typography, text animates in on load with a stagger effect, the background has a dynamic gradient or animated pattern, the CTA button has a magnetic hover effect, and the parallax on scroll still works.
+
+Needs ADR: yes — the animation choreography and text-splitting approach are decisions.
+
+- [x] Design it: `/blueprint Banner reimagined` — [ADR 0005](./adr/0005-banner-reimagined.md)
+
+### 19. Projects showcase elevated
+
+Intent: A showcase grid that feels curated and interactive. Masonry or staggered asymmetric grid instead of uniform cards. Each project card has a hover image parallax or reveal effect, smooth entrance animations, and overlay links that feel tactile. The NPM libraries section gets the same treatment.
+
+Done when: project cards render in a visually interesting grid layout, hover triggers an image scale/reveal effect, cards animate in as they enter the viewport, and the overlay links have smooth transitions.
+
+- [x] `/develop Projects showcase elevated`
+
+### 20. About & Skills sections elevated
+
+Intent: The About section gets a creative split layout (large profile image with a decorative frame on one side, bio text with staggered reveal on the other). The Skills section gets animated skill bars or a dynamic icon grid with hover glow effects and a smooth marquee for additional tech stack.
+
+Done when: About section has an image with creative framing and text that reveals on scroll, Skills section has animated indicators or a dynamic grid with hover effects, and both sections feel cohesive with the new design system.
+
+- [x] `/develop About & Skills sections elevated`
+
+### 21. Contact section elevated
+
+Intent: A bold, minimal contact section. Large typography CTA with an animated underline, social links as oversized interactive pills, and a subtle animated gradient or particle background that ties back to the banner. Clean, confident, and inviting.
+
+Done when: contact section has bold typography, social links have interactive hover states, and the background has a subtle animated element that echoes the banner.
+
+- [x] `/develop Contact section elevated`
+
+## Slice 7 — 3D & Advanced Interactions
+
+### 22. 3D interactive background
+
+Intent: A Three.js (react-three-fiber) interactive 3D element — a morphing blob, particle field, or geometric shape — that responds subtly to mouse movement. It sits behind or alongside the banner and possibly the contact section, adding depth and a signature Awwwards "wow" factor without hurting performance.
+
+Done when: a 3D element renders and responds to mouse position, it performs at 60fps on desktop, it degrades gracefully on mobile (static fallback or hidden), and it integrates visually with the banner and/or contact section.
+
+Needs ADR: yes — choosing Three.js/R3F, the 3D asset approach, and the performance strategy.
+
+- [x] Design it: `/blueprint 3D interactive background` — [ADR 0006](./adr/0006-3d-interactive-background.md)
+
+### 23. Advanced micro-interactions
+
+Intent: Layer in the small details that make a site feel alive. Magnetic hover on buttons and links (elements gently pull toward the cursor), text underline reveal animations on link hover, image scale/distortion on card hover, and enhanced cursor states (cursor grows over links, shrinks over text, hides over media). These are the details that separate good from great.
+
+Done when: buttons and links have a magnetic hover effect, link underlines animate in, card images have a subtle scale on hover, and the custom cursor changes state based on the hovered element type.
+
+- [x] `/develop Advanced micro-interactions`
+
+### 24. Page transitions & noise overlay
+
+Intent: A subtle grain/noise SVG overlay across the entire site for texture (a classic Awwwards technique). Smooth section entrance animations as the user scrolls (elements slide up and fade in with staggered timing). The noise overlay is a fixed, non-interactive layer with very low opacity so it adds texture without being distracting.
+
+Done when: a noise/grain overlay is visible across the site at low opacity, sections animate in smoothly on scroll with stagger effects, and the overlay does not impact scroll or click interactions.
+
+- [x] `/develop Page transitions & noise overlay`
+
+## Slice 8 — Final Polish
+
+### 25. Performance optimization
+
+Intent: With all the visual upgrades, 3D, and animations in place, audit and optimize to ensure the site stays fast. Lazy load the 3D component, optimize images with next/image, defer non critical animations, and ensure Core Web Vitals stay green. The site must feel premium AND fast.
+
+Done when: Lighthouse Performance score is 90+, the 3D element lazy loads and doesn't block first paint, all images use next/image with proper sizing, and the site feels snappy on scroll and interaction on desktop and mobile.
+
+- [x] `/develop Performance optimization`
+
 ## Legend
 
 **Status**: `planned` (not started) · `in-progress` (building) · `done` (built and verified) · `existing` (pre-dates this workflow) · `dropped` (de-scoped)
 
 **Weight**: `lean` (skip design review and harden) · `medium` (normal path) · `full` (design review and harden required)
 
-**Phase**: `Foundation` (scaffolding, standards, design system) · `Skateboard` (thinnest usable whole) · `Slice 2` · `Slice 3` · `Slice 4` · `Slice 5`
+**Phase**: `Foundation` (scaffolding, standards, design system) · `Skateboard` (thinnest usable whole) · `Slice 2` · `Slice 3` · `Slice 4` · `Slice 5` · `Slice 6` (Awwwards visual upgrade) · `Slice 7` (3D & advanced interactions) · `Slice 8` (final polish)

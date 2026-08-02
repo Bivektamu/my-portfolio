@@ -3,6 +3,7 @@ import Header from "@/components/header/Header";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import Preloader from "@/components/preloader/Preloader";
 import ScrollSpy from "@/components/animations/ScrollSpy";
+import NoiseOverlay from "@/components/animations/NoiseOverlay";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -50,6 +51,7 @@ export default function RootLayout({ children }) {
           <ScrollSpy sectionIds={SECTION_IDS}>
             <Header />
             <CustomCursor />
+            <NoiseOverlay />
             <main>{children}</main>
           </ScrollSpy>
         </Preloader>

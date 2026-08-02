@@ -1,40 +1,82 @@
 :root {
-  /* Light theme (default) */
-  --color-bg: #fff;
-  --color-text: #24292f;
-  --color-border: #201f1f17;
-  --color-shadow: rgb(57 56 61 / 21%);
-  --color-accent: #ff014f;
-  --color-muted: #666;
+  /* Dark theme (default — Awwwards style) */
+  --color-bg: #0a0a0f;
+  --color-bg-alt: #0f0f18;
+  --color-surface: #14141f;
+  --color-surface-elevated: #1a1a2e;
+  --color-text: #f0f0f5;
+  --color-text-secondary: #c0c0d0;
+  --color-muted: #6b6b80;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.12);
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-shadow-glow: rgba(99, 102, 241, 0.15);
 
-  /* Typography */
-  --font-family: var(--font-poppins), "Poppins", sans-serif;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 3rem;
+  /* Accent & gradients */
+  --color-accent: #6366f1;
+  --color-accent-2: #a855f7;
+  --color-accent-3: #ec4899;
+  --gradient-accent: linear-gradient(135deg, #6366f1, #a855f7);
+  --gradient-warm: linear-gradient(135deg, #ec4899, #f97316);
+  --gradient-subtle: linear-gradient(180deg, rgba(99, 102, 241, 0.08), transparent);
+
+  /* Glass surfaces */
+  --glass-bg: rgba(20, 20, 31, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 20px;
+
+  /* Typography — fluid scale */
+  --font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
+  --font-size-xs: clamp(0.7rem, 1vw, 0.75rem);
+  --font-size-sm: clamp(0.8rem, 1.2vw, 0.875rem);
+  --font-size-base: clamp(0.9rem, 1.4vw, 1rem);
+  --font-size-lg: clamp(1rem, 1.8vw, 1.125rem);
+  --font-size-xl: clamp(1.1rem, 2.2vw, 1.35rem);
+  --font-size-2xl: clamp(1.4rem, 3vw, 1.8rem);
+  --font-size-3xl: clamp(2rem, 4.5vw, 3rem);
+  --font-size-4xl: clamp(2.8rem, 6vw, 4.5rem);
+  --font-size-5xl: clamp(3.5rem, 8vw, 6rem);
+  --font-size-display: clamp(4rem, 10vw, 8rem);
 
   /* Spacing */
-  --space-section: 100px;
-  --space-container: 1200px;
+  --space-section: clamp(80px, 10vw, 140px);
+  --space-container: 1280px;
 
   /* Layout */
   --header-height: 70px;
+
+  /* Animation */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 0.2s;
+  --duration-normal: 0.4s;
+  --duration-slow: 0.7s;
+  --duration-reveal: 0.9s;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 }
 
-[data-theme="dark"] {
-  --color-bg: #24292f;
-  --color-text: #fff;
-  --color-border: rgba(225, 225, 225, 0.1);
-  --color-shadow: rgb(0 0 0 / 50%);
-  --color-muted: #aaa;
+[data-theme="light"] {
+  --color-bg: #fafafa;
+  --color-bg-alt: #f0f0f5;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #f5f5fa;
+  --color-text: #1a1a2e;
+  --color-text-secondary: #3d3d5c;
+  --color-muted: #6b6b80;
+  --color-border: rgba(0, 0, 0, 0.06);
+  --color-border-hover: rgba(0, 0, 0, 0.12);
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-shadow-glow: rgba(99, 102, 241, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.06);
 }
 
-/* Reset */
+/* ── Reset ── */
 *,
 *::before,
 *::after {
@@ -45,17 +87,20 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-bg);
 }
 
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-text);
   background-color: var(--color-bg);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--duration-slow) var(--ease-out-expo),
+    color var(--duration-slow) var(--ease-out-expo);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 a {
@@ -73,7 +118,13 @@ img {
   display: block;
 }
 
-/* Scroll margin for sections (accounts for fixed header) */
+/* Scroll margin for fixed header */
 section {
   scroll-margin-top: var(--header-height);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--color-accent);
+  color: #fff;
 }

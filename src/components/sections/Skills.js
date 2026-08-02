@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "motion/react";
 import { ImPhone } from "react-icons/im";
 import styles from "./Skills.module.css";
 
@@ -14,27 +17,63 @@ const SKILLS = [
   { name: "Git", icon: "/images/skills/git.png" },
 ];
 
+const skillVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: (i) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: i * 0.06,
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
+
 export default function Skills() {
   return (
     <section id="skill" className={styles.skills}>
       <div className={styles.container}>
-        <h2 className={styles.heading}>MY SPECIALITY</h2>
+        <motion.h2
+          className={styles.heading}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          MY SPECIALITY
+        </motion.h2>
 
         <div className={styles.row}>
           <div className={styles.grid}>
-            {SKILLS.map((skill) => (
-              <div key={skill.name} className={styles.skillCard}>
+            {SKILLS.map((skill, i) => (
+              <motion.div
+                key={skill.name}
+                className={styles.skillCard}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={skillVariants}
+              >
                 <Image
                   src={skill.icon}
                   alt={skill.name}
                   width={60}
                   height={60}
+                  sizes="60px"
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className={styles.experience}>
+          <motion.div
+            className={styles.experience}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className={styles.bgPanel} />
 
             <div className={styles.expHeader}>
@@ -58,7 +97,7 @@ export default function Skills() {
                 Call Now
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

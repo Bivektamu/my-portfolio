@@ -11,50 +11,82 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 60px;
+  gap: 80px;
 }
 
-.textCol {
-  flex: 1;
-}
-
-.heading {
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 20px;
-}
-
-.textCol p {
-  font-size: var(--font-size-base);
-  color: var(--color-muted);
-  line-height: 1.8;
-  max-width: 70%;
-}
-
+/* ── Image ── */
 .imageCol {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
-.imageCol img {
-  max-width: 100%;
-  height: auto;
+.imageFrame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
 }
 
+.imageFrame img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.imageAccent {
+  position: absolute;
+  bottom: -12px;
+  right: -12px;
+  width: 120px;
+  height: 120px;
+  background: var(--gradient-accent);
+  border-radius: var(--radius-lg);
+  opacity: 0.3;
+  filter: blur(30px);
+  z-index: -1;
+}
+
+/* ── Text ── */
+.textCol {
+  flex: 1;
+}
+
+.heading {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+.textCol p {
+  font-size: var(--font-size-base);
+  color: var(--color-muted);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.textCol p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .row {
     flex-direction: column-reverse;
     text-align: center;
-    gap: 40px;
+    gap: 50px;
   }
 
-  .textCol p {
-    max-width: 100%;
-  }
-
-  .imageCol img {
+  .imageFrame img {
     max-width: 280px;
+  }
+
+  .imageAccent {
+    bottom: -8px;
+    right: -8px;
+    width: 80px;
+    height: 80px;
   }
 }

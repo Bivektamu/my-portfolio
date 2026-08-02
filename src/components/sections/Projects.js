@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "motion/react";
 import { FaLink } from "react-icons/fa";
 import { SiNpm } from "react-icons/si";
 import styles from "./Projects.module.css";
@@ -48,9 +51,30 @@ const LIBRARIES = [
   },
 ];
 
-function ProjectCard({ item }) {
+const cardVariants = {
+  hidden: { opacity: 0, y: 60, scale: 0.95 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
+
+function ProjectCard({ item, index }) {
   return (
-    <div className={styles.card}>
+    <motion.div
+      className={styles.card}
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={cardVariants}
+    >
       <div className={styles.imageWrapper}>
         <Image
           src={item.image}
@@ -82,8 +106,10 @@ function ProjectCard({ item }) {
           )}
         </div>
       </div>
-      <p className={styles.cardTitle}>{item.title}</p>
-    </div>
+      <div className={styles.cardBody}>
+        <p className={styles.cardTitle}>{item.title}</p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -91,19 +117,35 @@ export default function Projects() {
   return (
     <section id="project" className={styles.projects}>
       <div className={styles.container}>
-        <h2 className={styles.heading}>PROJECTS</h2>
+        <motion.h2
+          className={styles.heading}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          PROJECTS
+        </motion.h2>
+
         <div className={styles.grid}>
-          {PROJECTS.map((project) => (
-            <ProjectCard key={project.title} item={project} />
+          {PROJECTS.map((project, i) => (
+            <ProjectCard key={project.title} item={project} index={i} />
           ))}
         </div>
 
-        <h2 className={styles.heading} style={{ marginTop: "40px" }}>
+        <motion.h2
+          className={styles.heading}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
           NPM LIBRARIES
-        </h2>
+        </motion.h2>
+
         <div className={styles.grid}>
-          {LIBRARIES.map((lib) => (
-            <ProjectCard key={lib.title} item={lib} />
+          {LIBRARIES.map((lib, i) => (
+            <ProjectCard key={lib.title} item={lib} index={i} />
           ))}
         </div>
       </div>

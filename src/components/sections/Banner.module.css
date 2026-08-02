@@ -3,6 +3,57 @@
   display: flex;
   align-items: center;
   padding-top: var(--header-height);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Animated gradient background ── */
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background:
+    radial-gradient(circle at 20% 30%, var(--color-accent-2), transparent 50%),
+    radial-gradient(circle at 80% 70%, var(--color-accent), transparent 50%),
+    radial-gradient(circle at 50% 50%, var(--color-accent-3), transparent 40%);
+  background-size: 120% 120%;
+  background-position: 0% 0%, 100% 100%, 50% 50%;
+  animation: bgShift 20s ease-in-out infinite alternate;
+  transform: translateY(var(--bg-y, 0px));
+  will-change: transform;
+}
+
+[data-theme="light"] .banner::before {
+  opacity: 0.15;
+}
+
+/* When 3D blob is active, dim the CSS gradient */
+.banner[data-3d]::before {
+  opacity: 0.06;
+}
+
+[data-theme="light"] .banner[data-3d]::before {
+  opacity: 0.04;
+}
+
+@keyframes bgShift {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  100% {
+    background-position: 100% 20%, 0% 80%, 80% 30%;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .banner::before {
+    animation: none;
+  }
 }
 
 .container {
@@ -10,6 +61,8 @@
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .row {
@@ -23,19 +76,87 @@
 }
 
 .greeting {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-xl);
   font-weight: 400;
   color: var(--color-muted);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
 }
 
 .name {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-5xl);
   font-weight: 700;
   color: var(--color-text);
-  line-height: 1.2;
+  line-height: 1.05;
+  margin-bottom: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  perspective: 400px;
 }
 
+.name span {
+  display: inline-block;
+}
+
+.space {
+  width: 0.35em;
+}
+
+/* ── CTA button ── */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo),
+    color var(--duration-normal) var(--ease-out-expo);
+}
+
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out-expo);
+  z-index: -1;
+}
+
+.cta:hover {
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0 30px var(--color-shadow-glow),
+    0 0 60px rgba(99, 102, 241, 0.08);
+}
+
+.cta:hover::before {
+  opacity: 1;
+}
+
+.ctaArrow {
+  display: inline-block;
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.cta:hover .ctaArrow {
+  transform: translateY(3px);
+}
+
+/* ── Image ── */
 .imageCol {
   flex: 1;
   display: flex;
@@ -45,8 +166,10 @@
 .imageCol img {
   max-width: 100%;
   height: auto;
+  filter: drop-shadow(0 0 40px var(--color-shadow-glow));
 }
 
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .row {
     flex-direction: column;
@@ -55,7 +178,7 @@
   }
 
   .name {
-    font-size: var(--font-size-3xl);
+    justify-content: center;
   }
 
   .imageCol {
@@ -63,6 +186,10 @@
   }
 
   .imageCol img {
-    max-width: 280px;
+    max-width: 260px;
+  }
+
+  .cta {
+    padding: 12px 28px;
   }
 }

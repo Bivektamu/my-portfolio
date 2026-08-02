@@ -1,6 +1,3 @@
 # CLAUDE.md
 
-This project's context for all AI tools lives in [AGENTS.md](./AGENTS.md).
-Claude Code loads it via the import below:
-
-@AGENTS.md
+See [AGENTS.md](../../../AGENTS.md) — the single source of truth for this project.

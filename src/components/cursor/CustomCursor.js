@@ -1,16 +1,38 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Cursor.module.css";
 
 export default function CustomCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 });
+  const [hovered, setHovered] = useState(false);
   const cursorRef = useRef(null);
   const rafRef = useRef(null);
   const mouseRef = useRef({ x: -100, y: -100 });
   const currentRef = useRef({ x: -100, y: -100 });
   const visibleRef = useRef(false);
 
+  /* ── Hover detection on interactive elements ── */
+  const onEnter = useCallback(() => setHovered(true), []);
+  const onLeave = useCallback(() => setHovered(false), []);
+
+  useEffect(() => {
+    const attach = () => {
+      const selectors = "a, button, [role=button], input, textarea, [data-magnetic]";
+      document.querySelectorAll(selectors).forEach((el) => {
+        el.addEventListener("mouseenter", onEnter);
+        el.addEventListener("mouseleave", onLeave);
+      });
+    };
+
+    attach();
+    const obs = new MutationObserver(attach);
+    obs.observe(document.body, { childList: true, subtree: true });
+
+    return () => obs.disconnect();
+  }, [onEnter, onLeave]);
+
+  /* ── Mouse tracking with rAF lerp ── */
   useEffect(() => {
     const onMouseMove = (e) => {
       if (window.innerWidth > 999) {
@@ -48,7 +70,7 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className={styles.cursor}
+      className={`${styles.cursor} ${hovered ? styles.hovered : ""}`}
       style={{
         left: pos.x,
         top: pos.y,
