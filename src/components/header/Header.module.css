@@ -172,3 +172,36 @@
     border-left-color: var(--color-tab-stroke);
   }
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .logo {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .logoText {
+    font-size: 14px;
+  }
+
+  .hamburger {
+    padding: 14px;
+  }
+
+  .hamburger span {
+    width: 20px;
+  }
+
+  .nav {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .navLink {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}

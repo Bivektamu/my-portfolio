@@ -216,3 +216,69 @@
     height: 200px;
   }
 }
+
+@media (max-width: 480px) {
+  .banner {
+    padding: 12px;
+    min-height: auto;
+    align-items: flex-start;
+    padding-top: calc(var(--header-height) + 16px);
+  }
+
+  .foreground {
+    padding: 20px 16px;
+  }
+
+  .content {
+    gap: 24px;
+  }
+
+  .name {
+    font-size: 26px;
+  }
+
+  .greeting {
+    font-size: 15px;
+  }
+
+  .jobTitle {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .socialLinks {
+    gap: 6px;
+  }
+
+  .socialBtn {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cta,
+  .resume {
+    text-align: center;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .blurBlue {
+    width: 250px;
+    height: 250px;
+    top: -60px;
+    left: -80px;
+  }
+
+  .blurGreen {
+    width: 250px;
+    height: 250px;
+    bottom: -60px;
+    right: -80px;
+  }
+}

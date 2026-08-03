@@ -164,6 +164,7 @@
 html {
   scroll-behavior: smooth;
   background-color: var(--color-bg);
+  overflow-x: hidden;
 }
 
 body {

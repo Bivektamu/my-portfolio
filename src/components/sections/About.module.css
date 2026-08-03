@@ -311,6 +311,12 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0;
+    padding: 8px;
+  }
+
+  .folderGroup {
+    flex: 1 1 auto;
+    min-width: 160px;
   }
 
   .panels {
@@ -326,5 +332,93 @@
   .gistPanel {
     width: 100%;
     max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 12px;
+  }
+
+  .sidebar {
+    flex-direction: column;
+    padding: 4px;
+    gap: 2px;
+  }
+
+  .folderGroup {
+    width: 100%;
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  .folderTitle {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .folderFiles {
+    padding-left: 24px;
+  }
+
+  .fileItem {
+    padding: 8px 10px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .codeHeader {
+    padding: 8px 12px;
+  }
+
+  .codeLang {
+    font-size: 11px;
+  }
+
+  .codeContent {
+    padding: 12px 0;
+  }
+
+  .lineNumbers {
+    padding: 0 8px 0 12px;
+    font-size: 11px;
+    min-width: 28px;
+  }
+
+  .codeText {
+    padding-right: 12px;
+    font-size: 12px;
+  }
+
+  .gistList {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .gistHeader {
+    padding: 12px 12px 8px;
+  }
+
+  .gistCodeBlock {
+    padding: 0 12px;
+  }
+
+  .gistCode {
+    padding: 12px;
+    font-size: 10px;
+  }
+
+  .gistFooter {
+    padding: 8px 12px 12px;
+  }
+
+  .gistCard {
+    width: 100%;
+    overflow: hidden;
   }
 }

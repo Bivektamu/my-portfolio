@@ -1,4 +1,4 @@
-# portfolio-site
+﻿# portfolio-site
 
 ## Stack
 
@@ -30,7 +30,7 @@ npm start
 # Lint
 npm run lint
 
-# Test (Jest + React Testing Library, CRA-era)
+# Test (Vitest + jsdom + @testing-library/react)
 npm test
 ```
 
@@ -113,7 +113,7 @@ Stored in `docs/adr/`. Active:
 
 - **Migration complete**: new and old code coexist. Do not import from old CRA into new Next.js.
 - **Legacy CSS**: `src/styles/*.js` are for old CRA components. Do not touch them.
-- **Test script is CRA-era**: `npm test` still uses `react-scripts test`.
+- **Test script**: `npm test` runs `vitest run` (Vitest + jsdom + @testing-library/react). Test files colocated as `*.test.js`.
 - **3D blob removed**: R3F/three.js dependency removed. Background blurs in Banner.module.css replace it. The `src/components/3d/` directory is deleted.
 - **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Default theme is dark. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, gist cards, and foreground containers.
 - **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. page.js composes sections directly.

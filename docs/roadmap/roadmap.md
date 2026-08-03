@@ -43,8 +43,8 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 35 | Contact form backend (API route + email) | Slice 2 | medium | yes | done |
 | 36 | 404 page | Skateboard | lean | no | done |
 | 37 | Responsive polish & mobile QA | Slice 3 | lean | no | done |
-| 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | done |
-| 39 | Performance optimization v2 | Slice 3 | lean | no | done |
+| 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | planned |
+| 39 | Performance optimization v2 | Slice 3 | lean | no | planned |
 
 ## Foundation
 
@@ -382,7 +382,8 @@ Intent: Test every redesigned section on real mobile viewports (375px per the de
 
 Done when: every section matches its mobile reference image at 375px, touch interactions work for the snake game buttons, file explorer accordion, and form inputs, and there are no horizontal overflow issues.
 
-- [ ] `/develop Responsive polish & mobile QA`
+- [x] `/develop Responsive polish & mobile QA`
+  - code in `src/components/sections/*.module.css`, `src/components/header/Header.module.css`, `src/components/snake/SnakeGame.module.css`, `src/app/not-found.module.css`, `src/app/globals.css`
 
 ### 38. Accessibility audit (WCAG AA)
 

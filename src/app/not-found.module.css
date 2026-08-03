@@ -66,3 +66,35 @@
   border-color: var(--color-accent-teal);
   background: rgba(70, 236, 213, 0.06);
 }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+
+  .foreground {
+    padding: 40px 24px;
+  }
+
+  .code {
+    font-size: 72px;
+  }
+
+  .text {
+    font-size: 16px;
+  }
+
+  .hint {
+    font-size: 12px;
+  }
+
+  .homeLink {
+    padding: 14px 24px;
+    font-size: 13px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

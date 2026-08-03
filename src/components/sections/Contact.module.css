@@ -240,3 +240,100 @@
     overflow: auto;
   }
 }
+
+@media (max-width: 480px) {
+  .contact {
+    padding: 12px;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .formPanel {
+    padding: 20px 16px;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .label {
+    font-size: 13px;
+  }
+
+  .input,
+  .textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 44px;
+  }
+
+  .input {
+    min-height: 44px;
+  }
+
+  .submitBtn {
+    align-self: stretch;
+    text-align: center;
+    padding: 14px 24px;
+    font-size: 14px;
+    min-height: 48px;
+  }
+
+  .errorMsg {
+    font-size: 11px;
+  }
+
+  .codePanel {
+    max-height: 180px;
+  }
+
+  .codePreview {
+    margin: 12px;
+    padding: 16px;
+    font-size: 11px;
+  }
+
+  .codePanelLabel {
+    font-size: 11px;
+  }
+
+  .codePanelHeader {
+    padding: 10px 16px;
+  }
+
+  .thankYou {
+    min-height: 200px;
+    gap: 12px;
+    padding: 20px 16px;
+  }
+
+  .thankYouTitle {
+    font-size: 22px;
+  }
+
+  .thankYouText {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  .socialStrip {
+    padding: 8px 12px;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .findMe {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .socialIcon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
