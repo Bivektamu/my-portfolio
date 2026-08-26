@@ -1,8 +1,37 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
+  compress: true,
+
   images: {
     remotePatterns: [],
   },
+
+  headers: async () => [
+    {
+      source: "/images/(.*)",
+      headers: [
+        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+      ],
+    },
+    {
+      source: "/pdf/(.*)",
+      headers: [
+        { key: "Cache-Control", value: "public, max-age=604800" },
+      ],
+    },
+    {
+      source: "/_next/static/(.*)",
+      headers: [
+        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+      ],
+    },
+  ],
+
+  experimental: {
+    scrollRestoration: true,
+  },
+
   turbopack: {
     root: __dirname,
   },

@@ -1,4 +1,4 @@
-﻿// covers: AC-1 — Fira Code + Inter font loading config
+// covers: AC-1 — Fira Code + Inter font loading config
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
@@ -10,14 +10,8 @@ vi.mock("@/components/header/Header", () => ({
 vi.mock("@/components/cursor/CustomCursor", () => ({
   default: () => React.createElement("div", { "data-testid": "mock-cursor" }),
 }));
-vi.mock("@/components/preloader/Preloader", () => ({
-  default: ({ children }) => React.createElement("div", { "data-testid": "mock-preloader" }, children),
-}));
-vi.mock("@/components/animations/ScrollSpy", () => ({
-  __esModule: true,
-  default: ({ children }) => React.createElement("div", { "data-testid": "mock-scrollspy" }, children),
-  ActiveSectionContext: { Provider: ({ children }) => children },
-  useActiveSection: () => "home",
+vi.mock("@/components/animations/PageTransition", () => ({
+  default: ({ children }) => React.createElement("div", { "data-testid": "mock-page-transition" }, children),
 }));
 vi.mock("@/components/animations/NoiseOverlay", () => ({
   default: () => React.createElement("div", { "data-testid": "mock-noise" }),
@@ -31,10 +25,10 @@ import RootLayout, { metadata } from "@/app/layout";
 describe("RootLayout", () => {
   // ── AC-1: Font configuration ──
   describe("AC-1: Font configuration", () => {
-    it("Fira_Code accepts weights 300-700 with display:swap and --font-fira-code variable", () => {
+    it("Fira_Code accepts weights 400, 500, 700 with display:swap and --font-fira-code variable", () => {
       const result = Fira_Code({
         subsets: ["latin"],
-        weight: ["300", "400", "500", "600", "700"],
+        weight: ["400", "500", "700"],
         display: "swap",
         variable: "--font-fira-code",
       });
@@ -123,10 +117,9 @@ describe("RootLayout", () => {
       expect(themeScript.textContent).toContain("data-theme");
     });
 
-    it("includes Preloader, ScrollSpy, Header, CustomCursor, NoiseOverlay", () => {
+    it("includes PageTransition, Header, CustomCursor, NoiseOverlay", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
-      expect(screen.getByTestId("mock-preloader")).toBeInTheDocument();
-      expect(screen.getByTestId("mock-scrollspy")).toBeInTheDocument();
+      expect(screen.getByTestId("mock-page-transition")).toBeInTheDocument();
       expect(screen.getByTestId("mock-header")).toBeInTheDocument();
       expect(screen.getByTestId("mock-cursor")).toBeInTheDocument();
       expect(screen.getByTestId("mock-noise")).toBeInTheDocument();

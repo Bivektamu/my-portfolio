@@ -1,42 +1,35 @@
-﻿// covers: AC-1 (navigation structure)
+// covers: AC-1 (navigation structure with path-based routing)
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 
-vi.mock("@/components/animations/ScrollSpy", () => ({
-  __esModule: true,
-  default: ({ children }) => React.createElement("div", null, children),
-  ActiveSectionContext: { Provider: ({ children }) => children },
-  useActiveSection: () => "home",
-}));
-
 import MobileNav from "@/components/header/MobileNav";
 
 const LINKS = [
-  { id: "home", label: "_hello" },
-  { id: "about", label: "_about-me" },
-  { id: "project", label: "_projects" },
-  { id: "skill", label: "_skills" },
-  { id: "contact", label: "_contact-me" },
+  { href: "/", label: "_hello" },
+  { href: "/about", label: "_about-me" },
+  { href: "/projects", label: "_projects" },
+  { href: "/skills", label: "_skills" },
+  { href: "/contact", label: "_contact-me" },
 ];
 
 describe("MobileNav", () => {
   it("renders hamburger button", () => {
-    render(React.createElement(MobileNav, { links: LINKS }));
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
     expect(screen.getByLabelText("Toggle navigation")).toBeInTheDocument();
   });
 
   it("renders all nav links with correct hrefs", () => {
-    render(React.createElement(MobileNav, { links: LINKS }));
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
     LINKS.forEach((link) => {
       const el = screen.getByText(link.label);
       expect(el).toBeInTheDocument();
-      expect(el.closest("a")).toHaveAttribute("href", "#" + link.id);
+      expect(el.closest("a")).toHaveAttribute("href", link.href);
     });
   });
 
   it("toggles nav open on hamburger click", () => {
-    render(React.createElement(MobileNav, { links: LINKS }));
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
     const btn = screen.getByLabelText("Toggle navigation");
 
     // Initially closed
@@ -44,14 +37,12 @@ describe("MobileNav", () => {
 
     // Click to open
     fireEvent.click(btn);
-    // The button should get 'open' class (depends on CSS module mock returning empty)
-    // Verify the nav becomes visible
     const nav = screen.getByRole("navigation");
     expect(nav).toBeInTheDocument();
   });
 
   it("closes nav when a link is clicked", () => {
-    render(React.createElement(MobileNav, { links: LINKS }));
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
     const btn = screen.getByLabelText("Toggle navigation");
 
     // Open first
@@ -62,14 +53,35 @@ describe("MobileNav", () => {
     fireEvent.click(firstLink);
 
     // After click, the nav should close
-    // The button should not have 'open' class
     expect(btn.classList.toString()).not.toContain("open");
   });
 
-  it("highlights active section link", () => {
-    render(React.createElement(MobileNav, { links: LINKS }));
-    // useActiveSection returns "home" — the home link should have active class
+  it("sets aria-expanded on hamburger button", () => {
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
+    const btn = screen.getByLabelText("Toggle navigation");
+
+    // Initially closed — aria-expanded should be false
+    expect(btn.getAttribute("aria-expanded")).toBe("false");
+
+    // Click to open
+    fireEvent.click(btn);
+    expect(btn.getAttribute("aria-expanded")).toBe("true");
+
+    // Click to close
+    fireEvent.click(btn);
+    expect(btn.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("highlights active route link based on currentPath", () => {
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/" }));
+    // currentPath is "/" — the home link should have active class
     const homeLink = screen.getByText("_hello");
     expect(homeLink.closest("a").className).toContain("active");
+  });
+
+  it("highlights about link when currentPath is /about", () => {
+    render(React.createElement(MobileNav, { links: LINKS, currentPath: "/about" }));
+    const aboutLink = screen.getByText("_about-me");
+    expect(aboutLink.closest("a").className).toContain("active");
   });
 });

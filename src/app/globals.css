@@ -14,7 +14,7 @@
   /* ── Text ── */
   --color-text: #f8fafc;
   --color-text-secondary: #90a1b9;
-  --color-text-muted: #607b9b;
+  --color-text-muted: #8599b5;
 
   /* ── Accents ── */
   --color-accent-blue: #615fff;
@@ -27,7 +27,7 @@
   --color-accent: var(--color-accent-teal);
 
   /* ── Borders & strokes ── */
-  --color-border: #314158;
+  --color-border: #536b8a;
   --color-border-hover: #607b9b;
   --color-tab-stroke: #ffb86a;
 
@@ -135,11 +135,11 @@
   --color-text: #1a1a2e;
   --color-text-secondary: #3d3d5c;
   --color-text-muted: #6b6b80;
-  --color-border: #d1d5db;
-  --color-border-hover: #9ca3af;
+  --color-border: #9ca3af;
+  --color-border-hover: #6b7280;
   --color-tab-stroke: #ff6a00;
   --input-bg: #ffffff;
-  --input-border: #d1d5db;
+  --input-border: #9ca3af;
   --input-border-focus: #615fff;
   --code-bg: #f8f9fa;
   --gist-bg: #ffffff;
@@ -243,6 +243,18 @@ section {
 
 .skip-link:focus {
   top: 16px;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ── Focus visible ── */

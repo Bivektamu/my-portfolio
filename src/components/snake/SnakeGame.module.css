@@ -29,6 +29,10 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
+  box-shadow:
+    0 0 15px rgba(70, 236, 213, 0.25),
+    0 0 35px rgba(70, 236, 213, 0.1),
+    0 0 60px rgba(70, 236, 213, 0.05);
 }
 
 .canvas {
@@ -52,6 +56,15 @@
   font-family: var(--font-family-display);
   font-size: var(--font-size-game-over);
   color: var(--color-text);
+}
+
+.instructions {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-button);
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.8;
+  max-width: 200px;
 }
 
 .overlayBtn {

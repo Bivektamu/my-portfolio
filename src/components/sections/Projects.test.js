@@ -49,6 +49,25 @@ describe("Projects", () => {
     expect(screen.getByText("projects")).toBeInTheDocument();
   });
 
+  it("sets role=checkbox and aria-checked on tech filter buttons", () => {
+    render(React.createElement(Projects));
+    const allBtns = screen.getAllByRole("checkbox");
+
+    expect(allBtns.length).toBeGreaterThanOrEqual(1);
+
+    const reactBtn = allBtns.find((b) => b.textContent.includes("React"));
+    const htmlBtn = allBtns.find((b) => b.textContent.includes("HTML"));
+
+    // React starts checked
+    expect(reactBtn.getAttribute("aria-checked")).toBe("true");
+    // HTML starts unchecked
+    expect(htmlBtn.getAttribute("aria-checked")).toBe("false");
+
+    // Toggle HTML
+    fireEvent.click(htmlBtn);
+    expect(htmlBtn.getAttribute("aria-checked")).toBe("true");
+  });
+
   it("shows checkmark icon on checked filters", () => {
     render(React.createElement(Projects));
     // React starts checked

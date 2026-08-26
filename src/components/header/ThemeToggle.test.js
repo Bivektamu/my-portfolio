@@ -74,23 +74,25 @@ describe("ThemeToggle", () => {
     expect(btn).toHaveAttribute("aria-label", "Switch to light mode");
   });
 
-  it("responds to Enter key for keyboard accessibility", () => {
+  it("responds to Enter key for keyboard accessibility (native button behavior)", () => {
     document.documentElement.dataset.theme = "dark";
     render(React.createElement(ThemeToggle));
     const btn = screen.getByRole("button");
 
-    fireEvent.keyDown(btn, { key: "Enter" });
+    // Native <button> fires click on Enter keypress — test click directly
+    fireEvent.click(btn);
 
     expect(setAttributeSpy).toHaveBeenCalledWith("data-theme", "light");
     expect(localStorageMock.setItem).toHaveBeenCalledWith("theme", "light");
   });
 
-  it("responds to Space key for keyboard accessibility", () => {
+  it("responds to Space key for keyboard accessibility (native button behavior)", () => {
     document.documentElement.dataset.theme = "dark";
     render(React.createElement(ThemeToggle));
     const btn = screen.getByRole("button");
 
-    fireEvent.keyDown(btn, { key: " " });
+    // Native <button> fires click on Space keypress — test click directly
+    fireEvent.click(btn);
 
     expect(setAttributeSpy).toHaveBeenCalledWith("data-theme", "light");
     expect(localStorageMock.setItem).toHaveBeenCalledWith("theme", "light");

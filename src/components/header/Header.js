@@ -1,17 +1,22 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import MobileNav from "./MobileNav";
 import styles from "./Header.module.css";
 
 const NAV_LINKS = [
-  { id: "home", label: "_hello" },
-  { id: "about", label: "_about-me" },
-  { id: "project", label: "_projects" },
-  { id: "skill", label: "_skills" },
-  { id: "contact", label: "_contact-me" },
+  { href: "/", label: "_hello" },
+  { href: "/about", label: "_about-me" },
+  { href: "/projects", label: "_projects" },
+  { href: "/skills", label: "_skills" },
+  { href: "/contact", label: "_contact-me" },
 ];
 
 export default function Header() {
+  const pathname = usePathname();
+
   return (
     <header id="header" className={styles.header}>
       <div className={styles.container}>
@@ -20,7 +25,7 @@ export default function Header() {
           <ThemeToggle />
         </Link>
 
-        <MobileNav links={NAV_LINKS} />
+        <MobileNav links={NAV_LINKS} currentPath={pathname} />
       </div>
     </header>
   );

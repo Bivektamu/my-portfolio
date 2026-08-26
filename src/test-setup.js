@@ -27,6 +27,11 @@ vi.mock("next/image", () => ({
   default: (props) => React.createElement("img", { alt: props.alt || "", ...props }),
 }));
 
+// ── next/navigation ──
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
+
 // ── motion/react ──
 vi.mock("motion/react", () => {
   function makeMotion(tag) {
@@ -42,6 +47,7 @@ vi.mock("motion/react", () => {
   }
 
   return {
+    AnimatePresence: function (props) { return props.children; },
     useScroll: function () { return { scrollY: { get: function () { return 0; } }, scrollYProgress: { get: function () { return 0; } } }; },
     useTransform: function () { return { get: function () { return 0; } }; },
     motion: {

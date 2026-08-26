@@ -54,6 +54,37 @@ describe("About", () => {
     expect(screen.getByText("MagneticButton")).toBeInTheDocument();
   });
 
+  it("sets aria-expanded on folder toggle buttons", () => {
+    render(React.createElement(About));
+    const folderBtn = screen.getByText("personal-info").closest("button");
+
+    // Initially collapsed: aria-expanded is false
+    expect(folderBtn.getAttribute("aria-expanded")).toBe("false");
+
+    // Expand
+    fireEvent.click(folderBtn);
+    expect(folderBtn.getAttribute("aria-expanded")).toBe("true");
+
+    // Collapse
+    fireEvent.click(folderBtn);
+    expect(folderBtn.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("gives gist avatars alt text for accessibility", () => {
+    render(React.createElement(About));
+    // First, expand a file that shows gist cards
+    const personalBtn = screen.getByText("personal-info").closest("button");
+    fireEvent.click(personalBtn);
+
+    const avatars = screen.getAllByRole("img");
+    // Gist avatars should have accessible alt text
+    const gistAvatars = avatars.filter((el) =>
+      el.getAttribute("alt")?.includes("avatar")
+    );
+    expect(gistAvatars.length).toBeGreaterThanOrEqual(1);
+    expect(gistAvatars[0]).toHaveAttribute("alt", expect.stringContaining("avatar"));
+  });
+
   it("shows code-snippet bio content with developer object", () => {
     render(React.createElement(About));
     // Multiple "const" instances — use getAllByText

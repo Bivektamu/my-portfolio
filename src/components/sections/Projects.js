@@ -44,8 +44,10 @@ export default function Projects() {
                 key={tech.name}
                 className={`${styles.techItem} ${tech.checked ? styles.checked : ""}`}
                 onClick={() => toggleTech(tech.name)}
+                role="checkbox"
+                aria-checked={tech.checked}
               >
-                <span className={styles.checkbox}>
+                <span className={styles.checkbox} aria-hidden="true">
                   {tech.checked && <span className={styles.checkIcon}>✓</span>}
                 </span>
                 <span>{tech.name}</span>

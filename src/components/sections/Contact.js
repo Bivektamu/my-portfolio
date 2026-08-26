@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
 import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
 import { socials } from "@/data/socials.json";
@@ -71,12 +71,15 @@ export default function Contact() {
     [form]
   );
 
-  // Generate code snippet preview from form data
-  const codeSnippet = `const message = {
+  // Generate code snippet preview from form data (memoized to avoid re-renders)
+  const codeSnippet = useMemo(
+    () => `const message = {
   name: "${form.name || "John Doe"}",
   email: "${form.email || "john@example.com"}",
   message: "${form.message || "Hello, I'd like to connect!"}",
-};`;
+};`,
+    [form.name, form.email, form.message]
+  );
 
   return (
     <section id="contact" className={styles.contact}>
@@ -105,8 +108,9 @@ export default function Contact() {
             ) : (
               <form className={styles.form} onSubmit={handleSubmit} noValidate>
                 <div className={`${styles.field} ${errors.name ? styles.fieldError : ""}`}>
-                  <label className={styles.label}>_name</label>
+                  <label className={styles.label} htmlFor="contact-name">_name</label>
                   <input
+                    id="contact-name"
                     type="text"
                     name="name"
                     value={form.name}
@@ -123,8 +127,9 @@ export default function Contact() {
                 </div>
 
                 <div className={`${styles.field} ${errors.email ? styles.fieldError : ""}`}>
-                  <label className={styles.label}>_email</label>
+                  <label className={styles.label} htmlFor="contact-email">_email</label>
                   <input
+                    id="contact-email"
                     type="email"
                     name="email"
                     value={form.email}
@@ -141,8 +146,9 @@ export default function Contact() {
                 </div>
 
                 <div className={`${styles.field} ${errors.message ? styles.fieldError : ""}`}>
-                  <label className={styles.label}>_message</label>
+                  <label className={styles.label} htmlFor="contact-message">_message</label>
                   <textarea
+                    id="contact-message"
                     name="message"
                     value={form.message}
                     onChange={handleChange}

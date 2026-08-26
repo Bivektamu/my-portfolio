@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import { bio } from "@/data/personal.json";
 import styles from "./About.module.css";
 
@@ -79,6 +80,7 @@ export default function About() {
               <button
                 className={`${styles.folderTitle} ${expanded === folder.name ? styles.expanded : ""}`}
                 onClick={() => toggleFolder(folder.name)}
+                aria-expanded={expanded === folder.name}
               >
                 <span className={styles.arrow}>{expanded === folder.name ? "▾" : "▸"}</span>
                 <span className={styles.icon}>{folder.icon}</span>
@@ -169,7 +171,13 @@ export default function About() {
                   >
                     <div className={styles.gistHeader}>
                       <div className={styles.gistUser}>
-                        <div className={styles.gistAvatar} />
+                        <Image
+                          src={snippet.avatar}
+                          alt={`${snippet.username} avatar`}
+                          width={36}
+                          height={36}
+                          className={styles.gistAvatar}
+                        />
                         <div className={styles.gistUserInfo}>
                           <span className={styles.gistUsername}>{snippet.username}</span>
                           <span className={styles.gistTimestamp}>2 days ago</span>

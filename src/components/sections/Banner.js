@@ -1,10 +1,15 @@
 "use client";
 
 import { useScroll, useTransform, motion } from "motion/react";
+import dynamic from "next/dynamic";
 import { socials } from "@/data/socials.json";
 import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
-import SnakeGame from "@/components/snake/SnakeGame";
 import styles from "./Banner.module.css";
+
+const SnakeGame = dynamic(() => import("@/components/snake/SnakeGame"), {
+  ssr: false,
+  loading: () => <div className={styles.gamePlaceholder} aria-label="Loading snake game" />,
+});
 
 const ICON_MAP = { FiGithub, FiLinkedin, FiMail, FiTwitter };
 

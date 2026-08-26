@@ -38,14 +38,16 @@ function randomFood(snake) {
 
 export default function SnakeGame() {
   const canvasRef = useRef(null);
-  const [gameState, setGameState] = useState("playing"); // playing | game-over | win
+  const [gameState, setGameState] = useState("idle"); // idle | playing | game-over | win
   const [score, setScore] = useState(0);
+  const [foodCount, setFoodCount] = useState(0);
   const snakeRef = useRef(createInitialSnake());
   const foodRef = useRef(randomFood(snakeRef.current));
   const directionRef = useRef(DIRECTION.RIGHT);
   const nextDirectionRef = useRef(DIRECTION.RIGHT);
   const intervalRef = useRef(null);
   const scoreRef = useRef(0);
+  const foodCountRef = useRef(0);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -105,6 +107,9 @@ export default function SnakeGame() {
       const newScore = scoreRef.current + 1;
       scoreRef.current = newScore;
       setScore(newScore);
+      const newFoodCount = foodCountRef.current + 1;
+      foodCountRef.current = newFoodCount;
+      setFoodCount(newFoodCount);
       foodRef.current = randomFood(newSnake);
 
       if (!foodRef.current) {
@@ -129,22 +134,44 @@ export default function SnakeGame() {
     directionRef.current = DIRECTION.RIGHT;
     nextDirectionRef.current = DIRECTION.RIGHT;
     scoreRef.current = 0;
+    foodCountRef.current = 0;
     setScore(0);
+    setFoodCount(0);
     setGameState("playing");
     draw();
     intervalRef.current = setInterval(tick, INITIAL_SPEED);
   }, [tick, draw]);
 
+  const resetToIdle = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    snakeRef.current = createInitialSnake();
+    foodRef.current = randomFood(snakeRef.current);
+    directionRef.current = DIRECTION.RIGHT;
+    nextDirectionRef.current = DIRECTION.RIGHT;
+    scoreRef.current = 0;
+    foodCountRef.current = 0;
+    setScore(0);
+    setFoodCount(0);
+    setGameState("idle");
+    draw();
+  }, [draw]);
+
+  // Cleanup on unmount
   useEffect(() => {
-    startGame();
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [startGame]);
+  }, []);
+
+  // Draw initial board on mount (idle state)
+  useEffect(() => {
+    draw();
+  }, [draw]);
 
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e) => {
+      if (gameState !== "playing") return;
       const current = directionRef.current;
       switch (e.key) {
         case "ArrowUp":
@@ -163,9 +190,10 @@ export default function SnakeGame() {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [gameState]);
 
   const onDirection = (dir) => {
+    if (gameState !== "playing") return;
     const current = directionRef.current;
     if (dir === "UP" && current !== DIRECTION.DOWN) nextDirectionRef.current = DIRECTION.UP;
     if (dir === "DOWN" && current !== DIRECTION.UP) nextDirectionRef.current = DIRECTION.DOWN;
@@ -178,18 +206,38 @@ export default function SnakeGame() {
       <div className={styles.header}>
         <span className={styles.label}>{"// snake_game.js"}</span>
         <span className={styles.score}>
-          {"// score: "}
-          {String(score).padStart(3, "0")}
+          {"// food: "}
+          {String(foodCount).padStart(3, "0")}
         </span>
       </div>
 
       <div className={styles.board}>
-        <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className={styles.canvas} />
+        <canvas
+          ref={canvasRef}
+          width={CANVAS_SIZE}
+          height={CANVAS_SIZE}
+          className={styles.canvas}
+          aria-label="Snake game board"
+          role="img"
+        />
+
+        {gameState === "idle" && (
+          <div className={styles.overlay}>
+            <p className={styles.instructions}>
+              Use arrow keys to move,<br />
+              eat the green food to grow,<br />
+              avoid walls and your tail
+            </p>
+            <button className={styles.overlayBtn} onClick={startGame}>
+              Start Game
+            </button>
+          </div>
+        )}
 
         {gameState === "game-over" && (
           <div className={styles.overlay}>
             <p className={styles.overlayTitle}>Game Over</p>
-            <button className={styles.overlayBtn} onClick={startGame}>
+            <button className={styles.overlayBtn} onClick={resetToIdle}>
               Start Again
             </button>
           </div>
@@ -198,7 +246,7 @@ export default function SnakeGame() {
         {gameState === "win" && (
           <div className={styles.overlay}>
             <p className={styles.overlayTitle}>Well Done</p>
-            <button className={styles.overlayBtn} onClick={startGame}>
+            <button className={styles.overlayBtn} onClick={resetToIdle}>
               Play Again
             </button>
           </div>

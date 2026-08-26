@@ -1,14 +1,11 @@
-﻿// covers: AC-1 (Header component with code-editor aesthetic)
+// covers: AC-1 (Header component with path-based active state)
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-// MobileNav uses useActiveSection from ScrollSpy — mock it
-vi.mock("@/components/animations/ScrollSpy", () => ({
-  __esModule: true,
-  default: ({ children }) => React.createElement("div", null, children),
-  ActiveSectionContext: { Provider: ({ children }) => children },
-  useActiveSection: () => "home",
+// Mock usePathname from next/navigation
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
 }));
 
 import Header from "@/components/header/Header";

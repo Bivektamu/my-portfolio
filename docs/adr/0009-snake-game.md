@@ -1,6 +1,6 @@
-# 0009 — Snake Game
+﻿# 0009 â€” Snake Game
 
-**Status**: Accepted
+**Status**: Superseded by [0012](0012-multi-page-routing-snake-update.md)
 **Feature**: Snake game (playable, scored) (Roadmap #30)
 **Date**: 2026-08-02
 

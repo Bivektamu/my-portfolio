@@ -16,24 +16,11 @@ export default function ThemeToggle() {
     setTheme(next);
   }, [theme]);
 
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggle();
-      }
-    },
-    [toggle],
-  );
-
   const label = `Switch to ${theme === "light" ? "dark" : "light"} mode`;
 
   return (
     <button
       onClick={toggle}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
       aria-label={label}
       title={label}
       style={{

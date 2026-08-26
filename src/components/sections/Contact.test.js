@@ -11,6 +11,22 @@ describe("Contact", () => {
     expect(document.getElementById("contact")).toBeInTheDocument();
   });
 
+  it("associates labels with inputs via htmlFor and id", () => {
+    render(React.createElement(Contact));
+    const nameLabel = screen.getByText("_name");
+    const emailLabel = screen.getByText("_email");
+    const messageLabel = screen.getByText("_message");
+
+    // React maps htmlFor to the DOM "for" attribute
+    expect(nameLabel).toHaveAttribute("for", "contact-name");
+    expect(emailLabel).toHaveAttribute("for", "contact-email");
+    expect(messageLabel).toHaveAttribute("for", "contact-message");
+
+    expect(document.getElementById("contact-name")).toBeInTheDocument();
+    expect(document.getElementById("contact-email")).toBeInTheDocument();
+    expect(document.getElementById("contact-message")).toBeInTheDocument();
+  });
+
   it("renders name, email, and message fields", () => {
     render(React.createElement(Contact));
     expect(screen.getByPlaceholderText("Your name")).toBeInTheDocument();

@@ -1,14 +1,13 @@
 import { Fira_Code, Inter } from "next/font/google";
 import Header from "@/components/header/Header";
 import CustomCursor from "@/components/cursor/CustomCursor";
-import Preloader from "@/components/preloader/Preloader";
-import ScrollSpy from "@/components/animations/ScrollSpy";
+import PageTransition from "@/components/animations/PageTransition";
 import NoiseOverlay from "@/components/animations/NoiseOverlay";
 import "./globals.css";
 
 const firaCode = Fira_Code({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   display: "swap",
   variable: "--font-fira-code",
 });
@@ -19,8 +18,6 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
 });
-
-const SECTION_IDS = ["home", "about", "project", "skill", "contact"];
 
 export const metadata = {
   title: "Bivek | Bivek Jang Gurung | Bivek Portfolio",
@@ -57,14 +54,12 @@ export default function RootLayout({ children }) {
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <Preloader>
-          <ScrollSpy sectionIds={SECTION_IDS}>
-            <Header />
-            <CustomCursor />
-            <NoiseOverlay />
-            <main id="main-content" role="main">{children}</main>
-          </ScrollSpy>
-        </Preloader>
+        <Header />
+        <CustomCursor />
+        <NoiseOverlay />
+        <PageTransition>
+          <main id="main-content">{children}</main>
+        </PageTransition>
       </body>
     </html>
   );

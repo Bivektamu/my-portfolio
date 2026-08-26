@@ -51,15 +51,16 @@ Stored in `docs/adr/`. Active:
 - [0006 — 3D Interactive Background](./docs/adr/0006-3d-interactive-background.md) (Superseded — 3D blob removed in v3)
 - [0007 — Design System v3 (Code-Editor Aesthetic)](./docs/adr/0007-design-system-v3.md)
 - [0008 — Banner Redesign](./docs/adr/0008-banner-redesign.md)
-- [0009 — Snake Game](./docs/adr/0009-snake-game.md)
+- [0009 — Snake Game](./docs/adr/0009-snake-game.md) (Superseded by 0012)
 - [0010 — About Redesign (File Explorer)](./docs/adr/0010-about-redesign.md)
 - [0011 — Contact Form Backend](./docs/adr/0011-contact-form-backend.md)
+- [0012 — Multi-page Routing & Snake Game Update](./docs/adr/0012-multi-page-routing-snake-update.md)
 
 ## Rules
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
-- **Section architecture**: 5 `<section>` blocks (home, about, project, skill, contact) composed in `src/app/page.js`. Each section in `src/components/sections/` with a co-located CSS Module. Sections carry `"use client"` directly — no RevealOnScroll wrapper.
-- **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact`. These match nav anchors. Do not change them. Note: the projects section uses `project` id (singular), not `projects`.
+- **Routing**: 5 routes (`/`, `/about`, `/projects`, `/skills`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `skills/page.js`, `contact/page.js`) import a single section from `src/components/sections/`. A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper.
+- **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
 - **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` / `[data-theme="dark"]` for theming (Design System v3 — code-editor aesthetic). Dark-first: default theme is dark (tokens on `:root`). Light theme lives under `[data-theme="light"]`. Pattern tokens for tabs, code blocks, inputs, file explorers, gist cards, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
 - **Theme**: `data-theme` attribute on `<html>`. Default is dark. Set via inline script in root layout (before paint, no flash). Client components read/write via `localStorage`. No React context for theme.
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
@@ -74,8 +75,12 @@ Stored in `docs/adr/`. Active:
 
 | Directory / File | Owns | Status |
 |---|---|---|
-| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, inline theme script, preloader, noise overlay, skip-to-content link | Done |
-| `src/app/page.js` | Composes 5 sections (no wrapper components) | Done |
+| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, inline theme script, PageTransition wrapper, noise overlay, skip-to-content link | Done |
+| `src/app/page.js` | Home route, renders Banner only | Done |
+| `src/app/about/page.js` | About route, renders About section | Done |
+| `src/app/projects/page.js` | Projects route, renders Projects section | Done |
+| `src/app/skills/page.js` | Skills route, renders Skills section | Done |
+| `src/app/contact/page.js` | Contact route, renders Contact section | Done |
 | `src/app/globals.css` | Design System v3 CSS custom properties, reset, pattern tokens, scrollbar, focus-visible, skip-link | Done |
 | `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
 | `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
@@ -85,10 +90,10 @@ Stored in `docs/adr/`. Active:
 | `src/components/sections/Skills.js` | Skills — tech chips with icons, experience panel with year count | Done |
 | `src/components/sections/Contact.js` | Contact — form with validation states, live code snippet preview, social strip | Done |
 | `src/components/header/` | Header, MobileNav, ThemeToggle (code-editor tab style) | Done |
-| `src/components/snake/` | SnakeGame — canvas-based, arrow keys + on-screen buttons, score, game-over/win states | Done |
+| `src/components/snake/` | SnakeGame, canvas-based, idle/playing/game-over/win states, food counter, neon glow | Done |
 | `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection (teal accent) | Done |
-| `src/components/preloader/` | Intro preloader sequence (blob animation) | Done |
-| `src/components/animations/` | RevealOnScroll, ScrollSpy, NoiseOverlay (SVG grain texture) | Done |
+| `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed from layout, unused |
+| `src/components/animations/` | PageTransition, RevealOnScroll, ScrollSpy (unused), NoiseOverlay (SVG grain texture) | Done |
 | `src/components/hooks/` | useMagnetic (magnetic hover hook, radius + strength config) | Done |
 | `src/data/` | Static JSON: projects.json, skills.json, socials.json, personal.json | Done |
 
@@ -116,10 +121,10 @@ Stored in `docs/adr/`. Active:
 - **Test script**: `npm test` runs `vitest run` (Vitest + jsdom + @testing-library/react). Test files colocated as `*.test.js`.
 - **3D blob removed**: R3F/three.js dependency removed. Background blurs in Banner.module.css replace it. The `src/components/3d/` directory is deleted.
 - **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Default theme is dark. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, gist cards, and foreground containers.
-- **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. page.js composes sections directly.
-- **Preloader**: gates body visibility. Uses code-editor accent colors.
+- **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. Each route renders its section directly.
+- **Preloader removed**: the intro preloader is gone. The `src/components/preloader/` files remain but are unused.
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
 - **`react-icons/fi`**: used in Contact and Banner sections for social links (FiGithub, FiLinkedin, FiMail, FiTwitter).
 - **`react-icons/im`**: used in Skills section for phone icon (ImPhone).
-- **Snake game**: canvas-based, self-contained client component. Arrow keys and on-screen buttons. Does not block page scroll.
+- **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. Does not block page scroll.
 - **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Logs to console by default; needs SMTP_USER and SMTP_PASS env vars for email sending via Nodemailer.

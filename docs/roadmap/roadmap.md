@@ -43,8 +43,9 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 35 | Contact form backend (API route + email) | Slice 2 | medium | yes | done |
 | 36 | 404 page | Skateboard | lean | no | done |
 | 37 | Responsive polish & mobile QA | Slice 3 | lean | no | done |
-| 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | planned |
-| 39 | Performance optimization v2 | Slice 3 | lean | no | planned |
+| 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | done |
+| 39 | Performance optimization v2 | Slice 3 | lean | no | in-progress |
+| 40 | Multi-page routing & snake game update | Slice 3 | medium | yes | done |
 
 ## Foundation
 
@@ -391,7 +392,8 @@ Intent: Audit the full site against WCAG AA. Ensure color contrast meets minimum
 
 Done when: automated audit (axe or Lighthouse) passes WCAG AA, manual keyboard testing covers all interactive features, and any contrast or focus issues are resolved.
 
-- [ ] `/develop Accessibility audit (WCAG AA)`
+- [x] `/develop Accessibility audit (WCAG AA)`
+  - code in `src/app/globals.css`, `src/components/header/ThemeToggle.js`, `src/components/header/MobileNav.js`, `src/components/sections/About.js`, `src/components/sections/Contact.js`, `src/components/sections/Projects.js`, `src/components/snake/SnakeGame.js`, `src/app/layout.js`
 
 ### 39. Performance optimization v2
 
@@ -399,7 +401,23 @@ Intent: With the new design system and snake game in place, audit Core Web Vital
 
 Done when: Lighthouse Performance score is 90+, the snake game initializes without blocking first paint, font loading uses optimal strategy (swap, size-adjust), and interaction to Next Paint is under 200ms.
 
-- [ ] `/develop Performance optimization v2`
+- [x] `/develop Performance optimization v2`
+  - code in `next.config.js`, `src/app/layout.js`, `src/components/sections/Banner.js`, `src/components/sections/Contact.js`, `src/components/sections/About.js`, `src/components/sections/Banner.module.css`, `src/components/sections/About.test.js`
+
+### 40. Multi-page routing & snake game update `done`
+
+Intent: Convert the single-page section layout (all 5 sections on one page with scroll-spy) to multi-page routing with fade transitions between pages. Update the snake game with a pre-game idle state (instructions overlay, Start Game button, food counter, neon glow) instead of auto-starting. Remove the preloader.
+
+Done when: 5 routes render independently with fade transitions, nav uses path-based active state, snake game shows idle state with instructions and Start button, game board has neon teal glow, and preloader is removed.
+
+- [x] Design it: `/blueprint` — [ADR 0012](../adr/0012-multi-page-routing-snake-update.md)
+- [x] Build it: `/develop Multi-page routing & snake game update`
+  - [x] Create route files and page transition wrapper (AC-1, AC-2, AC-3, AC-4, AC-5)
+  - [x] Update header navigation to path-based routing (AC-6, AC-7)
+  - [x] Update snake game with idle state, food counter, and neon glow (AC-1 through AC-6 snake)
+  - [x] Verify persistent UI and cleanup scroll-spy (AC-8, AC-9)
+- [x] Verify it: `/verify Multi-page routing & snake game update`
+- [x] Test it: `/test Multi-page routing & snake game update`
 
 ## Legend
 

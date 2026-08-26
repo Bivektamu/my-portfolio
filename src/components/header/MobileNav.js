@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useActiveSection } from "@/components/animations/ScrollSpy";
+import Link from "next/link";
 import styles from "./Header.module.css";
 
-export default function MobileNav({ links }) {
+export default function MobileNav({ links, currentPath }) {
   const [open, setOpen] = useState(false);
-  const activeSection = useActiveSection();
 
   const handleClick = () => {
     setOpen(false);
@@ -18,6 +17,7 @@ export default function MobileNav({ links }) {
         className={`${styles.hamburger} ${open ? styles.open : ""}`}
         onClick={() => setOpen(!open)}
         aria-label="Toggle navigation"
+        aria-expanded={open}
       >
         <span />
         <span />
@@ -30,14 +30,14 @@ export default function MobileNav({ links }) {
         </div>
         <ul className={styles.navList}>
           {links.map((link) => (
-            <li key={link.id}>
-              <a
-                href={`#${link.id}`}
-                className={`${styles.navLink} ${link.id === activeSection ? styles.active : ""}`}
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={`${styles.navLink} ${link.href === currentPath ? styles.active : ""}`}
                 onClick={handleClick}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
