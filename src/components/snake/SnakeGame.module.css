@@ -1,45 +1,102 @@
-/* ── Snake Game ── */
+/* ── Snake Game — IDE game panel ── */
 
-.game {
+.card {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  gap: 22px;
+  padding: 24px;
+  border-radius: 7px;
+  border: 1px solid rgba(54, 217, 208, 0.18);
+  background: linear-gradient(135deg, rgba(20, 139, 133, 0.18), rgba(98, 100, 255, 0.14)),
+    rgba(10, 16, 34, 0.55);
+  box-shadow:
+    0 0 18px rgba(54, 217, 208, 0.12),
+    0 0 50px rgba(98, 100, 255, 0.08),
+    inset 0 0 30px rgba(10, 16, 34, 0.4);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 260px;
+/* ── Decorative corner bolts ── */
+.bolt {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #3a4a5f, #0b1220 70%);
+  box-shadow:
+    inset 0 1px 1px rgba(237, 242, 250, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.label,
-.score {
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-button);
-  color: var(--color-text-muted);
+.boltTL {
+  top: 12px;
+  left: 12px;
+}
+
+.boltTR {
+  top: 12px;
+  right: 12px;
+}
+
+.boltBL {
+  bottom: 12px;
+  left: 12px;
+}
+
+.boltBR {
+  bottom: 12px;
+  right: 12px;
+}
+
+/* ── Left column: board ── */
+.left {
+  flex-shrink: 0;
 }
 
 .board {
   position: relative;
-  width: 260px;
-  height: 260px;
-  background: var(--code-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  width: 256px;
+  height: 432px;
+  background: #0a1224;
+  border: 1px solid rgba(38, 53, 77, 0.9);
+  border-radius: 7px;
   overflow: hidden;
   box-shadow:
-    0 0 15px rgba(70, 236, 213, 0.25),
-    0 0 35px rgba(70, 236, 213, 0.1),
-    0 0 60px rgba(70, 236, 213, 0.05);
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.35);
 }
 
 .canvas {
   display: block;
 }
 
-/* ── Overlays ── */
+/* ── Start game button ── */
+.startBtn {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 116px;
+  height: 43px;
+  background: #ffb45d;
+  color: #0a1224;
+  border: none;
+  border-radius: 7px;
+  font-family: var(--font-family-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 180, 93, 0.28);
+  transition: filter var(--duration-fast) var(--ease-out-expo);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.startBtn:hover {
+  filter: brightness(1.05);
+}
+
+/* ── Game over / win overlays ── */
 .overlay {
   position: absolute;
   inset: 0;
@@ -47,87 +104,186 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  background: rgba(2, 6, 24, 0.85);
-  border-radius: var(--radius-md);
+  gap: 18px;
+  background: rgba(8, 14, 32, 0.78);
 }
 
 .overlayTitle {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-game-over);
-  color: var(--color-text);
-}
-
-.instructions {
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-button);
-  color: var(--color-text-secondary);
-  text-align: center;
-  line-height: 1.8;
-  max-width: 200px;
+  font-size: 20px;
+  color: #edf2fa;
 }
 
 .overlayBtn {
-  padding: 12px 24px;
-  min-height: 44px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: transparent;
+  width: 116px;
+  height: 43px;
+  background: #ffb45d;
+  color: #0a1224;
+  border: none;
+  border-radius: 7px;
   font-family: var(--font-family-display);
-  font-size: var(--font-size-button);
-  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out-expo),
-    color var(--duration-fast) var(--ease-out-expo);
   -webkit-tap-highlight-color: transparent;
 }
 
-.overlayBtn:hover {
-  border-color: var(--color-accent-teal);
-  color: var(--color-accent-teal);
+/* ── Right column: controls + food + skip ── */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-width: 196px;
 }
 
-/* ── Directional controls ── */
-.controls {
+.controlsPanel {
+  width: 196px;
+  background: rgba(13, 22, 40, 0.6);
+  border: 1px solid rgba(38, 53, 77, 0.7);
+  border-radius: 7px;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.instructions {
+  font-family: var(--font-family-display);
+  font-size: 12px;
+  line-height: 1.7;
+  color: #7ee2a0;
+  text-align: left;
+  align-self: flex-start;
+}
+
+/* ── D pad ── */
+.dpad {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 }
 
-.ctrlRow {
+.dpadRow {
   display: flex;
   gap: 6px;
 }
 
-.ctrlBtn {
+.dpadBtn {
   width: 48px;
-  height: 44px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
-  cursor: pointer;
+  background: #0b1220;
+  border: 1px solid #2a3349;
+  border-radius: 6px;
+  color: #e6ecf5;
   font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
   transition: border-color var(--duration-fast) var(--ease-out-expo);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 
-.ctrlBtn:hover {
-  border-color: var(--color-accent-teal);
+.dpadBtn:hover {
+  border-color: #36d9d0;
 }
 
-.ctrlBtn:active {
-  background: var(--color-surface-elevated);
-  border-color: var(--color-accent-teal);
+.dpadBtn:active {
+  background: #12203a;
 }
 
-@media (min-width: 769px) {
-  .controls {
-    display: none;
+.foodPanel {
+  width: 196px;
+  background: rgba(13, 22, 40, 0.6);
+  border: 1px solid rgba(38, 53, 77, 0.7);
+  border-radius: 7px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Food counter ── */
+.foodLabel {
+  font-family: var(--font-family-display);
+  font-size: 12px;
+  color: #7ee2a0;
+  align-self: flex-start;
+}
+
+.foodMeter {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 14px 12px;
+}
+
+.foodDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #36d9d0;
+  box-shadow:
+    0 0 6px rgba(54, 217, 208, 0.8),
+    0 0 12px rgba(54, 217, 208, 0.4);
+}
+
+.foodDotDim {
+  background: rgba(54, 217, 208, 0.22);
+  box-shadow: none;
+}
+
+/* ── Skip button ── */
+.skipBtn {
+  width: 62px;
+  height: 42px;
+  background: rgba(13, 22, 40, 0.6);
+  border: 1px solid rgba(237, 242, 250, 0.4);
+  border-radius: 6px;
+  color: #e6ecf5;
+  font-family: var(--font-family-display);
+  font-size: 13px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: auto;
+  transition: border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.skipBtn:hover {
+  border-color: #36d9d0;
+  color: #36d9d0;
+}
+
+/* ── Small screens: shrink to fit ── */
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .board {
+    width: 224px;
+    height: 378px;
+  }
+
+  .controlsPanel,
+  .foodPanel {
+    width: 150px;
+    padding: 14px 10px;
+  }
+
+  .right {
+    min-width: 150px;
+  }
+
+  .dpadBtn {
+    width: 42px;
+    height: 30px;
   }
 }

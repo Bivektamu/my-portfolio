@@ -39,6 +39,7 @@ npm test
 - [src/components/AGENTS.md](src/components/AGENTS.md) — Shared component conventions and legacy migration notes
 - [src/components/sections/AGENTS.md](src/components/sections/AGENTS.md) — Section specific conventions
 - [src/components/snake/AGENTS.md](src/components/snake/AGENTS.md) — Snake game component conventions
+- [src/components/layout/AGENTS.md](src/components/layout/AGENTS.md) — SiteFrame (shared IDE window) conventions
 
 ## ADRs
 
@@ -50,16 +51,17 @@ Stored in `docs/adr/`. Active:
 - [0005 — Banner Reimagined](./docs/adr/0005-banner-reimagined.md) (Superseded by 0008)
 - [0006 — 3D Interactive Background](./docs/adr/0006-3d-interactive-background.md) (Superseded — 3D blob removed in v3)
 - [0007 — Design System v3 (Code-Editor Aesthetic)](./docs/adr/0007-design-system-v3.md)
-- [0008 — Banner Redesign](./docs/adr/0008-banner-redesign.md)
+- [0008 — Banner Redesign](./docs/adr/0008-banner-redesign.md) (Superseded by 0013)
 - [0009 — Snake Game](./docs/adr/0009-snake-game.md) (Superseded by 0012)
 - [0010 — About Redesign (File Explorer)](./docs/adr/0010-about-redesign.md)
 - [0011 — Contact Form Backend](./docs/adr/0011-contact-form-backend.md)
-- [0012 — Multi-page Routing & Snake Game Update](./docs/adr/0012-multi-page-routing-snake-update.md)
+- [0012 — Multi-page Routing & Snake Game Update](./docs/adr/0012-multi-page-routing-snake-update.md) (Superseded by 0013)
+- [0013 — Unified IDE Window (SiteFrame Layout)](./docs/adr/0013-unified-ide-window.md)
 
 ## Rules
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
-- **Routing**: 5 routes (`/`, `/about`, `/projects`, `/skills`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `skills/page.js`, `contact/page.js`) import a single section from `src/components/sections/`. A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper.
+- **Routing**: 5 routes (`/`, `/about`, `/projects`, `/skills`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `skills/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper.
 - **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
 - **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` / `[data-theme="dark"]` for theming (Design System v3 — code-editor aesthetic). Dark-first: default theme is dark (tokens on `:root`). Light theme lives under `[data-theme="light"]`. Pattern tokens for tabs, code blocks, inputs, file explorers, gist cards, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
 - **Theme**: `data-theme` attribute on `<html>`. Default is dark. Set via inline script in root layout (before paint, no flash). Client components read/write via `localStorage`. No React context for theme.
@@ -84,12 +86,13 @@ Stored in `docs/adr/`. Active:
 | `src/app/globals.css` | Design System v3 CSS custom properties, reset, pattern tokens, scrollbar, focus-visible, skip-link | Done |
 | `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
 | `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
-| `src/components/sections/Banner.js` | Home — split layout: intro text (Fira Code), social links, CTA, plus snake game | Done |
+| `src/components/sections/Banner.js` | Home — hero content (intro text, `> Front-end developer`, comments, github code line, snake game, glows) inside SiteFrame | Done |
 | `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, code-snippet bio, GitHub gist cards | Done |
 | `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar, project cards with hover effects | Done |
 | `src/components/sections/Skills.js` | Skills — tech chips with icons, experience panel with year count | Done |
 | `src/components/sections/Contact.js` | Contact — form with validation states, live code snippet preview, social strip | Done |
-| `src/components/header/` | Header, MobileNav, ThemeToggle (code-editor tab style) | Done |
+| `src/components/layout/` | SiteFrame — shared IDE window (brand, 5 nav tabs with active state, footer bar, theme toggle) wrapping every route | Done |
+| `src/components/header/` | ThemeToggle (theme color dot, inline styles). Header/MobileNav superseded by `layout/SiteFrame.js` | Done |
 | `src/components/snake/` | SnakeGame, canvas-based, idle/playing/game-over/win states, food counter, neon glow | Done |
 | `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection (teal accent) | Done |
 | `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed from layout, unused |
@@ -102,9 +105,9 @@ Stored in `docs/adr/`. Active:
 | File | Owns | Notes |
 |---|---|---|
 | `src/components/layout.js` | GlobalContext, ThemeProvider, Lenis, preloader, scroll-spy | Replaced by `src/app/layout.js` |
-| `src/components/Header.js` | Old header with DOM-query nav, theme toggle | Replaced by `header/` directory |
+| `src/components/Header.js` | Old header with DOM-query nav, theme toggle | Replaced by `layout/SiteFrame.js` nav |
 | `src/components/banner.js`, `about.js`, `project.js`, `skill.js`, `contact.js` | Old section components with motion parallax | Replaced by `sections/` |
-| `src/components/NavItem.js` | Old nav link with Lenis scroll | Replaced by `header/` |
+| `src/components/NavItem.js` | Old nav link with Lenis scroll | Replaced by `layout/SiteFrame.js` tabs |
 | `src/components/ProjectCard.js` | Animated project card wrapper | Replaced by `animations/RevealOnScroll.js` |
 | `src/components/Blob.jsx` | Decorative background blob | Legacy |
 | `src/components/customCursor.js` | Custom cursor (rAF spring) | Migrated to `cursor/CustomCursor.js` |

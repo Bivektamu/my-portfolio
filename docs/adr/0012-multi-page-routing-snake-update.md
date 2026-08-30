@@ -1,6 +1,6 @@
 ﻿# 0012 — Multi-page Routing & Snake Game Update
 
-**Status**: Accepted
+**Status**: Superseded by [0013](0013-unified-ide-window.md)
 **Feature**: Multi-page routing with fade transitions + snake game pre-game state (Roadmap #38, #39)
 **Date**: 2026-08-08
 **Supersedes**: [0009 — Snake Game](0009-snake-game.md)

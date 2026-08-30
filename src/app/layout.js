@@ -1,5 +1,4 @@
 import { Fira_Code, Inter } from "next/font/google";
-import Header from "@/components/header/Header";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import PageTransition from "@/components/animations/PageTransition";
 import NoiseOverlay from "@/components/animations/NoiseOverlay";
@@ -54,7 +53,6 @@ export default function RootLayout({ children }) {
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <Header />
         <CustomCursor />
         <NoiseOverlay />
         <PageTransition>

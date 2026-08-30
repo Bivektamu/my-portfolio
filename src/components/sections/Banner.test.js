@@ -1,4 +1,5 @@
-﻿// covers: AC-7 — No BlobScene import, Banner renders with snake game area
+// covers: AC-7 — No BlobScene import, Banner renders the hero content
+// (intro text, github code line, game area, background glows) inside the SiteFrame
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
@@ -16,61 +17,52 @@ describe("Banner", () => {
     expect(document.getElementById("home")).toBeInTheDocument();
   });
 
+  // ── Hero text ──
   it("renders greeting text", () => {
     render(React.createElement(Banner));
-    expect(screen.getByText(/Hi there/)).toBeInTheDocument();
+    expect(screen.getByText("Hi all. I am")).toBeInTheDocument();
   });
 
-  it("renders developer name", () => {
+  it("renders the developer name", () => {
     render(React.createElement(Banner));
     expect(screen.getByText("Bivek Gurung")).toBeInTheDocument();
   });
 
-  it("renders job title", () => {
+  it("renders the job title", () => {
     render(React.createElement(Banner));
-    expect(screen.getByText("Front End Developer")).toBeInTheDocument();
+    expect(screen.getByText("> Front-end developer")).toBeInTheDocument();
   });
 
-  it("renders 'View My Work' CTA link to projects section", () => {
+  it("renders the comment lines", () => {
     render(React.createElement(Banner));
-    const cta = screen.getByText("View My Work");
-    expect(cta.closest("a")).toHaveAttribute("href", "#project");
+    expect(screen.getByText("// complete the game to continue")).toBeInTheDocument();
+    expect(screen.getByText("// find my profile on Github:")).toBeInTheDocument();
   });
 
-  it("renders Resume link", () => {
+  it("renders the github code line as a clickable link", () => {
     render(React.createElement(Banner));
-    const resume = screen.getByText("Resume");
-    expect(resume.closest("a")).toHaveAttribute("href", "/pdf/Bivek_Gurung_Resume.pdf");
+    const link = screen.getByText(/https:\/\/github.com\/bivekgurung/);
+    expect(link.closest("a")).toHaveAttribute("href", "https://github.com/bivekgurung");
   });
 
-  it("renders social link buttons from socials.json", () => {
-    render(React.createElement(Banner));
-    // Icons are mocked — check for the icon testids
-    expect(screen.getByTestId("icon-github")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-linkedin")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-mail")).toBeInTheDocument();
-  });
-
+  // ── Game area ──
   it("renders snake game area", () => {
     render(React.createElement(Banner));
     expect(screen.getByTestId("mock-snake")).toBeInTheDocument();
   });
 
-  it("renders background blur divs", () => {
+  // ── Background glows ──
+  it("renders background glow divs", () => {
     const { container } = render(React.createElement(Banner));
-    // Banner has blurBlue and blurGreen — check for divs with those classes
-    const blurs = container.querySelectorAll('[class*="blur"]');
-    expect(blurs.length).toBeGreaterThanOrEqual(2);
+    const glows = container.querySelectorAll('[class*="glow"]');
+    expect(glows.length).toBeGreaterThanOrEqual(2);
   });
 
   // ── AC-7: 3D blob removed ──
   it("does NOT import or render BlobScene (AC-7: 3D blob removed)", () => {
-    // Verify Banner source does not contain BlobScene
     const bannerSource = Banner.toString();
     expect(bannerSource).not.toContain("BlobScene");
     expect(bannerSource).not.toContain("react-three-fiber");
     expect(bannerSource).not.toContain("@react-three");
   });
 });
-
-// NOT_COVERED: AC-7 CustomCursor teal color — visual check deferred to /verify

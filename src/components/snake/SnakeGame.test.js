@@ -1,5 +1,5 @@
-// covers: AC-1 (idle state with instructions and Start Game), AC-2 (food counter),
-// AC-3 (game states: idle, playing, game-over, win), AC-4 (restart returns to idle)
+// covers: idle state with start-game button, skip button, keyboard instructions,
+// food meter, and D-pad controls
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
@@ -18,6 +18,8 @@ function createMockCanvasContext() {
     stroke: vi.fn(),
     moveTo: vi.fn(),
     lineTo: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
   };
 }
 
@@ -35,66 +37,57 @@ describe("SnakeGame", () => {
     vi.useRealTimers();
   });
 
-  // ── AC-1: Idle state with instructions and Start Game button ──
-  it("renders the game header with snake_game.js label", () => {
-    render(React.createElement(SnakeGame));
-    expect(screen.getByText("// snake_game.js")).toBeInTheDocument();
-  });
-
-  it("renders the food counter starting at 000", () => {
-    render(React.createElement(SnakeGame));
-    expect(screen.getByText(/\/\/ food:/)).toBeInTheDocument();
-    const foodSpan = screen.getByText(/\/\/ food:/);
-    expect(foodSpan.textContent).toMatch(/000/);
-  });
-
-  it("shows instructions overlay in idle state", () => {
-    render(React.createElement(SnakeGame));
-    expect(screen.getByText(/Use arrow keys to move/)).toBeInTheDocument();
-    expect(screen.getByText(/eat the green food to grow/)).toBeInTheDocument();
-    expect(screen.getByText(/avoid walls and your tail/)).toBeInTheDocument();
-  });
-
-  it("shows Start Game button in idle state", () => {
-    render(React.createElement(SnakeGame));
-    expect(screen.getByText("Start Game")).toBeInTheDocument();
-  });
-
-  it("does not show game-over or win overlay in idle state", () => {
-    render(React.createElement(SnakeGame));
-    expect(screen.queryByText("Game Over")).toBeNull();
-    expect(screen.queryByText("Well Done")).toBeNull();
-  });
-
-  it("transitions from idle to playing on Start Game click", () => {
-    render(React.createElement(SnakeGame));
-    fireEvent.click(screen.getByText("Start Game"));
-    // Instructions should disappear
-    expect(screen.queryByText(/Use arrow keys to move/)).toBeNull();
-    expect(screen.queryByText("Start Game")).toBeNull();
-  });
-
-  // ── Canvas and controls ──
-  it("gives the canvas an accessible label and img role", () => {
+  // ── Board ──
+  it("renders the board canvas with an accessible label and img role", () => {
     render(React.createElement(SnakeGame));
     const canvas = screen.getByLabelText("Snake game board");
     expect(canvas).toBeInTheDocument();
     expect(canvas).toHaveAttribute("role", "img");
   });
 
-  it("renders a canvas element with correct dimensions", () => {
+  it("renders a portrait canvas (256 x 432)", () => {
     render(React.createElement(SnakeGame));
     const canvas = document.querySelector("canvas");
-    expect(canvas).toBeInTheDocument();
-    expect(canvas.width).toBe(240);
-    expect(canvas.height).toBe(240);
+    expect(canvas.width).toBe(256);
+    expect(canvas.height).toBe(432);
   });
 
-  it("creates canvas context and draws initial state", () => {
+  it("creates the canvas context and draws the initial state", () => {
     render(React.createElement(SnakeGame));
     expect(HTMLCanvasElement.prototype.getContext).toHaveBeenCalledWith("2d");
   });
 
+  // ── Idle state ──
+  it("shows the start-game button in idle state", () => {
+    render(React.createElement(SnakeGame));
+    expect(screen.getByText("start-game")).toBeInTheDocument();
+  });
+
+  it("shows the skip button", () => {
+    render(React.createElement(SnakeGame));
+    expect(screen.getByText("skip")).toBeInTheDocument();
+  });
+
+  it("renders the keyboard instructions", () => {
+    render(React.createElement(SnakeGame));
+    expect(screen.getByText("// use keyboard")).toBeInTheDocument();
+    expect(screen.getByText("// arrows to play")).toBeInTheDocument();
+  });
+
+  it("renders the food counter label and 10 meter dots", () => {
+    const { container } = render(React.createElement(SnakeGame));
+    expect(screen.getByText("// food left")).toBeInTheDocument();
+    const meter = screen.getByLabelText("Food remaining");
+    expect(meter.querySelectorAll('[class*="foodDot"]').length).toBe(10);
+  });
+
+  it("transitions from idle to playing on start-game click", () => {
+    render(React.createElement(SnakeGame));
+    fireEvent.click(screen.getByText("start-game"));
+    expect(screen.queryByText("start-game")).toBeNull();
+  });
+
+  // ── D-pad controls ──
   it("renders directional buttons (Up, Down, Left, Right)", () => {
     render(React.createElement(SnakeGame));
     expect(screen.getByLabelText("Up")).toBeInTheDocument();
@@ -103,7 +96,7 @@ describe("SnakeGame", () => {
     expect(screen.getByLabelText("Right")).toBeInTheDocument();
   });
 
-  it("onDirection does not crash when clicking directional buttons in idle state", () => {
+  it("does not crash when clicking directional buttons in idle state", () => {
     render(React.createElement(SnakeGame));
     expect(() => {
       fireEvent.click(screen.getByLabelText("Up"));
@@ -113,6 +106,7 @@ describe("SnakeGame", () => {
     }).not.toThrow();
   });
 
+  // ── Keyboard ──
   it("listens for arrow key events", () => {
     const addEventListenerSpy = vi.spyOn(window, "addEventListener");
     render(React.createElement(SnakeGame));
@@ -129,17 +123,11 @@ describe("SnakeGame", () => {
     }).not.toThrow();
   });
 
-  it("displays food counter padded to 3 digits", () => {
-    render(React.createElement(SnakeGame));
-    const foodSpan = screen.getByText(/\/\/ food:/);
-    expect(foodSpan.textContent).toContain("000");
-  });
-
+  // ── Cleanup ──
   it("clears interval on unmount when game is playing", () => {
     const clearIntervalSpy = vi.spyOn(window, "clearInterval");
     const { unmount } = render(React.createElement(SnakeGame));
-    // Start the game so an interval is running
-    fireEvent.click(screen.getByText("Start Game"));
+    fireEvent.click(screen.getByText("start-game"));
     unmount();
     expect(clearIntervalSpy).toHaveBeenCalled();
   });
@@ -152,7 +140,6 @@ describe("SnakeGame", () => {
   });
 });
 
-// NOT_COVERED: actual game loop tick logic (canvas drawing, collision detection) — requires integration test
-// NOT_COVERED: food generation randomness — non-deterministic
-// NOT_COVERED: visual appearance of snake and food — deferred to /verify
+// NOT_COVERED: actual game loop tick logic (canvas drawing, collision detection)
+// NOT_COVERED: food generation randomness
 // NOT_COVERED: neon glow visual effect — CSS only, verified visually

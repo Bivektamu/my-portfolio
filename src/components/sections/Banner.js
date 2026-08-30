@@ -1,9 +1,6 @@
 "use client";
 
-import { useScroll, useTransform, motion } from "motion/react";
 import dynamic from "next/dynamic";
-import { socials } from "@/data/socials.json";
-import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
 import styles from "./Banner.module.css";
 
 const SnakeGame = dynamic(() => import("@/components/snake/SnakeGame"), {
@@ -11,64 +8,37 @@ const SnakeGame = dynamic(() => import("@/components/snake/SnakeGame"), {
   loading: () => <div className={styles.gamePlaceholder} aria-label="Loading snake game" />,
 });
 
-const ICON_MAP = { FiGithub, FiLinkedin, FiMail, FiTwitter };
+const GITHUB_URL = "https://github.com/bivekgurung";
 
 export default function Banner() {
-  const { scrollY } = useScroll();
-  const yText = useTransform(scrollY, [0, 600], [0, -80]);
-  const yGame = useTransform(scrollY, [0, 600], [0, 30]);
-
   return (
     <section id="home" className={styles.banner}>
-      {/* Background blurs */}
-      <div className={styles.blurBlue} />
-      <div className={styles.blurGreen} />
+      <div className={styles.glowTeal} aria-hidden="true" />
+      <div className={styles.glowPurple} aria-hidden="true" />
 
-      <div className={styles.foreground}>
-        <div className={styles.content}>
-          {/* Left column: Introduction */}
-          <motion.div className={styles.intro} style={{ y: yText }}>
-            <p className={styles.greeting}>
-              <span className={styles.comment}>{"// "}</span>
-              Hi there, I&apos;m
-            </p>
-            <h1 className={styles.name}>Bivek Gurung</h1>
-            <p className={styles.jobTitle}>Front End Developer</p>
+      <div className={styles.hero}>
+        {/* Left column: introduction */}
+        <div className={styles.intro}>
+          <p className={styles.greeting}>Hi all. I am</p>
+          <h1 className={styles.name}>Bivek Gurung</h1>
+          <p className={styles.jobTitle}>&gt; Front-end developer</p>
 
-            <div className={styles.socialLinks}>
-              {socials.map((s) => {
-                const Icon = ICON_MAP[s.icon];
-                if (!Icon) return null;
-                return (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target={s.href.startsWith("mailto") ? undefined : "_blank"}
-                    rel="noreferrer"
-                    className={styles.socialBtn}
-                    aria-label={s.label}
-                  >
-                    <Icon />
-                    <span>{s.label}</span>
-                  </a>
-                );
-              })}
-            </div>
+          <p className={styles.comment}>{"// "}complete the game to continue</p>
+          <p className={styles.comment}>{"// "}find my profile on Github:</p>
 
-            <div className={styles.actions}>
-              <a href="#project" className={styles.cta}>
-                View My Work
-              </a>
-              <a href="/pdf/Bivek_Gurung_Resume.pdf" className={styles.resume} target="_blank" rel="noreferrer">
-                Resume
-              </a>
-            </div>
-          </motion.div>
+          <p className={styles.codeLine}>
+            <span className={styles.keyword}>const</span>
+            <span className={styles.ident}> githubLink</span>
+            <span className={styles.symbol}> = </span>
+            <a href={GITHUB_URL} target="_blank" rel="noreferrer" className={styles.url}>
+              &quot;{GITHUB_URL}&quot;
+            </a>
+          </p>
+        </div>
 
-          {/* Right column: Snake game */}
-          <motion.div className={styles.gameArea} style={{ y: yGame }}>
-            <SnakeGame />
-          </motion.div>
+        {/* Right column: game panel */}
+        <div className={styles.gameArea}>
+          <SnakeGame />
         </div>
       </div>
     </section>

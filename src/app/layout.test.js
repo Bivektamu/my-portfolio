@@ -4,9 +4,6 @@ import { render, screen } from "@testing-library/react";
 import React from "react";
 
 // Mock sub-components so the layout renders without needing their full trees
-vi.mock("@/components/header/Header", () => ({
-  default: () => React.createElement("header", { "data-testid": "mock-header" }, "Header"),
-}));
 vi.mock("@/components/cursor/CustomCursor", () => ({
   default: () => React.createElement("div", { "data-testid": "mock-cursor" }),
 }));
@@ -117,10 +114,9 @@ describe("RootLayout", () => {
       expect(themeScript.textContent).toContain("data-theme");
     });
 
-    it("includes PageTransition, Header, CustomCursor, NoiseOverlay", () => {
+    it("includes PageTransition, CustomCursor, NoiseOverlay", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
       expect(screen.getByTestId("mock-page-transition")).toBeInTheDocument();
-      expect(screen.getByTestId("mock-header")).toBeInTheDocument();
       expect(screen.getByTestId("mock-cursor")).toBeInTheDocument();
       expect(screen.getByTestId("mock-noise")).toBeInTheDocument();
     });

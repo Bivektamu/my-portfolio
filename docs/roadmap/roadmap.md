@@ -44,8 +44,9 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 36 | 404 page | Skateboard | lean | no | done |
 | 37 | Responsive polish & mobile QA | Slice 3 | lean | no | done |
 | 38 | Accessibility audit (WCAG AA) | Slice 3 | lean | no | done |
-| 39 | Performance optimization v2 | Slice 3 | lean | no | in-progress |
+| 39 | Performance optimization v2 | Slice 3 | lean | no | done |
 | 40 | Multi-page routing & snake game update | Slice 3 | medium | yes | done |
+| 41 | Unified IDE window (SiteFrame layout) | Slice 3 | medium | yes | done |
 
 ## Foundation
 
@@ -395,7 +396,7 @@ Done when: automated audit (axe or Lighthouse) passes WCAG AA, manual keyboard t
 - [x] `/develop Accessibility audit (WCAG AA)`
   - code in `src/app/globals.css`, `src/components/header/ThemeToggle.js`, `src/components/header/MobileNav.js`, `src/components/sections/About.js`, `src/components/sections/Contact.js`, `src/components/sections/Projects.js`, `src/components/snake/SnakeGame.js`, `src/app/layout.js`
 
-### 39. Performance optimization v2
+### 39. Performance optimization v2 `done`
 
 Intent: With the new design system and snake game in place, audit Core Web Vitals. Ensure Fira Code and Inter fonts load efficiently, the snake game does not cause layout shift or block the main thread, all images use next/image, and the contact form code-snippet panel does not cause expensive re-renders.
 
@@ -418,6 +419,16 @@ Done when: 5 routes render independently with fade transitions, nav uses path-ba
   - [x] Verify persistent UI and cleanup scroll-spy (AC-8, AC-9)
 - [x] Verify it: `/verify Multi-page routing & snake game update`
 - [x] Test it: `/test Multi-page routing & snake game update`
+
+### 41. Unified IDE window (SiteFrame layout) `done`
+
+Intent: Wrap every route in one shared IDE application window (SiteFrame) so all five pages present identically: top tab navigation with an active state, the section content, and a footer social bar. Removes the global fixed header and reduces the home banner to hero content only. Supersedes the routing chrome of #40 (ADR 0012) and the banner chrome of #29 (ADR 0008).
+
+Done when: all five routes render inside SiteFrame with the active nav tab highlighted, the footer bar shows the social links, the global header is removed, and the banner is hero content only.
+
+- [x] Design it: `/blueprint` — [ADR 0013](../adr/0013-unified-ide-window.md)
+- [x] Build it: `/develop Unified IDE window (SiteFrame layout)`
+- [x] Test it: `/test Unified IDE window`
 
 ## Legend
 

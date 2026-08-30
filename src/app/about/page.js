@@ -1,4 +1,5 @@
 import About from "@/components/sections/About";
+import SiteFrame from "@/components/layout/SiteFrame";
 
 export const metadata = {
   title: "About | Bivek Gurung",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function AboutPage() {
-  return <About />;
+  return (
+    <SiteFrame>
+      <About />
+    </SiteFrame>
+  );
 }

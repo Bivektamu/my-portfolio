@@ -1,4 +1,5 @@
 import Projects from "@/components/sections/Projects";
+import SiteFrame from "@/components/layout/SiteFrame";
 
 export const metadata = {
   title: "Projects | Bivek Gurung",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function ProjectsPage() {
-  return <Projects />;
+  return (
+    <SiteFrame>
+      <Projects />
+    </SiteFrame>
+  );
 }

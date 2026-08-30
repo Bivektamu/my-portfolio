@@ -1,6 +1,6 @@
 # 0008 — Home / Banner Redesign
 
-**Status**: Accepted
+**Status**: Superseded by [0013](0013-unified-ide-window.md)
 **Feature**: Home / Banner redesign (Roadmap #29)
 **Date**: 2026-08-02
 

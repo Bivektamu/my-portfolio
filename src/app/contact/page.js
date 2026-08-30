@@ -1,4 +1,5 @@
 import Contact from "@/components/sections/Contact";
+import SiteFrame from "@/components/layout/SiteFrame";
 
 export const metadata = {
   title: "Contact | Bivek Gurung",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function ContactPage() {
-  return <Contact />;
+  return (
+    <SiteFrame>
+      <Contact />
+    </SiteFrame>
+  );
 }

@@ -1,4 +1,5 @@
 import Skills from "@/components/sections/Skills";
+import SiteFrame from "@/components/layout/SiteFrame";
 
 export const metadata = {
   title: "Skills | Bivek Gurung",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function SkillsPage() {
-  return <Skills />;
+  return (
+    <SiteFrame>
+      <Skills />
+    </SiteFrame>
+  );
 }
