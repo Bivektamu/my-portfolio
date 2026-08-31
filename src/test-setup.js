@@ -48,6 +48,7 @@ vi.mock("motion/react", () => {
 
   return {
     AnimatePresence: function (props) { return props.children; },
+    MotionConfig: function (props) { return props.children; },
     useScroll: function () { return { scrollY: { get: function () { return 0; } }, scrollYProgress: { get: function () { return 0; } } }; },
     useTransform: function () { return { get: function () { return 0; } }; },
     motion: {
@@ -71,7 +72,6 @@ vi.mock("react-icons/fi", () => ({
   FiGithub: function (props) { return React.createElement("span", Object.assign({ "data-testid": "icon-github" }, props), "GH"); },
   FiLinkedin: function (props) { return React.createElement("span", Object.assign({ "data-testid": "icon-linkedin" }, props), "LI"); },
   FiMail: function (props) { return React.createElement("span", Object.assign({ "data-testid": "icon-mail" }, props), "MAIL"); },
-  FiTwitter: function (props) { return React.createElement("span", Object.assign({ "data-testid": "icon-twitter" }, props), "TW"); },
 }));
 
 // ── react-icons/fa ──

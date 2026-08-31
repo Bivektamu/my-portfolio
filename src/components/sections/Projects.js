@@ -95,6 +95,8 @@ export default function Projects() {
                 transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className={styles.cardImage}>
+                  {/* fill + sizes is intentional here: card images are fluid
+                      width inside a CSS grid, so dimensions are unknown */}
                   <Image
                     src={item.image}
                     alt={item.title}

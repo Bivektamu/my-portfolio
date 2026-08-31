@@ -27,7 +27,7 @@ npm run build
 # Start production server
 npm start
 
-# Lint
+# Lint (ESLint + eslint-config-next)
 npm run lint
 
 # Test (Vitest + jsdom + @testing-library/react)
@@ -62,9 +62,9 @@ Stored in `docs/adr/`. Active:
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
 - **Routing**: 4 routes (`/`, `/about`, `/projects`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper. The `/skills` route was removed.
-- **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
+- **Section IDs are fixed**: `home`, `about`, `project`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
 - **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` for theming (Design System v3 — code-editor aesthetic). Dark-only. Pattern tokens for tabs, code blocks, inputs, file explorers, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
-- **Theme**: dark-only. Tokens live on `:root` in `globals.css` and `<html data-theme="dark">` is hardcoded in the root layout. No toggle, no localStorage, no flash-of-theme script.
+- **Theme**: dark-only. Tokens live on `:root` in `globals.css`. The `<html>` element carries no theme attribute. No toggle, no localStorage, no flash-of-theme script.
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
 - **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
 - **Motion imports**: always from `motion/react`, not `framer-motion`.
@@ -77,7 +77,7 @@ Stored in `docs/adr/`. Active:
 
 | Directory / File | Owns | Status |
 |---|---|---|
-| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, dark theme attribute, PageTransition wrapper, noise overlay, skip-to-content link | Done |
+| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, MotionConfig (reduced motion), PageTransition wrapper, noise overlay, skip-to-content link | Done |
 | `src/app/page.js` | Home route, renders Banner only | Done |
 | `src/app/about/page.js` | About route, renders About section | Done |
 | `src/app/projects/page.js` | Projects route, renders Projects section | Done |
@@ -125,6 +125,6 @@ Stored in `docs/adr/`. Active:
 - **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. Each route renders its section directly.
 - **Preloader removed**: the intro preloader is gone. The `src/components/preloader/` files remain but are unused.
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
-- **`react-icons/fi`**: used in Contact and Banner sections for social links (FiGithub, FiLinkedin, FiMail, FiTwitter).
+- **`react-icons/fi`**: used in Contact and SiteFrame sections for social links (FiGithub, FiLinkedin, FiMail).
 - **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. The game loop is cleared (paused) on win and game over, so the board freezes behind the overlay. Does not block page scroll.
 - **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Logs to console by default; needs SMTP_USER and SMTP_PASS env vars for email sending via Nodemailer.

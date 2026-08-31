@@ -2,18 +2,21 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import { bio } from "@/data/personal.json";
+import {
+  bio,
+  name,
+  role,
+  email,
+  phone,
+  location,
+  github,
+  linkedin,
+  experience as EXPERIENCE,
+  interests as INTERESTS,
+} from "@/data/personal.json";
 import styles from "./About.module.css";
 
-const PROFILE = {
-  name: "Bivek Gurung",
-  role: "Front End Developer",
-  email: "bivekgurung9@gmail.com",
-  phone: "+61452424565",
-  location: "Australia",
-  github: "https://github.com/bivektamu",
-  linkedin: "https://www.linkedin.com/in/bivek-gurung-b4602a62/",
-};
+const PROFILE = { name, role, email, phone, location, github, linkedin };
 
 const FOLDERS = [
   {
@@ -34,40 +37,6 @@ const FOLDERS = [
     icon: "📁",
     files: [{ name: "interests.md", icon: "📄", type: "interests" }],
   },
-];
-
-const EXPERIENCE = [
-  {
-    role: "Front End Developer",
-    company: "Ondicom",
-    period: "Jun 2017 - Feb 2025",
-    type: "Full-time · Hybrid · North Sydney NSW",
-    highlights: [
-      "Progressed from Junior to Mid-level, shipping 200+ digital products across marketing and enterprise",
-      "React, ES6+, TypeScript and component-driven architecture for scalability and maintainability",
-      "Reusable UI component libraries, REST API integration and state management patterns",
-      "WCAG accessibility, cross-browser compatibility and responsive design",
-      "CMS migrations from legacy WordPress systems to React-driven, .NET-backed platforms",
-      "Code reviews, frontend standards and mentoring junior developers",
-    ],
-  },
-  {
-    role: "Web Developer Intern",
-    company: "Thinkun",
-    period: "Jan 2017 - May 2017",
-    type: "Internship · On-site · Newtown NSW",
-    highlights: [
-      "Custom WordPress themes built from scratch, turning designs into responsive sites",
-      "Custom UI plugins to extend functionality and improve user experience",
-      "HTML, CSS, SASS, JavaScript, jQuery, PHP and WordPress",
-    ],
-  },
-];
-
-const INTERESTS = [
-  "exploring new technologies and the modern JavaScript ecosystem",
-  "contributing to open-source projects",
-  "hiking and spending time in the great outdoors",
 ];
 
 /* ── Syntax-token helpers for the code-editor content ── */

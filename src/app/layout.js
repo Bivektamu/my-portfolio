@@ -1,4 +1,5 @@
 import { Fira_Code, Inter } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import PageTransition from "@/components/animations/PageTransition";
 import NoiseOverlay from "@/components/animations/NoiseOverlay";
@@ -36,7 +37,6 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en-AU"
-      data-theme="dark"
       className={`${firaCode.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
@@ -46,9 +46,11 @@ export default function RootLayout({ children }) {
         </a>
         <CustomCursor />
         <NoiseOverlay />
-        <PageTransition>
-          <main id="main-content">{children}</main>
-        </PageTransition>
+        <MotionConfig reducedMotion="user">
+          <PageTransition>
+            <main id="main-content">{children}</main>
+          </PageTransition>
+        </MotionConfig>
       </body>
     </html>
   );

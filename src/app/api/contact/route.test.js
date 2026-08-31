@@ -179,6 +179,59 @@ describe("Contact API route (POST /api/contact)", () => {
       const data = await res.json();
       expect(data.error).toBeDefined();
     });
+
+    it("returns 400 instead of 500 when the JSON body is null", async () => {
+      const req = createRequest(null, { "x-forwarded-for": uniqueIP() });
+      const res = await POST(req);
+      expect(res.status).toBe(400);
+      const data = await res.json();
+      expect(data.errors.form).toBeDefined();
+    });
+
+    it("returns 400 when the JSON body is an array", async () => {
+      const req = createRequest(["not", "an", "object"], { "x-forwarded-for": uniqueIP() });
+      const res = await POST(req);
+      expect(res.status).toBe(400);
+      const data = await res.json();
+      expect(data.errors.form).toBeDefined();
+    });
+  });
+
+  describe("Client IP detection", () => {
+    it("prefers x-nf-client-connection-ip over x-forwarded-for", async () => {
+      // 3 requests from the same Netlify client IP must hit the limit.
+      for (let i = 0; i < 3; i++) {
+        const req = createRequest(
+          { name: "Test", email: "t@t.com", message: "Message number " + (i + 1) + " here." },
+          { "x-nf-client-connection-ip": "203.0.113.7", "x-forwarded-for": "10.0.0.1" }
+        );
+        const res = await POST(req);
+        expect(res.status).toBe(200);
+      }
+      const req = createRequest(
+        { name: "Test", email: "t@t.com", message: "This should be rate limited now." },
+        { "x-nf-client-connection-ip": "203.0.113.7", "x-forwarded-for": "10.0.0.1" }
+      );
+      const res = await POST(req);
+      expect(res.status).toBe(429);
+    });
+
+    it("uses the first IP of a comma separated x-forwarded-for list", async () => {
+      for (let i = 0; i < 3; i++) {
+        const req = createRequest(
+          { name: "Test", email: "t@t.com", message: "Message number " + (i + 1) + " here." },
+          { "x-forwarded-for": "198.51.100.4, 10.0.0.2, 10.0.0.3" }
+        );
+        const res = await POST(req);
+        expect(res.status).toBe(200);
+      }
+      const req = createRequest(
+        { name: "Test", email: "t@t.com", message: "This should be rate limited now." },
+        { "x-forwarded-for": "198.51.100.4, 10.0.0.2" }
+      );
+      const res = await POST(req);
+      expect(res.status).toBe(429);
+    });
   });
 });
 

@@ -1,9 +1,25 @@
 import { NextResponse } from "next/server";
 
-// Simple in-memory rate limit store
+// Simple in-memory rate limit store.
+// Note: on serverless hosting this store is per instance and ephemeral, so
+// the limit is a best-effort guard, not a hard production guarantee. A shared
+// store (for example Upstash or Redis) would be needed for strict enforcement.
 const rateLimitStore = new Map();
 const RATE_LIMIT_MAX = 3;
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
+
+// Best-effort client IP. Netlify sets the real client IP in
+// x-nf-client-connection-ip on serverless functions; fall back to the first
+// entry of x-forwarded-for (set by proxies, leftmost is the original client).
+function getClientIp(request) {
+  const netlifyIp = request.headers.get("x-nf-client-connection-ip");
+  if (netlifyIp) return netlifyIp;
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+
+  return request.headers.get("x-real-ip") || "unknown";
+}
 
 function validate(data) {
   const errors = {};
@@ -24,7 +40,7 @@ function validate(data) {
 export async function POST(request) {
   try {
     // Rate limiting
-    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    const ip = getClientIp(request);
     const now = Date.now();
     const windowStart = now - RATE_LIMIT_WINDOW;
 
@@ -43,6 +59,12 @@ export async function POST(request) {
 
     // Parse body
     const body = await request.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json(
+        { errors: { form: "Invalid request body." } },
+        { status: 400 }
+      );
+    }
     const { name, email, message } = body;
 
     // Server-side validation
@@ -51,8 +73,9 @@ export async function POST(request) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 
-    // Log the submission (in production, send email via Nodemailer or Resend)
-    console.log(`[Contact] Name: ${name}, Email: ${email}, Message: ${message.substring(0, 100)}...`);
+    // Log the submission without personal data (in production, send email via
+    // Nodemailer or Resend)
+    console.log(`[Contact] Form submission received (message length: ${message.length}).`);
 
     // TODO: Configure SMTP credentials and uncomment to send real emails
     // const nodemailer = await import("nodemailer");

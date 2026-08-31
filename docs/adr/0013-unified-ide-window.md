@@ -75,3 +75,12 @@ The home page was already rebuilt as a self-contained IDE window. Extending that
 ## Follow-up
 
 None. This ADR records the shipped state.
+
+## Amendment (2026-08-31)
+
+After this ADR shipped, two elements it describes were removed:
+
+- The `_skills` tab (and the `/skills` route, plus the `Skills` section) was removed. The nav now has four tabs: `_hello`, `_about-me`, `_projects`, `_contact-me`. See the "remove skills section" commit on `new-design-system`.
+- The theme toggle was removed (the site is dark-only) and the `<html data-theme="dark">` attribute was dropped; dark tokens live on `:root` in `globals.css`. AC-2's "theme toggle sits at the far right" and AC-6 no longer apply.
+
+AC-1 should read "all four routes" (`/`, `/about`, `/projects`, `/contact`). The rest of the ADR is unchanged.

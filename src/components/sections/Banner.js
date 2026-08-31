@@ -5,7 +5,11 @@ import styles from "./Banner.module.css";
 
 const SnakeGame = dynamic(() => import("@/components/snake/SnakeGame"), {
   ssr: false,
-  loading: () => <div className={styles.gamePlaceholder} aria-label="Loading snake game" />,
+  loading: () => (
+    <div className={styles.gamePlaceholder} role="status" aria-label="Loading snake game">
+      <span>Loading snake game...</span>
+    </div>
+  ),
 });
 
 const GITHUB_URL = "https://github.com/bivektamu";

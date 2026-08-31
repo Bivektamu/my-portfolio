@@ -94,9 +94,10 @@ describe("RootLayout", () => {
       expect(screen.getByText("test-child")).toBeInTheDocument();
     });
 
-    it("renders html with dark theme applied (no theme toggle script)", () => {
+    it("does not add a data-theme attribute or a theme toggle script (dark-only)", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
-      expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+      // Dark tokens live on :root in globals.css; no attribute is needed.
+      expect(document.documentElement.getAttribute("data-theme")).toBeNull();
       const scripts = Array.from(document.querySelectorAll("script"));
       expect(
         scripts.some((s) => s.textContent.includes("localStorage.getItem('theme')"))

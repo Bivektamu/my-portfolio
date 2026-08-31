@@ -66,6 +66,14 @@ function randomFood(snake) {
   return available[Math.floor(Math.random() * available.length)];
 }
 
+// Exported for unit testing. Moving into the tail cell is a legal move when
+// the snake does not eat food on this tick (the tail advances in the same
+// tick), so the tail is excluded from the collision check in that case.
+export function wouldSelfCollide(snake, newHead, willEat) {
+  const body = willEat ? snake : snake.slice(0, -1);
+  return body.some((seg) => seg.x === newHead.x && seg.y === newHead.y);
+}
+
 export default function SnakeGame() {
   const canvasRef = useRef(null);
   const [gameState, setGameState] = useState("idle"); // idle | playing | game-over | win
@@ -158,17 +166,20 @@ export default function SnakeGame() {
       return;
     }
 
-    // Self collision
-    if (snake.some((seg) => seg.x === newHead.x && seg.y === newHead.y)) {
+    const food = foodRef.current;
+    const willEat = Boolean(food && newHead.x === food.x && newHead.y === food.y);
+
+    // Self collision. The tail cell is a legal destination when no food is
+    // eaten, because the tail advances on the same tick.
+    if (wouldSelfCollide(snake, newHead, willEat)) {
       stopLoop();
       setGameState("game-over");
       return;
     }
 
     const newSnake = [newHead, ...snake];
-    const food = foodRef.current;
 
-    if (food && newHead.x === food.x && newHead.y === food.y) {
+    if (willEat) {
       const newFoodCount = foodCountRef.current + 1;
       foodCountRef.current = newFoodCount;
       setFoodCount(newFoodCount);
@@ -188,7 +199,7 @@ export default function SnakeGame() {
 
     snakeRef.current = newSnake;
     draw();
-  }, [draw]);
+  }, [draw, stopLoop]);
 
   const startGame = useCallback(() => {
     stopLoop();
@@ -201,7 +212,7 @@ export default function SnakeGame() {
     setGameState("playing");
     draw();
     intervalRef.current = setInterval(tick, INITIAL_SPEED);
-  }, [tick, draw]);
+  }, [tick, draw, stopLoop]);
 
   const resetToIdle = useCallback(() => {
     stopLoop();
@@ -213,7 +224,7 @@ export default function SnakeGame() {
     setFoodCount(0);
     setGameState("idle");
     draw();
-  }, [draw]);
+  }, [draw, stopLoop]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -231,6 +242,10 @@ export default function SnakeGame() {
   useEffect(() => {
     const handleKey = (e) => {
       if (gameState !== "playing") return;
+      // Stop the browser from scrolling the page while playing with arrows.
+      if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+      }
       const current = directionRef.current;
       switch (e.key) {
         case "ArrowUp":

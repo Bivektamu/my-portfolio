@@ -3,7 +3,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import React from "react";
-import SnakeGame from "@/components/snake/SnakeGame";
+import SnakeGame, { wouldSelfCollide } from "@/components/snake/SnakeGame";
 
 function createMockCanvasContext() {
   return {
@@ -121,6 +121,53 @@ describe("SnakeGame", () => {
       fireEvent.keyDown(window, { key: "ArrowLeft" });
       fireEvent.keyDown(window, { key: "ArrowRight" });
     }).not.toThrow();
+  });
+
+  it("prevents the default (page scroll) for arrow keys while playing", () => {
+    const preventDefaultSpy = vi.spyOn(KeyboardEvent.prototype, "preventDefault");
+    render(React.createElement(SnakeGame));
+    fireEvent.click(screen.getByText("start-game"));
+
+    fireEvent.keyDown(window, { key: "ArrowUp" });
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+
+  it("does not call preventDefault for arrow keys in idle state", () => {
+    const preventDefaultSpy = vi.spyOn(KeyboardEvent.prototype, "preventDefault");
+    render(React.createElement(SnakeGame));
+
+    fireEvent.keyDown(window, { key: "ArrowUp" });
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+
+  // ── Self-collision logic ──
+  describe("wouldSelfCollide", () => {
+    // Snake heading right: head at (5,5), body trailing to the left.
+    const snake = [
+      { x: 5, y: 5 },
+      { x: 4, y: 5 },
+      { x: 3, y: 5 },
+    ];
+
+    it("allows moving into the tail cell when not eating (tail advances)", () => {
+      const newHead = { x: 3, y: 5 }; // the tail cell
+      expect(wouldSelfCollide(snake, newHead, false)).toBe(false);
+    });
+
+    it("disallows moving into the tail cell when eating (tail stays)", () => {
+      const newHead = { x: 3, y: 5 }; // the tail cell
+      expect(wouldSelfCollide(snake, newHead, true)).toBe(true);
+    });
+
+    it("disallows moving into the body", () => {
+      const newHead = { x: 4, y: 5 }; // a mid-body cell
+      expect(wouldSelfCollide(snake, newHead, false)).toBe(true);
+    });
+
+    it("allows moving into an empty cell", () => {
+      const newHead = { x: 6, y: 5 };
+      expect(wouldSelfCollide(snake, newHead, false)).toBe(false);
+    });
   });
 
   // ── Game over pauses the loop ──

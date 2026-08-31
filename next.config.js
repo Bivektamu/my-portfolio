@@ -20,12 +20,6 @@ const nextConfig = {
         { key: "Cache-Control", value: "public, max-age=604800" },
       ],
     },
-    {
-      source: "/_next/static/(.*)",
-      headers: [
-        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-      ],
-    },
   ],
 
   experimental: {

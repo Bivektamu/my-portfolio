@@ -2,18 +2,22 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
-import { FiGithub, FiLinkedin, FiMail, FiTwitter } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { socials } from "@/data/socials.json";
 import styles from "./Contact.module.css";
 
-const ICON_MAP = { FiGithub, FiLinkedin, FiMail, FiTwitter };
+const ICON_MAP = { FiGithub, FiLinkedin, FiMail };
 
 function validateForm(data) {
   const errors = {};
-  if (!data.name || data.name.length < 2) errors.name = "Name must be at least 2 characters.";
-  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
+  // Trim first so client validation matches the server (which trims).
+  const name = (data.name || "").trim();
+  const email = (data.email || "").trim();
+  const message = (data.message || "").trim();
+  if (!name || name.length < 2) errors.name = "Name must be at least 2 characters.";
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     errors.email = "Please enter a valid email.";
-  if (!data.message || data.message.length < 10)
+  if (!message || message.length < 10)
     errors.message = "Message must be at least 10 characters.";
   return errors;
 }
@@ -117,9 +121,11 @@ export default function Contact() {
                     onChange={handleChange}
                     className={styles.input}
                     placeholder="Your name"
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "contact-name-error" : undefined}
                   />
                   {errors.name && (
-                    <span className={styles.errorMsg}>
+                    <span id="contact-name-error" role="alert" className={styles.errorMsg}>
                       <span className={styles.errorIcon}>!</span>
                       {errors.name}
                     </span>
@@ -136,9 +142,11 @@ export default function Contact() {
                     onChange={handleChange}
                     className={styles.input}
                     placeholder="your@email.com"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "contact-email-error" : undefined}
                   />
                   {errors.email && (
-                    <span className={styles.errorMsg}>
+                    <span id="contact-email-error" role="alert" className={styles.errorMsg}>
                       <span className={styles.errorIcon}>!</span>
                       {errors.email}
                     </span>
@@ -155,9 +163,11 @@ export default function Contact() {
                     className={styles.textarea}
                     placeholder="Your message..."
                     rows={5}
+                    aria-invalid={Boolean(errors.message)}
+                    aria-describedby={errors.message ? "contact-message-error" : undefined}
                   />
                   {errors.message && (
-                    <span className={styles.errorMsg}>
+                    <span id="contact-message-error" role="alert" className={styles.errorMsg}>
                       <span className={styles.errorIcon}>!</span>
                       {errors.message}
                     </span>
@@ -165,7 +175,7 @@ export default function Contact() {
                 </div>
 
                 {status === "error" && (
-                  <p className={styles.errorMsg}>
+                  <p role="alert" className={styles.errorMsg}>
                     Something went wrong. Please try again.
                   </p>
                 )}
