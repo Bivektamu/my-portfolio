@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# Portfolio — Bivek Gurung
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A personal portfolio for **Bivek Jang Gurung**, a front-end developer based in Australia with 7 years of experience. The site uses a code-editor aesthetic (Design System v3) and is organized as a shared IDE window across five routes.
 
-## Available Scripts
+## Tech stack
 
-In the project directory, you can run:
+- **Framework**: Next.js 16 (App Router), React 19
+- **Styling**: CSS Modules + CSS custom properties (dark-first theme, `data-theme` switching)
+- **Fonts**: Fira Code (display/code) and Inter (body/UI) via `next/font/google`
+- **Animations**: `motion` (framer-motion), page transitions, noise overlay
+- **Icons**: `react-icons`
+- **Tests**: Vitest + jsdom + @testing-library/react
+- **Deploy**: Netlify (`@netlify/plugin-nextjs`)
 
-### `npm start`
+## Routes
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Route | Content |
+|---|---|
+| `/` | Home — intro, social links, playable snake game |
+| `/about` | About — file explorer sidebar, code-snippet bio, GitHub gist cards |
+| `/projects` | Projects — technology filter sidebar, project cards |
+| `/skills` | Skills — tech chips with icons, experience panel |
+| `/contact` | Contact — validated form, live code-snippet preview, social strip |
+| anything else | Custom 404 page (code-editor style) |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Every route renders inside a shared `SiteFrame` (top tab navigation, section content, footer bar) so the whole site presents as one IDE window.
 
-### `npm test`
+## Getting started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# Install dependencies
+npm install
 
-### `npm run build`
+# Dev server (port 3000)
+npm run dev
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Production build
+npm run build
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Start production server
+npm start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Lint
+npm run lint
 
-### `npm run eject`
+# Test (Vitest, runs once)
+npm test
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Key features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Snake game** — canvas-based, idle/playing/game-over/win states, keyboard + on-screen controls, neon glow. Does not block page scroll.
+- **Theme toggle** — dark default, light alternative, persisted to `localStorage`, no flash on first paint.
+- **Contact form** — client-side validation states, server-side validation and rate limiting (3/hr/IP) at `POST /api/contact`. Email sending is Nodemailer-ready: set `SMTP_USER` and `SMTP_PASS` env vars to enable; otherwise submissions are logged to the console.
+- **Custom cursor** — rAF lerp follow, active above 999px viewport.
+- **Accessibility** — WCAG AA audit (see `docs/verify-38-accessibility-audit.md`), skip-to-content link, keyboard-friendly interactions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+src/
+├── app/                    # App Router: routes, root layout, globals.css, 404, API route
+│   └── api/contact/        # Contact form POST handler
+├── components/
+│   ├── layout/SiteFrame.js # Shared IDE window (nav, content, footer)
+│   ├── sections/           # Banner, About, Projects, Skills, Contact
+│   ├── snake/SnakeGame.js  # Canvas snake game
+│   ├── cursor/             # Custom cursor
+│   ├── animations/         # PageTransition, RevealOnScroll, NoiseOverlay
+│   ├── header/             # ThemeToggle
+│   └── hooks/              # useMagnetic
+└── data/                   # Static JSON: projects, skills, socials, personal
+```
 
-## Learn More
+## Content & data
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+All site content lives in static JSON files under `src/data/` — edit `projects.json`, `skills.json`, `socials.json`, or `personal.json` to change the content without touching components.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Environment variables
 
-### Code Splitting
+| Variable | Purpose |
+|---|---|
+| `SMTP_USER` | SMTP username for contact-form email sending (optional) |
+| `SMTP_PASS` | SMTP password for contact-form email sending (optional) |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Deployment
 
-### Analyzing the Bundle Size
+The project deploys to Netlify via `netlify.toml` (build command `npm run build`, publish dir `.next`, Next.js plugin). `next.config.js` sets `poweredByHeader: false`, compression, and long-lived cache headers for `/images` and `/pdf`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Docs
 
-### Making a Progressive Web App
+- `docs/roadmap/roadmap.md` — feature roadmap and build approach
+- `docs/adr/` — architecture decision records (e.g. Design System v3, SiteFrame layout, multi-page routing)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Private project. All rights reserved.

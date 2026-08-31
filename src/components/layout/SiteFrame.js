@@ -6,9 +6,8 @@ import { FiGithub } from "react-icons/fi";
 import ThemeToggle from "@/components/header/ThemeToggle";
 import styles from "./SiteFrame.module.css";
 
-const GITHUB_URL = "https://github.com/bivekgurung";
-const LINKEDIN_URL = "https://www.linkedin.com/in/bivek-gurung-145880145/";
-const X_URL = "https://twitter.com";
+const GITHUB_URL = "https://github.com/bivektamu";
+const LINKEDIN_URL = "https://www.linkedin.com/in/bivek-gurung-b4602a62/";
 
 const NAV_LINKS = [
   { href: "/", label: "_hello" },
@@ -55,9 +54,7 @@ export default function SiteFrame({ children }) {
 
         <footer className={styles.footer}>
           <span className={styles.footerLabel}>find me in:</span>
-          <a className={styles.footerBtn} href={X_URL} target="_blank" rel="noreferrer" aria-label="X">
-            X
-          </a>
+         
           <a
             className={styles.footerBtn}
             href={LINKEDIN_URL}

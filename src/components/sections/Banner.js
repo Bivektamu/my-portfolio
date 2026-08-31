@@ -8,7 +8,7 @@ const SnakeGame = dynamic(() => import("@/components/snake/SnakeGame"), {
   loading: () => <div className={styles.gamePlaceholder} aria-label="Loading snake game" />,
 });
 
-const GITHUB_URL = "https://github.com/bivekgurung";
+const GITHUB_URL = "https://github.com/bivektamu";
 
 export default function Banner() {
   return (
@@ -23,13 +23,12 @@ export default function Banner() {
           <h1 className={styles.name}>Bivek Gurung</h1>
           <p className={styles.jobTitle}>&gt; Front-end developer</p>
 
-          <p className={styles.comment}>{"// "}complete the game to continue</p>
           <p className={styles.comment}>{"// "}find my profile on Github:</p>
 
           <p className={styles.codeLine}>
-            <span className={styles.keyword}>const</span>
-            <span className={styles.ident}> githubLink</span>
-            <span className={styles.symbol}> = </span>
+            <span className={styles.keyword}>const&nbsp;</span>
+            <span className={styles.ident}>githubLink</span>
+            <span className={styles.symbol}>&nbsp;=&nbsp;</span>
             <a href={GITHUB_URL} target="_blank" rel="noreferrer" className={styles.url}>
               &quot;{GITHUB_URL}&quot;
             </a>
