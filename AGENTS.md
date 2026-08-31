@@ -68,7 +68,7 @@ Stored in `docs/adr/`. Active:
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
 - **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
 - **Motion imports**: always from `motion/react`, not `framer-motion`.
-- **Data**: static JSON files in `src/data/` (projects.json, skills.json, socials.json, personal.json). Imported directly in components — no API routes for data, no database.
+- **Data**: static JSON files in `src/data/` (projects.json, socials.json, personal.json). Imported directly in components — no API routes for data, no database.
 - **Contact form**: POST `/api/contact` with server-side validation and rate limiting. Nodemailer-ready for email sending (needs SMTP credentials in env).
 - **Images**: use Next.js `Image` from `next/image` with explicit `width`/`height` and `sizes` attribute.
 - **File naming**: PascalCase for components. One CSS Module per component: `Banner.js` + `Banner.module.css`.
@@ -86,7 +86,7 @@ Stored in `docs/adr/`. Active:
 | `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
 | `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
 | `src/components/sections/Banner.js` | Home — hero content (intro text, `> Front-end developer`, comments, github code line, snake game, glows) inside SiteFrame | Done |
-| `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, per-file code content (bio, contacts, experience, interests), tech-stack panel | Done |
+| `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, per-file code content (bio, contacts, experience, interests) | Done |
 | `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar (filters the card grid), project cards with hover effects | Done |
 | `src/components/sections/Contact.js` | Contact — form with validation states, live code snippet preview, social strip | Done |
 | `src/components/layout/` | SiteFrame — shared IDE window (brand, 4 nav tabs with active state, footer bar) wrapping every route | Done |
@@ -96,7 +96,7 @@ Stored in `docs/adr/`. Active:
 | `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed from layout, unused |
 | `src/components/animations/` | PageTransition, RevealOnScroll, ScrollSpy (unused), NoiseOverlay (SVG grain texture) | Done |
 | `src/components/hooks/` | useMagnetic (magnetic hover hook, radius + strength config) | Done |
-| `src/data/` | Static JSON: projects.json (with per-project tech tags for filtering), skills.json (About tech-stack panel), socials.json, personal.json | Done |
+| `src/data/` | Static JSON: projects.json (with per-project tech tags for filtering), socials.json, personal.json | Done |
 
 ## Legacy CRA files
 

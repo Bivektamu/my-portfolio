@@ -13,11 +13,11 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 5 | Home / Banner section | Skateboard | medium | no | done |
 | 6 | About section | Skateboard | lean | no | done |
 | 7 | Projects section | Skateboard | medium | no | done |
-| 8 | Skills section | Skateboard | lean | no | done |
+| 8 | Skills section | Skateboard | lean | no | dropped |
 | 9 | Contact / Footer section | Skateboard | lean | no | done |
 | 10 | Scroll driven parallax & animations | Slice 2 | medium | yes | done |
 | 11 | Scroll spy & smooth scroll | Slice 2 | medium | yes | done |
-| 12 | Theme toggle (light / dark) | Slice 3 | medium | yes | done |
+| 12 | Theme toggle (light / dark) | Slice 3 | medium | yes | dropped |
 | 13 | Custom cursor | Slice 3 | medium | no | done |
 | 14 | Intro preloader sequence | Slice 4 | medium | no | done |
 | 15 | SEO metadata | Slice 5 | lean | no | done |
@@ -38,7 +38,7 @@ Build approach: Skateboard — ship the thinnest usable whole first, then layer 
 | 30 | Snake game (playable, scored) | Skateboard | full | yes | done |
 | 31 | About redesign (File explorer, code snippets, gists) | Skateboard | medium | yes | done |
 | 32 | Projects redesign (Tech filters, new cards) | Skateboard | medium | no | done |
-| 33 | Skills redesign | Skateboard | lean | no | done |
+| 33 | Skills redesign | Skateboard | lean | no | dropped |
 | 34 | Contact redesign (Form with validation states) | Skateboard | medium | no | done |
 | 35 | Contact form backend (API route + email) | Slice 2 | medium | yes | done |
 | 36 | 404 page | Skateboard | lean | no | done |
