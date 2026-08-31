@@ -2,57 +2,229 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import Image from "next/image";
 import { bio } from "@/data/personal.json";
 import styles from "./About.module.css";
+
+const PROFILE = {
+  name: "Bivek Gurung",
+  role: "Front End Developer",
+  email: "bivekgurung9@gmail.com",
+  phone: "+61452424565",
+  location: "Australia",
+  github: "https://github.com/bivektamu",
+  linkedin: "https://www.linkedin.com/in/bivek-gurung-b4602a62/",
+};
 
 const FOLDERS = [
   {
     name: "personal-info",
     icon: "📁",
     files: [
-      { name: "bio.md", icon: "📄", content: "bio" },
-      { name: "contacts.md", icon: "📄", content: "contacts" },
+      { name: "bio.md", icon: "📄", type: "bio" },
+      { name: "contacts.md", icon: "📄", type: "contacts" },
     ],
   },
   {
     name: "professional-info",
     icon: "📁",
-    files: [
-      { name: "experience.md", icon: "📄", content: "experience" },
-      { name: "education.md", icon: "📄", content: "education" },
-    ],
+    files: [{ name: "experience.md", icon: "📄", type: "experience" }],
   },
   {
     name: "hobbies",
     icon: "📁",
-    files: [
-      { name: "interests.md", icon: "📄", content: "interests" },
+    files: [{ name: "interests.md", icon: "📄", type: "interests" }],
+  },
+];
+
+const EXPERIENCE = [
+  {
+    role: "Front End Developer",
+    company: "Ondicom",
+    period: "Jun 2017 - Feb 2025",
+    type: "Full-time · Hybrid · North Sydney NSW",
+    highlights: [
+      "Progressed from Junior to Mid-level, shipping 200+ digital products across marketing and enterprise",
+      "React, ES6+, TypeScript and component-driven architecture for scalability and maintainability",
+      "Reusable UI component libraries, REST API integration and state management patterns",
+      "WCAG accessibility, cross-browser compatibility and responsive design",
+      "CMS migrations from legacy WordPress systems to React-driven, .NET-backed platforms",
+      "Code reviews, frontend standards and mentoring junior developers",
+    ],
+  },
+  {
+    role: "Web Developer Intern",
+    company: "Thinkun",
+    period: "Jan 2017 - May 2017",
+    type: "Internship · On-site · Newtown NSW",
+    highlights: [
+      "Custom WordPress themes built from scratch, turning designs into responsive sites",
+      "Custom UI plugins to extend functionality and improve user experience",
+      "HTML, CSS, SASS, JavaScript, jQuery, PHP and WordPress",
     ],
   },
 ];
 
-const CODE_SNIPPETS = [
-  {
-    id: 1,
-    title: "useParallax",
-    username: "bivekgurung",
-    avatar: "/images/fav.png",
-    stars: 12,
-    code: `export function useParallax(ref, offset) {\n  const { scrollYProgress } = useScroll({\n    target: ref,\n    offset: offset || ["start end", "end start"],\n  });\n  return useTransform(scrollYProgress, [0, 1], [50, -50]);\n}`,
-  },
-  {
-    id: 2,
-    title: "MagneticButton",
-    username: "bivekgurung",
-    avatar: "/images/fav.png",
-    stars: 8,
-    code: `export function MagneticButton({ children }) {\n  const ref = useRef(null);\n  const { x, y } = useMagnetic(ref, 0.3, 120);\n  return (\n    <button ref={ref} style={{ transform: \`translate(\${x}px, \${y}px)\` }}>\n      {children}\n    </button>\n  );\n}`,
-  },
+const INTERESTS = [
+  "exploring new technologies and the modern JavaScript ecosystem",
+  "contributing to open-source projects",
+  "hiking and spending time in the great outdoors",
 ];
 
+/* ── Syntax-token helpers for the code-editor content ── */
+const Kw = ({ children }) => <span className={styles.keyword}>{children}</span>;
+const Var = ({ children }) => <span className={styles.variable}>{children}</span>;
+const Op = ({ children }) => <span className={styles.operator}>{children}</span>;
+const Brace = ({ children }) => <span className={styles.brace}>{children}</span>;
+const Str = ({ children }) => <span className={styles.string}>{children}</span>;
+const Prop = ({ children }) => <span className={styles.property}>{children}</span>;
+const Com = ({ children }) => <span className={styles.comment}>{children}</span>;
+
+function bioLines() {
+  return [
+    <p key="h0">
+      <Com>{"// the developer"}</Com>
+    </p>,
+    <p key="0">
+      <Kw>const</Kw> <Var>developer</Var> <Op>=</Op> <Brace>{"{"}</Brace>
+    </p>,
+    <p key="1">
+      <Prop>name</Prop>: <Str>{`"${PROFILE.name}",`}</Str>
+    </p>,
+    <p key="2">
+      <Prop>role</Prop>: <Str>{`"${PROFILE.role}",`}</Str>
+    </p>,
+    <p key="3">
+      <Prop>location</Prop>: <Str>{`"${PROFILE.location}",`}</Str>
+    </p>,
+    <p key="4">
+      <Prop>bio</Prop>: <Brace>[</Brace>
+    </p>,
+    ...bio.map((paragraph, i) => (
+      <p key={`b${i}`}>
+        <Str>{`    "${paragraph}",`}</Str>
+      </p>
+    )),
+    <p key="5">
+      <Brace>]</Brace>
+    </p>,
+    <p key="6">
+      <Brace>{"}"}</Brace>
+      <Op>;</Op>
+    </p>,
+  ];
+}
+
+function contactsLines() {
+  return [
+    <p key="h0">
+      <Com>{"// how to reach me"}</Com>
+    </p>,
+    <p key="0">
+      <Kw>const</Kw> <Var>contacts</Var> <Op>=</Op> <Brace>{"{"}</Brace>
+    </p>,
+    <p key="1">
+      <Prop>email</Prop>: <Str>{`"${PROFILE.email}",`}</Str>
+    </p>,
+    <p key="2">
+      <Prop>phone</Prop>: <Str>{`"${PROFILE.phone}",`}</Str>
+    </p>,
+    <p key="3">
+      <Prop>location</Prop>: <Str>{`"${PROFILE.location}",`}</Str>
+    </p>,
+    <p key="4">
+      <Prop>github</Prop>: <Str>{`"${PROFILE.github}",`}</Str>
+    </p>,
+    <p key="5">
+      <Prop>linkedin</Prop>: <Str>{`"${PROFILE.linkedin}",`}</Str>
+    </p>,
+    <p key="6">
+      <Brace>{"}"}</Brace>
+      <Op>;</Op>
+    </p>,
+  ];
+}
+
+function experienceLines() {
+  const lines = [
+    <p key="h0">
+      <Com>{"// professional experience"}</Com>
+    </p>,
+    <p key="0">
+      <Kw>const</Kw> <Var>experience</Var> <Op>=</Op> <Brace>[</Brace>
+    </p>,
+  ];
+  EXPERIENCE.forEach((job, i) => {
+    lines.push(
+      <p key={`open${i}`}>
+        <Brace>{"{"}</Brace>
+      </p>,
+      <p key={`role${i}`}>
+        <Prop>role</Prop>: <Str>{`"${job.role}",`}</Str>
+      </p>,
+      <p key={`company${i}`}>
+        <Prop>company</Prop>: <Str>{`"${job.company}",`}</Str>
+      </p>,
+      <p key={`period${i}`}>
+        <Prop>period</Prop>: <Str>{`"${job.period}",`}</Str>
+      </p>,
+      <p key={`type${i}`}>
+        <Prop>type</Prop>: <Str>{`"${job.type}",`}</Str>
+      </p>,
+      <p key={`hl${i}`}>
+        <Prop>highlights</Prop>: <Brace>[</Brace>
+      </p>,
+      ...job.highlights.map((highlight, j) => (
+        <p key={`line${i}${j}`}>
+          <Str>{`    "${highlight}",`}</Str>
+        </p>
+      )),
+      <p key={`hlclose${i}`}>
+        <Brace>]</Brace>
+      </p>,
+      <p key={`close${i}`}>
+        <Brace>{"}"}</Brace>
+        <Op>,</Op>
+      </p>
+    );
+  });
+  lines.push(
+    <p key="end">
+      <Brace>]</Brace>
+      <Op>;</Op>
+    </p>
+  );
+  return lines;
+}
+
+function interestsLines() {
+  return [
+    <p key="h0">
+      <Com>{"// outside of work"}</Com>
+    </p>,
+    <p key="0">
+      <Kw>const</Kw> <Var>interests</Var> <Op>=</Op> <Brace>[</Brace>
+    </p>,
+    ...INTERESTS.map((interest, i) => (
+      <p key={`i${i}`}>
+        <Str>{`  "${interest}",`}</Str>
+      </p>
+    )),
+    <p key="1">
+      <Brace>]</Brace>
+      <Op>;</Op>
+    </p>,
+  ];
+}
+
+const CONTENT = {
+  bio: bioLines,
+  contacts: contactsLines,
+  experience: experienceLines,
+  interests: interestsLines,
+};
+
 export default function About() {
-  const [expanded, setExpanded] = useState(null);
+  const [expanded, setExpanded] = useState("personal-info");
   const [activeFile, setActiveFile] = useState("bio.md");
   const [activeFolder, setActiveFolder] = useState("personal-info");
 
@@ -65,10 +237,11 @@ export default function About() {
     setActiveFile(fileName);
   };
 
-  const activeFileObj = FOLDERS.find((f) => f.name === activeFolder)
-    ?.files.find((f) => f.name === activeFile);
+  const activeFileObj = FOLDERS.find((f) => f.name === activeFolder)?.files.find(
+    (f) => f.name === activeFile
+  );
 
-  const lineNumbers = Array.from({ length: bio.length + 2 }, (_, i) => i + 1);
+  const lines = activeFileObj ? CONTENT[activeFileObj.type]() : [];
 
   return (
     <section id="about" className={styles.about}>
@@ -111,90 +284,35 @@ export default function About() {
             {activeFileObj && (
               <div className={styles.tab}>
                 <span className={styles.tabIcon}>{activeFileObj.icon}</span>
-                <span>{activeFolder} / {activeFile}</span>
+                <span>
+                  {activeFolder} / {activeFile}
+                </span>
               </div>
             )}
           </div>
 
           {/* Content panels */}
           <div className={styles.panels}>
-            {/* Left: Code snippet bio */}
+            {/* Left: code file content */}
             <div className={styles.codePanel}>
               <div className={styles.codeHeader}>
-                <span className={styles.codeLang}>{"// about.tsx"}</span>
+                <span className={styles.codeLang}>{"// "}{activeFile}</span>
               </div>
               <div className={styles.codeContent}>
                 <div className={styles.lineNumbers}>
-                  {lineNumbers.map((n) => (
-                    <span key={n}>{n}</span>
+                  {lines.map((_, i) => (
+                    <span key={i}>{i + 1}</span>
                   ))}
                 </div>
-                <div className={styles.codeText}>
-                  <p>
-                    <span className={styles.keyword}>const</span>{" "}
-                    <span className={styles.variable}>developer</span>{" "}
-                    <span className={styles.operator}>=</span>{" "}
-                    <span className={styles.brace}>{"{"}</span>
-                  </p>
-                  {bio.map((paragraph, i) => (
-                    <motion.p
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <span className={styles.string}>  bio: &quot;{paragraph}&quot;,</span>
-                    </motion.p>
-                  ))}
-                  <p>
-                    <span className={styles.brace}>{"}"}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Gist cards */}
-            <div className={styles.gistPanel}>
-              <div className={styles.codeHeader}>
-                <span className={styles.codeLang}>{"// gists"}</span>
-              </div>
-              <div className={styles.gistList}>
-                {CODE_SNIPPETS.map((snippet) => (
-                  <motion.div
-                    key={snippet.id}
-                    className={styles.gistCard}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div className={styles.gistHeader}>
-                      <div className={styles.gistUser}>
-                        <Image
-                          src={snippet.avatar}
-                          alt={`${snippet.username} avatar`}
-                          width={36}
-                          height={36}
-                          className={styles.gistAvatar}
-                        />
-                        <div className={styles.gistUserInfo}>
-                          <span className={styles.gistUsername}>{snippet.username}</span>
-                          <span className={styles.gistTimestamp}>2 days ago</span>
-                        </div>
-                      </div>
-                      <div className={styles.gistActions}>
-                        <span className={styles.gistStars}>★ {snippet.stars}</span>
-                      </div>
-                    </div>
-                    <div className={styles.gistCodeBlock}>
-                      <pre className={styles.gistCode}>{snippet.code}</pre>
-                    </div>
-                    <div className={styles.gistFooter}>
-                      <span className={styles.gistTitle}>{snippet.title}</span>
-                    </div>
-                  </motion.div>
-                ))}
+                <motion.div
+                  key={activeFile}
+                  className={styles.codeText}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {lines}
+                </motion.div>
               </div>
             </div>
           </div>

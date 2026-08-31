@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    Design System v3 — Code-Editor Aesthetic
-   Dark-first (default), light alternative under [data-theme="light"]
+   Dark-only (default tokens on :root)
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -123,30 +123,6 @@
   --duration-normal: 0.4s;
   --duration-slow: 0.7s;
   --duration-reveal: 0.9s;
-}
-
-/* ── Light theme ── */
-[data-theme="light"] {
-  --color-bg: #f0f2f5;
-  --color-bg-alt: #e2e5ea;
-  --color-bg-code: #f8f9fa;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #f0f2f5;
-  --color-text: #1a1a2e;
-  --color-text-secondary: #3d3d5c;
-  --color-text-muted: #6b6b80;
-  --color-border: #9ca3af;
-  --color-border-hover: #6b7280;
-  --color-tab-stroke: #ff6a00;
-  --input-bg: #ffffff;
-  --input-border: #9ca3af;
-  --input-border-focus: #615fff;
-  --code-bg: #f8f9fa;
-  --gist-bg: #ffffff;
-  --tab-active-stroke: #ff6a00;
-  --shadow-game: 0px 2px 0px 0px #1a1a2e;
-  --shadow-code: 1px 3px 8px 0px rgba(0, 0, 0, 0.08);
-  --color-accent: var(--color-accent-blue);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

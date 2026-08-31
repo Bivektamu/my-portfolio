@@ -109,6 +109,16 @@
   flex: 1;
 }
 
+/* ── Empty state ── */
+.empty {
+  grid-column: 1 / -1;
+  padding: 48px 24px;
+  text-align: center;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-dev-note);
+  color: var(--color-text-muted);
+}
+
 /* ── Card ── */
 .card {
   background: var(--color-surface);

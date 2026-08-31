@@ -34,21 +34,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en-AU" className={`${firaCode.variable} ${inter.variable}`} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('theme') || 'dark';
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
+    <html
+      lang="en-AU"
+      data-theme="dark"
+      className={`${firaCode.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content

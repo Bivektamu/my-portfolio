@@ -17,14 +17,22 @@ describe("Projects", () => {
 
   it("renders all technology filter checkboxes", () => {
     render(React.createElement(Projects));
-    expect(screen.getByText("React")).toBeInTheDocument();
-    expect(screen.getByText("JavaScript")).toBeInTheDocument();
-    expect(screen.getByText("HTML")).toBeInTheDocument();
-    expect(screen.getByText("CSS")).toBeInTheDocument();
-    expect(screen.getByText("Next.js")).toBeInTheDocument();
-    expect(screen.getByText("Gatsby")).toBeInTheDocument();
-    expect(screen.getByText("Vue")).toBeInTheDocument();
-    expect(screen.getByText("Angular")).toBeInTheDocument();
+    ["React", "JavaScript", "TypeScript", "HTML", "CSS", "SASS", "Gatsby",
+     "Redux", "GraphQL", "MongoDB", "Node.js", "Tailwind", "Stripe", "AWS"]
+      .forEach((tech) => {
+        expect(screen.getByText(tech)).toBeInTheDocument();
+      });
+  });
+
+  it("starts with all filters unchecked and all projects visible", () => {
+    render(React.createElement(Projects));
+    const allBtns = screen.getAllByRole("checkbox");
+    allBtns.forEach((btn) => {
+      expect(btn.getAttribute("aria-checked")).toBe("false");
+    });
+    expect(screen.getByText("La Property Co")).toBeInTheDocument();
+    expect(screen.getByText("Mobje Commerce")).toBeInTheDocument();
+    expect(screen.getByText("Ticker Tape Library")).toBeInTheDocument();
   });
 
   it("toggles technology filter on click", () => {
@@ -32,10 +40,38 @@ describe("Projects", () => {
     const htmlBtn = screen.getByText("HTML").closest("button");
     // HTML starts unchecked
     expect(htmlBtn.className).not.toContain("checked");
-    
+
     fireEvent.click(htmlBtn);
     // After click, HTML should be checked
     expect(htmlBtn.className).toContain("checked");
+  });
+
+  it("filters the grid when a technology is selected", () => {
+    render(React.createElement(Projects));
+    fireEvent.click(screen.getByText("Gatsby"));
+
+    // Only the Restaurant app uses Gatsby
+    expect(screen.getByText("RESTAURANT WEB APP")).toBeInTheDocument();
+    expect(screen.queryByText("La Property Co")).toBeNull();
+    expect(screen.queryByText("Mobje Commerce")).toBeNull();
+  });
+
+  it("shows empty state when no project matches the selection", () => {
+    render(React.createElement(Projects));
+    fireEvent.click(screen.getByText("Gatsby"));
+    fireEvent.click(screen.getByText("MongoDB"));
+
+    expect(screen.getByText("// no projects match the selected technologies")).toBeInTheDocument();
+    expect(screen.queryByText("RESTAURANT WEB APP")).toBeNull();
+  });
+
+  it("shows all projects again when filters are cleared", () => {
+    render(React.createElement(Projects));
+    fireEvent.click(screen.getByText("Gatsby"));
+    expect(screen.queryByText("La Property Co")).toBeNull();
+
+    fireEvent.click(screen.getByText("Gatsby"));
+    expect(screen.getByText("La Property Co")).toBeInTheDocument();
   });
 
   it("renders project cards", () => {
@@ -56,23 +92,20 @@ describe("Projects", () => {
     expect(allBtns.length).toBeGreaterThanOrEqual(1);
 
     const reactBtn = allBtns.find((b) => b.textContent.includes("React"));
-    const htmlBtn = allBtns.find((b) => b.textContent.includes("HTML"));
 
-    // React starts checked
+    // React starts unchecked
+    expect(reactBtn.getAttribute("aria-checked")).toBe("false");
+
+    // Toggle React
+    fireEvent.click(reactBtn);
     expect(reactBtn.getAttribute("aria-checked")).toBe("true");
-    // HTML starts unchecked
-    expect(htmlBtn.getAttribute("aria-checked")).toBe("false");
-
-    // Toggle HTML
-    fireEvent.click(htmlBtn);
-    expect(htmlBtn.getAttribute("aria-checked")).toBe("true");
   });
 
   it("shows checkmark icon on checked filters", () => {
     render(React.createElement(Projects));
-    // React starts checked
-    const reactBtn = screen.getByText("React").closest("button");
-    expect(reactBtn.className).toContain("checked");
-    expect(reactBtn.querySelector('[class*="checkIcon"]') || reactBtn.textContent).toBeTruthy();
+    const htmlBtn = screen.getByText("HTML").closest("button");
+    fireEvent.click(htmlBtn);
+    expect(htmlBtn.className).toContain("checked");
+    expect(htmlBtn.querySelector('[class*="checkIcon"]')).toBeTruthy();
   });
 });

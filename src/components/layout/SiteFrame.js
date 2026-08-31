@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiGithub } from "react-icons/fi";
-import ThemeToggle from "@/components/header/ThemeToggle";
 import styles from "./SiteFrame.module.css";
 
 const GITHUB_URL = "https://github.com/bivektamu";
@@ -13,7 +12,6 @@ const NAV_LINKS = [
   { href: "/", label: "_hello" },
   { href: "/about", label: "_about-me" },
   { href: "/projects", label: "_projects" },
-  { href: "/skills", label: "_skills" },
   { href: "/contact", label: "_contact-me" },
 ];
 
@@ -38,16 +36,10 @@ export default function SiteFrame({ children }) {
           <Link href="/projects" className={tabClass("/projects", pathname)}>
             _projects
           </Link>
-          <Link href="/skills" className={tabClass("/skills", pathname)}>
-            _skills
-          </Link>
           <span className={styles.navSpacer} />
           <Link href="/contact" className={tabClass("/contact", pathname)}>
             _contact-me
           </Link>
-          <span className={styles.themeWrap}>
-            <ThemeToggle />
-          </span>
         </nav>
 
         <div className={styles.main}>{children}</div>
@@ -66,7 +58,7 @@ export default function SiteFrame({ children }) {
           </a>
           <span className={styles.footerSpacer} />
           <a className={styles.footerGithub} href={GITHUB_URL} target="_blank" rel="noreferrer">
-            <span>@bivekgurung</span>
+            <span>@bivektamu</span>
             <FiGithub />
           </a>
         </footer>

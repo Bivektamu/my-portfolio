@@ -77,6 +77,13 @@ export default function SnakeGame() {
   const intervalRef = useRef(null);
   const foodCountRef = useRef(0);
 
+  const stopLoop = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -146,12 +153,14 @@ export default function SnakeGame() {
 
     // Wall collision
     if (newHead.x < 0 || newHead.x >= GRID_COLS || newHead.y < 0 || newHead.y >= GRID_ROWS) {
+      stopLoop();
       setGameState("game-over");
       return;
     }
 
     // Self collision
     if (snake.some((seg) => seg.x === newHead.x && seg.y === newHead.y)) {
+      stopLoop();
       setGameState("game-over");
       return;
     }
@@ -167,6 +176,7 @@ export default function SnakeGame() {
 
       if (newFoodCount >= MAX_FOOD || !foodRef.current) {
         // Board full or food target reached — win
+        stopLoop();
         setGameState("win");
         snakeRef.current = newSnake;
         draw();
@@ -181,7 +191,7 @@ export default function SnakeGame() {
   }, [draw]);
 
   const startGame = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    stopLoop();
     snakeRef.current = createInitialSnake();
     foodRef.current = randomFood(snakeRef.current);
     directionRef.current = DIRECTION.RIGHT;
@@ -194,7 +204,7 @@ export default function SnakeGame() {
   }, [tick, draw]);
 
   const resetToIdle = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    stopLoop();
     snakeRef.current = createIdleSnake();
     foodRef.current = IDLE_FOOD;
     directionRef.current = DIRECTION.RIGHT;
@@ -208,9 +218,9 @@ export default function SnakeGame() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      stopLoop();
     };
-  }, []);
+  }, [stopLoop]);
 
   // Draw initial board on mount (idle state)
   useEffect(() => {

@@ -5,21 +5,35 @@
       "image": "/images/portfolio/la.jpg",
       "link": "https://www.lapropertyco.com.au/",
       "npm": null,
-      "live": "https://www.lapropertyco.com.au/"
+      "live": "https://www.lapropertyco.com.au/",
+      "tech": ["React", "JavaScript", "HTML", "CSS", "SASS"]
     },
     {
       "title": "Mobje Commerce",
       "image": "/images/portfolio/mobje_commerce.png",
       "link": "https://mobjecommerce.netlify.app/",
       "npm": null,
-      "live": "https://mobjecommerce.netlify.app/"
+      "live": "https://mobjecommerce.netlify.app/",
+      "tech": [
+        "React",
+        "TypeScript",
+        "Redux",
+        "GraphQL",
+        "SASS",
+        "Tailwind",
+        "MongoDB",
+        "Node.js",
+        "Stripe",
+        "AWS"
+      ]
     },
     {
       "title": "RESTAURANT WEB APP",
       "image": "/images/portfolio/restaurant.jpg",
       "link": "https://restaurantapp.netlify.app/",
       "npm": null,
-      "live": "https://restaurantapp.netlify.app/"
+      "live": "https://restaurantapp.netlify.app/",
+      "tech": ["React", "Gatsby", "JavaScript", "HTML", "SASS", "GraphQL"]
     }
   ],
   "libraries": [
@@ -27,19 +41,22 @@
       "title": "Fancyslider Library",
       "image": "/images/portfolio/fancyslider.jpg",
       "npm": "https://www.npmjs.com/package/react-fancyslider",
-      "live": "https://fancysliderdemo.netlify.app/"
+      "live": "https://fancysliderdemo.netlify.app/",
+      "tech": ["React", "JavaScript"]
     },
     {
       "title": "Odometer Library",
       "image": "/images/portfolio/odometer.jpg",
       "npm": "https://www.npmjs.com/package/react-simple-odometer",
-      "live": "https://simpleodometerdemo.netlify.app/"
+      "live": "https://simpleodometerdemo.netlify.app/",
+      "tech": ["React", "JavaScript"]
     },
     {
       "title": "Ticker Tape Library",
       "image": "/images/portfolio/ticker_tape.jpg",
       "npm": "https://www.npmjs.com/package/react-ticker-tape",
-      "live": "https://tickertapedemo.netlify.app/"
+      "live": "https://tickertapedemo.netlify.app/",
+      "tech": ["React", "JavaScript"]
     }
   ]
 }

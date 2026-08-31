@@ -1,7 +1,7 @@
 // covers: idle state with start-game button, skip button, keyboard instructions,
 // food meter, and D-pad controls
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import React from "react";
 import SnakeGame from "@/components/snake/SnakeGame";
 
@@ -121,6 +121,27 @@ describe("SnakeGame", () => {
       fireEvent.keyDown(window, { key: "ArrowLeft" });
       fireEvent.keyDown(window, { key: "ArrowRight" });
     }).not.toThrow();
+  });
+
+  // ── Game over pauses the loop ──
+  it("stops the game loop and shows the overlay when the snake hits a wall", () => {
+    const clearIntervalSpy = vi.spyOn(window, "clearInterval");
+    render(React.createElement(SnakeGame));
+    fireEvent.click(screen.getByText("start-game"));
+
+    // Snake starts at x=8 heading right; 8 ticks reach x=16 (wall collision).
+    act(() => {
+      vi.advanceTimersByTime(150 * 8);
+    });
+
+    expect(screen.getByText("game over")).toBeInTheDocument();
+    expect(clearIntervalSpy).toHaveBeenCalled();
+
+    // Loop must be stopped: more time passing changes nothing (no crash, overlay stays).
+    act(() => {
+      vi.advanceTimersByTime(150 * 10);
+    });
+    expect(screen.getByText("game over")).toBeInTheDocument();
   });
 
   // ── Cleanup ──

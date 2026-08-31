@@ -69,15 +69,6 @@ describe("RootLayout", () => {
 
   // ── Component structure ──
   describe("Component structure", () => {
-    beforeEach(() => {
-      // Ensure localStorage mock exists before render (inline script reads it)
-      Object.defineProperty(window, "localStorage", {
-        value: { getItem: vi.fn(() => "dark"), setItem: vi.fn() },
-        writable: true,
-        configurable: true,
-      });
-    });
-
     it("renders html element with lang en-AU and font variables", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
       const html = document.documentElement;
@@ -103,15 +94,13 @@ describe("RootLayout", () => {
       expect(screen.getByText("test-child")).toBeInTheDocument();
     });
 
-    it("renders inline theme script in head", () => {
+    it("renders html with dark theme applied (no theme toggle script)", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
-      // The script is in <head>, verify it exists via querySelector
-      const scripts = document.querySelectorAll("script");
-      const themeScript = Array.from(scripts).find((s) =>
-        s.textContent.includes("localStorage.getItem('theme')")
-      );
-      expect(themeScript).toBeTruthy();
-      expect(themeScript.textContent).toContain("data-theme");
+      expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+      const scripts = Array.from(document.querySelectorAll("script"));
+      expect(
+        scripts.some((s) => s.textContent.includes("localStorage.getItem('theme')"))
+      ).toBe(false);
     });
 
     it("includes PageTransition, CustomCursor, NoiseOverlay", () => {

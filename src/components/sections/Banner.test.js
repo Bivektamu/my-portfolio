@@ -33,16 +33,15 @@ describe("Banner", () => {
     expect(screen.getByText("> Front-end developer")).toBeInTheDocument();
   });
 
-  it("renders the comment lines", () => {
+  it("renders the comment line", () => {
     render(React.createElement(Banner));
-    expect(screen.getByText("// complete the game to continue")).toBeInTheDocument();
     expect(screen.getByText("// find my profile on Github:")).toBeInTheDocument();
   });
 
   it("renders the github code line as a clickable link", () => {
     render(React.createElement(Banner));
-    const link = screen.getByText(/https:\/\/github.com\/bivekgurung/);
-    expect(link.closest("a")).toHaveAttribute("href", "https://github.com/bivekgurung");
+    const link = screen.getByText(/https:\/\/github.com\/bivektamu/);
+    expect(link.closest("a")).toHaveAttribute("href", "https://github.com/bivektamu");
   });
 
   // ── Game area ──

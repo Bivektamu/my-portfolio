@@ -47,7 +47,7 @@ Stored in `docs/adr/`. Active:
 - [0001 — Next.js Migration Architecture](./docs/adr/0001-nextjs-migration-architecture.md)
 - [0002 — Scroll Parallax](./docs/adr/0002-scroll-parallax.md)
 - [0003 — Scroll Spy](./docs/adr/0003-scroll-spy.md)
-- [0004 — Theme Toggle](./docs/adr/0004-theme-toggle.md)
+- [0004 — Theme Toggle](./docs/adr/0004-theme-toggle.md) (Superseded — dark-only theme, toggle removed)
 - [0005 — Banner Reimagined](./docs/adr/0005-banner-reimagined.md) (Superseded by 0008)
 - [0006 — 3D Interactive Background](./docs/adr/0006-3d-interactive-background.md) (Superseded — 3D blob removed in v3)
 - [0007 — Design System v3 (Code-Editor Aesthetic)](./docs/adr/0007-design-system-v3.md)
@@ -61,10 +61,10 @@ Stored in `docs/adr/`. Active:
 ## Rules
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
-- **Routing**: 5 routes (`/`, `/about`, `/projects`, `/skills`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `skills/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper.
+- **Routing**: 4 routes (`/`, `/about`, `/projects`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper. The `/skills` route was removed.
 - **Section IDs are fixed**: `home`, `about`, `project`, `skill`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
-- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` / `[data-theme="dark"]` for theming (Design System v3 — code-editor aesthetic). Dark-first: default theme is dark (tokens on `:root`). Light theme lives under `[data-theme="light"]`. Pattern tokens for tabs, code blocks, inputs, file explorers, gist cards, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
-- **Theme**: `data-theme` attribute on `<html>`. Default is dark. Set via inline script in root layout (before paint, no flash). Client components read/write via `localStorage`. No React context for theme.
+- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` for theming (Design System v3 — code-editor aesthetic). Dark-only. Pattern tokens for tabs, code blocks, inputs, file explorers, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
+- **Theme**: dark-only. Tokens live on `:root` in `globals.css` and `<html data-theme="dark">` is hardcoded in the root layout. No toggle, no localStorage, no flash-of-theme script.
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
 - **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
 - **Motion imports**: always from `motion/react`, not `framer-motion`.
@@ -77,28 +77,26 @@ Stored in `docs/adr/`. Active:
 
 | Directory / File | Owns | Status |
 |---|---|---|
-| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, inline theme script, PageTransition wrapper, noise overlay, skip-to-content link | Done |
+| `src/app/layout.js` | Root layout, Fira Code + Inter fonts, metadata, dark theme attribute, PageTransition wrapper, noise overlay, skip-to-content link | Done |
 | `src/app/page.js` | Home route, renders Banner only | Done |
 | `src/app/about/page.js` | About route, renders About section | Done |
 | `src/app/projects/page.js` | Projects route, renders Projects section | Done |
-| `src/app/skills/page.js` | Skills route, renders Skills section | Done |
 | `src/app/contact/page.js` | Contact route, renders Contact section | Done |
 | `src/app/globals.css` | Design System v3 CSS custom properties, reset, pattern tokens, scrollbar, focus-visible, skip-link | Done |
 | `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
 | `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
 | `src/components/sections/Banner.js` | Home — hero content (intro text, `> Front-end developer`, comments, github code line, snake game, glows) inside SiteFrame | Done |
-| `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, code-snippet bio, GitHub gist cards | Done |
-| `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar, project cards with hover effects | Done |
-| `src/components/sections/Skills.js` | Skills — tech chips with icons, experience panel with year count | Done |
+| `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, per-file code content (bio, contacts, experience, interests), tech-stack panel | Done |
+| `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar (filters the card grid), project cards with hover effects | Done |
 | `src/components/sections/Contact.js` | Contact — form with validation states, live code snippet preview, social strip | Done |
-| `src/components/layout/` | SiteFrame — shared IDE window (brand, 5 nav tabs with active state, footer bar, theme toggle) wrapping every route | Done |
-| `src/components/header/` | ThemeToggle (theme color dot, inline styles). Header/MobileNav superseded by `layout/SiteFrame.js` | Done |
-| `src/components/snake/` | SnakeGame, canvas-based, idle/playing/game-over/win states, food counter, neon glow | Done |
+| `src/components/layout/` | SiteFrame — shared IDE window (brand, 4 nav tabs with active state, footer bar) wrapping every route | Done |
+| `src/components/header/` | ThemeToggle — removed (dark-only theme) | Removed |
+| `src/components/snake/` | SnakeGame, canvas-based, idle/playing/game-over/win states (loop stops on game-over/win), food counter, neon glow | Done |
 | `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection (teal accent) | Done |
 | `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed from layout, unused |
 | `src/components/animations/` | PageTransition, RevealOnScroll, ScrollSpy (unused), NoiseOverlay (SVG grain texture) | Done |
 | `src/components/hooks/` | useMagnetic (magnetic hover hook, radius + strength config) | Done |
-| `src/data/` | Static JSON: projects.json, skills.json, socials.json, personal.json | Done |
+| `src/data/` | Static JSON: projects.json (with per-project tech tags for filtering), skills.json (About tech-stack panel), socials.json, personal.json | Done |
 
 ## Legacy CRA files
 
@@ -123,11 +121,10 @@ Stored in `docs/adr/`. Active:
 - **Legacy CSS**: `src/styles/*.js` are for old CRA components. Do not touch them.
 - **Test script**: `npm test` runs `vitest run` (Vitest + jsdom + @testing-library/react). Test files colocated as `*.test.js`.
 - **3D blob removed**: R3F/three.js dependency removed. Background blurs in Banner.module.css replace it. The `src/components/3d/` directory is deleted.
-- **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Default theme is dark. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, gist cards, and foreground containers.
+- **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Dark-only theme. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, and foreground containers.
 - **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. Each route renders its section directly.
 - **Preloader removed**: the intro preloader is gone. The `src/components/preloader/` files remain but are unused.
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
 - **`react-icons/fi`**: used in Contact and Banner sections for social links (FiGithub, FiLinkedin, FiMail, FiTwitter).
-- **`react-icons/im`**: used in Skills section for phone icon (ImPhone).
-- **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. Does not block page scroll.
+- **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. The game loop is cleared (paused) on win and game over, so the board freezes behind the overlay. Does not block page scroll.
 - **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Logs to console by default; needs SMTP_USER and SMTP_PASS env vars for email sending via Nodemailer.

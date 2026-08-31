@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { FaLink } from "react-icons/fa";
@@ -11,15 +11,21 @@ import styles from "./Projects.module.css";
 const ALL_ITEMS = [...projects, ...libraries];
 
 const TECHNOLOGIES = [
-  { name: "React", checked: true },
-  { name: "JavaScript", checked: true },
-  { name: "HTML", checked: false },
-  { name: "CSS", checked: false },
-  { name: "Next.js", checked: true },
-  { name: "Gatsby", checked: false },
-  { name: "Vue", checked: false },
-  { name: "Angular", checked: false },
-];
+  "React",
+  "JavaScript",
+  "TypeScript",
+  "HTML",
+  "CSS",
+  "SASS",
+  "Gatsby",
+  "Redux",
+  "GraphQL",
+  "MongoDB",
+  "Node.js",
+  "Tailwind",
+  "Stripe",
+  "AWS",
+].map((name) => ({ name, checked: false }));
 
 export default function Projects() {
   const [techFilters, setTechFilters] = useState(TECHNOLOGIES);
@@ -29,6 +35,16 @@ export default function Projects() {
       prev.map((t) => (t.name === name ? { ...t, checked: !t.checked } : t))
     );
   };
+
+  // No filters selected shows everything; otherwise items must match every
+  // selected technology.
+  const visibleItems = useMemo(() => {
+    const active = techFilters.filter((t) => t.checked).map((t) => t.name);
+    if (active.length === 0) return ALL_ITEMS;
+    return ALL_ITEMS.filter((item) =>
+      active.every((tech) => Array.isArray(item.tech) && item.tech.includes(tech))
+    );
+  }, [techFilters]);
 
   return (
     <section id="project" className={styles.projects}>
@@ -64,7 +80,12 @@ export default function Projects() {
             </div>
           </div>
           <div className={styles.grid}>
-            {ALL_ITEMS.map((item, i) => (
+            {visibleItems.length === 0 && (
+              <p className={styles.empty}>
+                {"// no projects match the selected technologies"}
+              </p>
+            )}
+            {visibleItems.map((item, i) => (
               <motion.div
                 key={item.title}
                 className={styles.card}
