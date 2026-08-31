@@ -32,3 +32,8 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# docs and AI context files
+/docs
+/AGENTS.md
+/CLAUDE.md
