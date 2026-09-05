@@ -17,7 +17,7 @@ The shared IDE application window (`SiteFrame`) that wraps every route. It rende
 - Nav uses Next.js `<Link>` with route paths (`/`, `/about`, `/projects`, `/contact`), not anchors.
 - Active tab is determined by comparing `usePathname()` to each link's `href`.
 - The global fixed header is gone; navigation lives in SiteFrame. `src/components/header/` is removed (dark-only theme).
-- Footer social links (GitHub, LinkedIn, X) are hardcoded in SiteFrame.
+- Footer social links (GitHub and LinkedIn) are hardcoded in SiteFrame.
 - The nav tab bar scrolls horizontally on small screens instead of collapsing into a menu.
 
 ## Gotchas

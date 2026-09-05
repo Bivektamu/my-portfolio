@@ -68,8 +68,9 @@ Stored in `docs/adr/`. Active:
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
 - **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
 - **Motion imports**: always from `motion/react`, not `framer-motion`.
+- **Reduced motion**: the root layout wraps the tree in `<MotionConfig reducedMotion="user">`, so `motion/react` animations honor `prefers-reduced-motion` automatically.
 - **Data**: static JSON files in `src/data/` (projects.json, socials.json, personal.json). Imported directly in components — no API routes for data, no database.
-- **Contact form**: POST `/api/contact` with server-side validation and rate limiting. Nodemailer-ready for email sending (needs SMTP credentials in env).
+- **Contact form**: POST `/api/contact` with server-side validation and rate limiting. With `SMTP_USER` and `SMTP_PASS` set, valid submissions send an owner notification and a visitor thank you via Nodemailer and Gmail SMTP. Sending is best effort: failures are logged and the request still succeeds.
 - **Images**: use Next.js `Image` from `next/image` with explicit `width`/`height` and `sizes` attribute.
 - **File naming**: PascalCase for components. One CSS Module per component: `Banner.js` + `Banner.module.css`.
 
@@ -84,7 +85,7 @@ Stored in `docs/adr/`. Active:
 | `src/app/contact/page.js` | Contact route, renders Contact section | Done |
 | `src/app/globals.css` | Design System v3 CSS custom properties, reset, pattern tokens, scrollbar, focus-visible, skip-link | Done |
 | `src/app/not-found.js` | Custom 404 page (code-editor style) | Done |
-| `src/app/api/contact/route.js` | Contact form POST handler with validation and rate limiting | Done |
+| `src/app/api/contact/route.js` | Contact form POST handler with validation, rate limiting, and best-effort Nodemailer email sending (owner notification + visitor thank you) | Done |
 | `src/components/sections/Banner.js` | Home — hero content (intro text, `> Front-end developer`, comments, github code line, snake game, glows) inside SiteFrame | Done |
 | `src/components/sections/About.js` | About — file explorer sidebar, editor tabs, per-file code content (bio, contacts, experience, interests) | Done |
 | `src/components/sections/Projects.js` | Projects — technology filter checkboxes sidebar (filters the card grid), project cards with hover effects | Done |
@@ -127,4 +128,4 @@ Stored in `docs/adr/`. Active:
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
 - **`react-icons/fi`**: used in Contact and SiteFrame sections for social links (FiGithub, FiLinkedin, FiMail).
 - **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. The game loop is cleared (paused) on win and game over, so the board freezes behind the overlay. Does not block page scroll.
-- **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Logs to console by default; needs SMTP_USER and SMTP_PASS env vars for email sending via Nodemailer.
+- **Contact API**: POST `/api/contact` rate limited (3/hr/IP). Client IP is taken from Netlify's `x-nf-client-connection-ip` header, falling back to the first `x-forwarded-for` entry. Email is best effort: when `SMTP_USER` and `SMTP_PASS` are set it sends an owner notification to bivek.tamu@gmail.com and a thank you to the visitor via Nodemailer and Gmail SMTP; without them the submission is logged and no email is sent. Send failures are logged and never fail the request (still 200).

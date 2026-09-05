@@ -66,7 +66,7 @@ describe("About", () => {
   it("switches to contacts content when contacts.md is clicked", () => {
     render(React.createElement(About));
     fireEvent.click(screen.getByText("contacts.md"));
-    expect(screen.getByText(/bivekgurung9@gmail.com/)).toBeInTheDocument();
+    expect(screen.getByText(/bivek.tamu@gmail.com/)).toBeInTheDocument();
   });
 
   it("switches to experience content when experience.md is clicked", () => {

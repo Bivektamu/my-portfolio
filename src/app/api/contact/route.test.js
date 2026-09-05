@@ -1,6 +1,16 @@
-﻿// covers: AC-3 (form validation, server-side), AC-7 (API route exists)
+// covers: AC-3 (form validation, server-side), AC-7 (API route exists)
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { POST } from "@/app/api/contact/route";
+
+const emailMocks = vi.hoisted(() => ({
+  createTransport: vi.fn(),
+  sendMail: vi.fn(),
+}));
+
+vi.mock("nodemailer", () => ({
+  createTransport: emailMocks.createTransport,
+}));
+
 
 let ipCounter = 0;
 function uniqueIP() {
@@ -233,6 +243,140 @@ describe("Contact API route (POST /api/contact)", () => {
       expect(res.status).toBe(429);
     });
   });
+  describe("Email sending (AC-3, AC-5)", () => {
+    const OWNER_EMAIL = "bivek.tamu@gmail.com";
+
+    const originalSmtpUser = process.env.SMTP_USER;
+    const originalSmtpPass = process.env.SMTP_PASS;
+
+    let consoleLogSpy;
+    let consoleErrorSpy;
+
+    function setSmtpEnv(user, pass) {
+      if (user === undefined) delete process.env.SMTP_USER;
+      else process.env.SMTP_USER = user;
+      if (pass === undefined) delete process.env.SMTP_PASS;
+      else process.env.SMTP_PASS = pass;
+    }
+
+    function restoreSmtpEnv() {
+      if (originalSmtpUser === undefined) delete process.env.SMTP_USER;
+      else process.env.SMTP_USER = originalSmtpUser;
+      if (originalSmtpPass === undefined) delete process.env.SMTP_PASS;
+      else process.env.SMTP_PASS = originalSmtpPass;
+    }
+
+    beforeEach(() => {
+      emailMocks.createTransport.mockReset();
+      emailMocks.sendMail.mockReset();
+      emailMocks.createTransport.mockReturnValue({ sendMail: emailMocks.sendMail });
+      emailMocks.sendMail.mockResolvedValue({ messageId: "mock-message-id" });
+    });
+
+    afterEach(() => {
+      restoreSmtpEnv();
+      if (consoleLogSpy) consoleLogSpy.mockRestore();
+      if (consoleErrorSpy) consoleErrorSpy.mockRestore();
+    });
+
+    it("AC-3 sends owner and visitor emails when SMTP is configured", async () => {
+      setSmtpEnv("owner@gmail.com", "app-password");
+
+      const req = createRequest(
+        { name: "Bivek", email: "visitor@test.com", message: "Hello there, I would like to connect!" },
+        { "x-forwarded-for": uniqueIP() }
+      );
+
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.success).toBe(true);
+
+      expect(emailMocks.createTransport).toHaveBeenCalledTimes(1);
+      expect(emailMocks.sendMail).toHaveBeenCalledTimes(2);
+
+      const ownerCall = emailMocks.sendMail.mock.calls[0][0];
+      const visitorCall = emailMocks.sendMail.mock.calls[1][0];
+
+      expect(ownerCall.to).toBe(OWNER_EMAIL);
+      expect(ownerCall.replyTo).toBe("visitor@test.com");
+      expect(ownerCall.text).toContain("Bivek");
+      expect(ownerCall.text).toContain("visitor@test.com");
+      expect(ownerCall.text).toContain("Hello there, I would like to connect!");
+
+      expect(visitorCall.to).toBe("visitor@test.com");
+      expect(visitorCall.subject).toBe("Thanks for reaching out");
+    });
+
+    it("AC-3 trims submitted values before building both emails", async () => {
+      setSmtpEnv("owner@gmail.com", "app-password");
+
+      const req = createRequest(
+        { name: "  Bivek  ", email: "visitor@test.com", message: "   Hello there, this is my message.   " },
+        { "x-forwarded-for": uniqueIP() }
+      );
+
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+
+      const ownerCall = emailMocks.sendMail.mock.calls[0][0];
+      const visitorCall = emailMocks.sendMail.mock.calls[1][0];
+
+      expect(ownerCall.subject).toBe("Portfolio contact from Bivek");
+      expect(ownerCall.text).toContain("Name: Bivek\n");
+      expect(ownerCall.text).toContain("Email: visitor@test.com\n");
+      expect(ownerCall.text).toContain("Hello there, this is my message.");
+      expect(ownerCall.text).not.toContain("  Bivek");
+      expect(ownerCall.text).not.toContain("   Hello");
+
+      expect(visitorCall.to).toBe("visitor@test.com");
+      expect(visitorCall.text).toContain("Hi Bivek,");
+    });
+
+    it("AC-5 still returns 200 when the SMTP transport rejects", async () => {
+      setSmtpEnv("owner@gmail.com", "app-password");
+
+      const smtpError = new Error("SMTP server unavailable");
+      emailMocks.sendMail.mockRejectedValue(smtpError);
+      consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const req = createRequest(
+        { name: "Bivek", email: "visitor@test.com", message: "Hello there, this is a valid message." },
+        { "x-forwarded-for": uniqueIP() }
+      );
+
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.success).toBe(true);
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      expect(consoleErrorSpy.mock.calls[0][0]).toContain("Email sending failed");
+    });
+
+    it("AC-5 skips sending and logs when SMTP credentials are absent", async () => {
+      setSmtpEnv("owner@gmail.com", undefined);
+
+      consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+      const req = createRequest(
+        { name: "Bivek", email: "visitor@test.com", message: "Hello there, this is a valid message." },
+        { "x-forwarded-for": uniqueIP() }
+      );
+
+      const res = await POST(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.success).toBe(true);
+
+      expect(emailMocks.createTransport).not.toHaveBeenCalled();
+      expect(emailMocks.sendMail).not.toHaveBeenCalled();
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        "[Contact] SMTP credentials not set, email sending skipped."
+      );
+    });
+  });
+
 });
 
-// NOT_COVERED: actual email sending — requires SMTP credentials (Nodemailer/Resend not configured)
+// NOT_COVERED: real inbox delivery stays manual because it needs a live SMTP account and inbox.

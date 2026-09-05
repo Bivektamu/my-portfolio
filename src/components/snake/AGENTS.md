@@ -30,4 +30,4 @@ A fully playable Snake game embedded in the home banner. Canvas-based rendering 
 - Direction changes are queued via nextDirectionRef to prevent 180-degree reversals within one tick
 - Canvas size is 256x432 (16x27 grid, 16px cells)
 - The game does not auto-start; the loop initializes only on the "start-game" button click
-- The component must not block page scroll — the keyboard handler does not call preventDefault
+- The component must not block page scroll — while playing, the keyboard handler calls preventDefault only for the arrow keys (so the page does not scroll); other keys are unaffected

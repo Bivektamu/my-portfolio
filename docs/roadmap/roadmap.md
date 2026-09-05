@@ -356,13 +356,20 @@ Done when: form renders with styled inputs, validation shows inline errors with 
 
 - [x] `/develop Contact redesign (Form with validation states)`
 
-### 35. Contact form backend (API route + email) · Needs ADR
+### 35. Contact form backend (API route + email) `done`
 
-Intent: A Next.js API route or server action that receives the contact form submission, validates the data server-side, and sends an email notification. Uses a transactional email service. Rate limiting prevents abuse.
+Intent: A Next.js API route that receives the contact form submission, validates server-side, rate-limits, and sends email via Nodemailer with Gmail SMTP: a notification to the owner and a thank-you reply to the visitor.
 
-Done when: submitting the form sends a real email, server-side validation catches bad inputs, rate limiting is in place, and errors are handled gracefully with user-facing messages.
+Done when: submitting the form sends the owner a notification email and the visitor a thank-you reply; server-side validation catches bad inputs; rate limiting is in place; and email failures degrade gracefully without losing the submission.
 
-- [x] Design it: `/blueprint Contact form backend`
+- [x] Design it: `/blueprint Contact form backend` — [ADR 0011](../adr/0011-contact-form-backend.md)
+- [x] Build it: `/develop Contact form backend`
+  - [x] Wire Nodemailer + Gmail SMTP and send the owner notification plus the visitor thank-you (AC-3)
+  - [x] Make email best-effort: log failures and still return 200 (AC-5)
+  - [x] Set `SMTP_USER`/`SMTP_PASS` env vars, update README, add to the Netlify dashboard (AC-3)
+  - code in `src/app/api/contact/route.js`; SMTP env vars documented in `.env.local.example` and `README.md`
+- [x] Verify it: `/verify Contact form backend`
+- [x] Test it: `/test Contact form backend`
 
 ### 36. 404 page
 

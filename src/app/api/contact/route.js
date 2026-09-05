@@ -37,6 +37,54 @@ function validate(data) {
   return errors;
 }
 
+const OWNER_EMAIL = "bivek.tamu@gmail.com";
+
+// Sends the two emails for a valid submission. This is best effort: when SMTP
+// credentials are set, both emails go out through Gmail SMTP, and any failure
+// is logged so the route can still report success. Without credentials the
+// send is skipped and the submission is logged instead.
+async function sendEmails({ name, email, message }) {
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (!smtpUser || !smtpPass) {
+    console.log("[Contact] SMTP credentials not set, email sending skipped.");
+    return;
+  }
+
+  try {
+    const nodemailer = await import("nodemailer");
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: smtpUser, pass: smtpPass },
+      // Bound the worst case so a slow SMTP outage cannot stall the request.
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
+    });
+
+    await Promise.all([
+      transporter.sendMail({
+        from: `"Portfolio site" <${smtpUser}>`,
+        to: OWNER_EMAIL,
+        replyTo: email,
+        subject: `Portfolio contact from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      }),
+      transporter.sendMail({
+        from: `"Bivek Gurung" <${smtpUser}>`,
+        to: email,
+        subject: "Thanks for reaching out",
+        text: `Hi ${name},\n\nThanks for your message on my portfolio. I read every note and will get back to you as soon as I can.\n\nBest regards,\nBivek`,
+      }),
+    ]);
+
+    console.log("[Contact] Notification and thank you emails sent.");
+  } catch (error) {
+    console.error("[Contact] Email sending failed, submission kept:", error);
+  }
+}
+
 export async function POST(request) {
   try {
     // Rate limiting
@@ -73,22 +121,10 @@ export async function POST(request) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 
-    // Log the submission without personal data (in production, send email via
-    // Nodemailer or Resend)
+    // Record the submission without logging personal data, then send the
+    // emails. Sending is best effort, so this never changes the response.
     console.log(`[Contact] Form submission received (message length: ${message.length}).`);
-
-    // TODO: Configure SMTP credentials and uncomment to send real emails
-    // const nodemailer = await import("nodemailer");
-    // const transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    // });
-    // await transporter.sendMail({
-    //   from: process.env.SMTP_USER,
-    //   to: "bivekgurung9@gmail.com",
-    //   subject: `Portfolio Contact: ${name}`,
-    //   text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-    // });
+    await sendEmails({ name: name.trim(), email: email.trim(), message: message.trim() });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

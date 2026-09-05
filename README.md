@@ -50,7 +50,7 @@ npm test
 
 - **Snake game** — canvas-based, idle/playing/game-over/win states, keyboard + on-screen controls, neon glow. Does not block page scroll.
 - **Dark-only theme** — code-editor palette, no toggle.
-- **Contact form** — client-side validation states, server-side validation and rate limiting (3/hr/IP) at `POST /api/contact`. Email sending is Nodemailer-ready: set `SMTP_USER` and `SMTP_PASS` env vars to enable; otherwise submissions are logged to the console.
+- **Contact form**: client-side validation states, server-side validation and rate limiting (3/hr/IP) at `POST /api/contact`. Valid submissions send an owner notification and a visitor thank you through Nodemailer and Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. Sending is best effort: failures are logged and the submission still returns success. Without credentials the submission is logged and no email is sent.
 - **Custom cursor** — rAF lerp follow, active above 999px viewport.
 - **Accessibility** — WCAG AA audit (see `docs/verify-38-accessibility-audit.md`), skip-to-content link, keyboard-friendly interactions.
 
@@ -78,8 +78,10 @@ All site content lives in static JSON files under `src/data/` — edit `projects
 
 | Variable | Purpose |
 |---|---|
-| `SMTP_USER` | SMTP username for contact-form email sending (optional) |
-| `SMTP_PASS` | SMTP password for contact-form email sending (optional) |
+| `SMTP_USER` | Gmail address that sends the contact form emails |
+| `SMTP_PASS` | Gmail app password for the address above |
+
+Email sending activates only when both are set. For production, add both in the Netlify dashboard (Site configuration, Environment variables). For local testing, copy `.env.local.example` to `.env.local` and fill them in.
 
 ## Deployment
 
