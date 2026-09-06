@@ -52,7 +52,7 @@ npm test
 - **Dark-only theme** — code-editor palette, no toggle.
 - **Contact form**: client-side validation states, server-side validation and rate limiting (3/hr/IP) at `POST /api/contact`. Valid submissions send an owner notification and a visitor thank you through Nodemailer and Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. Sending is best effort: failures are logged and the submission still returns success. Without credentials the submission is logged and no email is sent.
 - **Custom cursor** — rAF lerp follow, active above 999px viewport.
-- **Accessibility** — WCAG AA audit (see `docs/verify-38-accessibility-audit.md`), skip-to-content link, keyboard-friendly interactions.
+- **Accessibility** — WCAG AA audited (contrast, keyboard navigation, screen reader structure), skip-to-content link, `prefers-reduced-motion` respected.
 
 ## Project structure
 
@@ -85,11 +85,6 @@ Email sending activates only when both are set. For production, add both in the 
 ## Deployment
 
 The project deploys to Netlify via `netlify.toml` (build command `npm run build`, publish dir `.next`, Next.js plugin). `next.config.js` sets `poweredByHeader: false`, compression, and long-lived cache headers for `/images` and `/pdf`.
-
-## Docs
-
-- `docs/roadmap/roadmap.md` — feature roadmap and build approach
-- `docs/adr/` — architecture decision records (e.g. Design System v3, SiteFrame layout, multi-page routing)
 
 ## License
 
