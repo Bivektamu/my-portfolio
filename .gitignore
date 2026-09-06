@@ -34,7 +34,11 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 
-# docs and AI context files
+# agent / AI context files at any depth
 /docs
-/AGENTS.md
-/CLAUDE.md
+**/AGENTS.md
+**/CLAUDE.md
+test-preferences.json
+
+# design files (reference images and design tokens)
+/design-files
