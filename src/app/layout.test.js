@@ -63,7 +63,12 @@ describe("RootLayout", () => {
     });
 
     it("exports metadata with icons", () => {
-      expect(metadata.icons.icon).toBe("/images/fav.png");
+      expect(metadata.icons.icon).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ url: "/images/favicon/favicon.ico" }),
+        ])
+      );
+      expect(metadata.icons.apple).toBe("/images/favicon/icon-180x180.png");
     });
   });
 

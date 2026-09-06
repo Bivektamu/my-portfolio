@@ -24,7 +24,15 @@ export const metadata = {
   description: "This is a portfolio website for Bivek Jang Gurung.",
   authors: [{ name: "Bivek Jang Gurung" }],
   icons: {
-    icon: "/images/fav.png",
+    icon: [
+      { url: "/images/favicon/favicon.ico", sizes: "any" },
+      { url: "/images/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/images/favicon/icon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/favicon/icon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/favicon/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/images/favicon/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/images/favicon/icon-180x180.png",
   },
   openGraph: {
     title: "Bivek | Portfolio",

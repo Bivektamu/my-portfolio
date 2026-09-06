@@ -101,14 +101,6 @@ describe("Contact", () => {
     });
   });
 
-  it("renders social links in footer strip", () => {
-    render(React.createElement(Contact));
-    expect(screen.getByText("_find-me-in")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-github")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-linkedin")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-mail")).toBeInTheDocument();
-  });
-
   it("renders tabs header with contact.ts", () => {
     render(React.createElement(Contact));
     expect(screen.getByText("contact.ts")).toBeInTheDocument();

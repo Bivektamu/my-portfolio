@@ -61,12 +61,11 @@ src/
 ├── app/                    # App Router: routes, root layout, globals.css, 404, API route
 │   └── api/contact/        # Contact form POST handler
 ├── components/
+│   ├── animations/         # PageTransition (route fade), NoiseOverlay
+│   ├── cursor/             # Custom cursor
 │   ├── layout/SiteFrame.js # Shared IDE window (nav, content, footer)
 │   ├── sections/           # Banner, About, Projects, Contact
-│   ├── snake/SnakeGame.js  # Canvas snake game
-│   ├── cursor/             # Custom cursor
-│   ├── animations/         # PageTransition, RevealOnScroll, NoiseOverlay
-│   └── hooks/              # useMagnetic
+│   └── snake/SnakeGame.js  # Canvas snake game
 └── data/                   # Static JSON: projects, socials, personal
 ```
 
@@ -81,7 +80,7 @@ All site content lives in static JSON files under `src/data/` — edit `projects
 | `SMTP_USER` | Gmail address that sends the contact form emails |
 | `SMTP_PASS` | Gmail app password for the address above |
 
-Email sending activates only when both are set. For production, add both in the Netlify dashboard (Site configuration, Environment variables). For local testing, copy `.env.local.example` to `.env.local` and fill them in.
+Email sending activates only when both are set. For production, add both in the Netlify dashboard (Site configuration, Environment variables). For local testing, set both values in a local `.env.local` file.
 
 ## Deployment
 

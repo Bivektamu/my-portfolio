@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" font-family="'JetBrains Mono','Fira Code',Consolas,ui-monospace,monospace" role="img" aria-label="BJG logo mark">
+  <title>BJG</title>
+  <rect x="0" y="0" width="128" height="128" rx="30" fill="#314158"/>
+  <text x="64" y="64" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700">
+    <tspan fill="#46ECD5">&lt;</tspan>
+    <tspan fill="#FFFFFF">BJG</tspan>
+    <tspan fill="#46ECD5"> /&gt;</tspan>
+  </text>
+</svg>

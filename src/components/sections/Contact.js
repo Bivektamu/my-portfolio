@@ -3,10 +3,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { motion } from "motion/react";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { socials } from "@/data/socials.json";
 import styles from "./Contact.module.css";
 
-const ICON_MAP = { FiGithub, FiLinkedin, FiMail };
 
 function validateForm(data) {
   const errors = {};
@@ -200,26 +198,7 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Social links footer */}
-        <div className={styles.socialStrip}>
-          <span className={styles.findMe}>_find-me-in</span>
-          {socials.map((s) => {
-            const Icon = ICON_MAP[s.icon];
-            if (!Icon) return null;
-            return (
-              <a
-                key={s.label}
-                href={s.href}
-                target={s.href.startsWith("mailto") ? undefined : "_blank"}
-                rel="noreferrer"
-                className={styles.socialIcon}
-                aria-label={s.label}
-              >
-                <Icon />
-              </a>
-            );
-          })}
-        </div>
+    
       </div>
     </section>
   );

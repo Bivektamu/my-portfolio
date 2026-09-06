@@ -5,7 +5,7 @@
 - **Language / Runtime**: JavaScript (ES6+), Node 20+
 - **Framework**: Next.js 16.2 (App Router), React 19.2
 - **Key dependencies**: motion 12 (framer-motion), react-icons 4, next/font/google (Fira Code + Inter)
-- **Styling**: CSS Modules + CSS custom properties (Design System v3 — code-editor aesthetic). Legacy styled-components remain in package.json during migration.
+- **Styling**: CSS Modules + CSS custom properties (Design System v3 — code-editor aesthetic).
 - **Package manager**: npm
 
 ## Build approach
@@ -36,7 +36,7 @@ npm test
 
 ## Context files
 
-- [src/components/AGENTS.md](src/components/AGENTS.md) — Shared component conventions and legacy migration notes
+- [src/components/AGENTS.md](src/components/AGENTS.md) — Components area context (points to root AGENTS.md)
 - [src/components/sections/AGENTS.md](src/components/sections/AGENTS.md) — Section specific conventions
 - [src/components/snake/AGENTS.md](src/components/snake/AGENTS.md) — Snake game component conventions
 - [src/components/layout/AGENTS.md](src/components/layout/AGENTS.md) — SiteFrame (shared IDE window) conventions
@@ -61,9 +61,9 @@ Stored in `docs/adr/`. Active:
 ## Rules
 
 - **Server-first**: components are server components by default. Only add `"use client"` when you need browser APIs (state, effects, events, media queries, motion).
-- **Routing**: 4 routes (`/`, `/about`, `/projects`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, no RevealOnScroll wrapper. The `/skills` route was removed.
+- **Routing**: 4 routes (`/`, `/about`, `/projects`, `/contact`), each rendering one section. Route files under `src/app/` (`page.js`, `about/page.js`, `projects/page.js`, `contact/page.js`) import a single section from `src/components/sections/` and wrap it in `SiteFrame` (the shared IDE window: top nav, main content, footer bar). A `PageTransition` client component (AnimatePresence opacity fade) wraps `{children}` in the root layout. Each section has a co-located CSS Module and carries `"use client"` directly, with its own inline entrance animations. The `/skills` route was removed.
 - **Section IDs are fixed**: `home`, `about`, `project`, `contact` (the `<section id>` values). Nav uses route paths, not anchors. Do not change the IDs. Note: the projects section uses `project` id (singular), not `projects`.
-- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` for theming (Design System v3 — code-editor aesthetic). Dark-only. Pattern tokens for tabs, code blocks, inputs, file explorers, and foreground containers. Legacy `src/styles/` (styled-components) is migration-only, do not extend.
+- **Styling**: CSS Modules — `Component.js` + `Component.module.css` side by side. CSS custom properties on `:root` for theming (Design System v3 — code-editor aesthetic). Dark-only. Pattern tokens for tabs, code blocks, inputs, file explorers, and foreground containers.
 - **Theme**: dark-only. Tokens live on `:root` in `globals.css`. The `<html>` element carries no theme attribute. No toggle, no localStorage, no flash-of-theme script.
 - **Fonts**: Fira Code (display, headings, code) + Inter (body, UI). Loaded via `next/font/google` in root layout as CSS variables `--font-fira-code` and `--font-inter`. Poppins removed.
 - **Smooth scroll**: CSS `scroll-behavior: smooth` + `scroll-margin-top` on sections.
@@ -94,37 +94,23 @@ Stored in `docs/adr/`. Active:
 | `src/components/header/` | ThemeToggle — removed (dark-only theme) | Removed |
 | `src/components/snake/` | SnakeGame, canvas-based, idle/playing/game-over/win states (loop stops on game-over/win), food counter, neon glow | Done |
 | `src/components/cursor/` | CustomCursor with rAF lerp, hover state detection (teal accent) | Done |
-| `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed from layout, unused |
-| `src/components/animations/` | PageTransition, RevealOnScroll, ScrollSpy (unused), NoiseOverlay (SVG grain texture) | Done |
-| `src/components/hooks/` | useMagnetic (magnetic hover hook, radius + strength config) | Done |
+| `src/components/preloader/` | Intro preloader sequence (blob animation) | Removed — deleted in cleanup |
+| `src/components/animations/` | PageTransition (route fade), NoiseOverlay (SVG grain texture) | Done |
+| `src/components/hooks/` | useMagnetic (magnetic hover hook) | Removed — deleted in cleanup (no callers) |
 | `src/data/` | Static JSON: projects.json (with per-project tech tags for filtering), socials.json, personal.json | Done |
 
 ## Legacy CRA files
 
-| File | Owns | Notes |
-|---|---|---|
-| `src/components/layout.js` | GlobalContext, ThemeProvider, Lenis, preloader, scroll-spy | Replaced by `src/app/layout.js` |
-| `src/components/Header.js` | Old header with DOM-query nav, theme toggle | Replaced by `layout/SiteFrame.js` nav |
-| `src/components/banner.js`, `about.js`, `project.js`, `skill.js`, `contact.js` | Old section components with motion parallax | Replaced by `sections/` |
-| `src/components/NavItem.js` | Old nav link with Lenis scroll | Replaced by `layout/SiteFrame.js` tabs |
-| `src/components/ProjectCard.js` | Animated project card wrapper | Replaced by `animations/RevealOnScroll.js` |
-| `src/components/Blob.jsx` | Decorative background blob | Legacy |
-| `src/components/customCursor.js` | Custom cursor (rAF spring) | Migrated to `cursor/CustomCursor.js` |
-| `src/components/seo.js` | react-helmet wrapper | Replaced by Next.js metadata export |
-| `src/components/index.js` | Unused IndexPage duplicate | Legacy |
-| `src/components/hooks/useScrollSpy.js` | IntersectionObserver scroll spy hook | Migrated to `animations/ScrollSpy.js` |
-| `src/styles/*.js` | styled-components theme objects | Legacy, do not touch |
-| `src/components/3d/` | BlobScene (R3F morphing blob) | Removed in v3 — replaced by CSS background blurs |
+All legacy CRA code was deleted in the migration cleanup: `src/App.*`, `src/index.*`, `src/reportWebVitals.js`, `src/context/` (GlobalContext), `src/styles/*.js` (styled-components), and the old components in `src/components/` (`Header.js`, `NavItem.js`, `ProjectCard.js`, `Blob.jsx`, `layout.js`, `customCursor.js`, `seo.js`, `banner.js`, `about.js`, `project.js`, `skill.js`, `contact.js`, `index.js`), plus `src/components/preloader/`, `src/components/ui/`, the scroll spy and reveal helpers (`useScrollSpy`, `ScrollSpy`, `RevealOnScroll`, `useMagnetic`). Do not reintroduce styled-components, react-helmet, or Lenis.
 
 ## Gotchas
 
-- **Migration complete**: new and old code coexist. Do not import from old CRA into new Next.js.
-- **Legacy CSS**: `src/styles/*.js` are for old CRA components. Do not touch them.
+- **Migration cleanup done**: no legacy CRA code remains. Do not reintroduce old CRA patterns into the Next.js app.
 - **Test script**: `npm test` runs `vitest run` (Vitest + jsdom + @testing-library/react). Test files colocated as `*.test.js`.
-- **3D blob removed**: R3F/three.js dependency removed. Background blurs in Banner.module.css replace it. The `src/components/3d/` directory is deleted.
+- **3D blob removed**: the R3F/three.js blob is gone (CSS background blurs in Banner.module.css replace it) and the `three`, `@react-three/fiber`, `@react-three/drei`, and `lenis` dependencies are removed from package.json.
 - **Design System v3**: code-editor aesthetic. Fira Code (monospace) for headings and code. Inter for body. Dark-only theme. Pattern tokens for tabs (`--tab-active-stroke: #ffb86a`), code blocks (`--code-bg: #011627`), inputs, file explorers, and foreground containers.
-- **No RevealOnScroll wrappers**: sections handle their own entrance animations inline. Each route renders its section directly.
-- **Preloader removed**: the intro preloader is gone. The `src/components/preloader/` files remain but are unused.
+- **No reveal wrappers**: sections handle their own entrance animations inline. Each route renders its section directly.
+- **Preloader removed**: the intro preloader is gone and its files were deleted in the cleanup.
 - **`react-icons/fa` and `react-icons/si`**: used in Projects section for overlay links.
 - **`react-icons/fi`**: used in Contact and SiteFrame sections for social links (FiGithub, FiLinkedin, FiMail).
 - **Snake game**: canvas-based, self-contained client component. Idle pre-game state (instructions + Start Game) before play; arrow keys and on-screen buttons; food counter; neon teal glow. The game loop is cleared (paused) on win and game over, so the board freezes behind the overlay. Does not block page scroll.
