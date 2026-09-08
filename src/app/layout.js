@@ -3,6 +3,7 @@ import { MotionConfig } from "motion/react";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import PageTransition from "@/components/animations/PageTransition";
 import NoiseOverlay from "@/components/animations/NoiseOverlay";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
 
 const firaCode = Fira_Code({
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
         </a>
         <CustomCursor />
         <NoiseOverlay />
+        <GoogleAnalytics />
         <MotionConfig reducedMotion="user">
           <PageTransition>
             <main id="main-content">{children}</main>

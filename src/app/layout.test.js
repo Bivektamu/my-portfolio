@@ -13,6 +13,9 @@ vi.mock("@/components/animations/PageTransition", () => ({
 vi.mock("@/components/animations/NoiseOverlay", () => ({
   default: () => React.createElement("div", { "data-testid": "mock-noise" }),
 }));
+vi.mock("@/components/analytics/GoogleAnalytics", () => ({
+  default: () => React.createElement("div", { "data-testid": "mock-analytics" }),
+}));
 
 // Re-import next/font/google for inspection (already mocked in test-setup.js)
 import { Fira_Code, Inter } from "next/font/google";
@@ -109,11 +112,12 @@ describe("RootLayout", () => {
       ).toBe(false);
     });
 
-    it("includes PageTransition, CustomCursor, NoiseOverlay", () => {
+    it("includes PageTransition, CustomCursor, NoiseOverlay, GoogleAnalytics", () => {
       render(React.createElement(RootLayout, null, React.createElement("div", null, "child")));
       expect(screen.getByTestId("mock-page-transition")).toBeInTheDocument();
       expect(screen.getByTestId("mock-cursor")).toBeInTheDocument();
       expect(screen.getByTestId("mock-noise")).toBeInTheDocument();
+      expect(screen.getByTestId("mock-analytics")).toBeInTheDocument();
     });
   });
 });

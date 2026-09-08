@@ -79,8 +79,11 @@ All site content lives in static JSON files under `src/data/` — edit `projects
 |---|---|
 | `SMTP_USER` | Gmail address that sends the contact form emails |
 | `SMTP_PASS` | Gmail app password for the address above |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 measurement ID; falls back to `G-V9W1PD2NDW` when unset |
 
 Email sending activates only when both are set. For production, add both in the Netlify dashboard (Site configuration, Environment variables). For local testing, set both values in a local `.env.local` file.
+
+Google Analytics loads only in production builds and never blocks first paint. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in the Netlify dashboard to override the fallback `G-V9W1PD2NDW`; without it the fallback is used.
 
 ## Deployment
 
