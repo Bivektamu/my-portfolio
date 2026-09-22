@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { verifyTurnstile } from "./turnstile";
 
 // Simple in-memory rate limit store.
 // Note: on serverless hosting this store is per instance and ephemeral, so
@@ -113,12 +114,23 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    const { name, email, message } = body;
+    const { name, email, message, captchaToken } = body;
 
     // Server-side validation
     const errors = validate({ name, email, message });
     if (Object.keys(errors).length > 0) {
       return NextResponse.json({ errors }, { status: 400 });
+    }
+
+    // Bot protection. Runs after the cheap guards so a spam burst spends its
+    // rate limit before it can trigger outbound Cloudflare calls. A rejection
+    // uses the { error } shape the client branches on with a 403 status.
+    const verification = await verifyTurnstile(captchaToken, ip);
+    if (!verification.ok) {
+      return NextResponse.json(
+        { error: "We could not verify your submission. Please try again." },
+        { status: 403 }
+      );
     }
 
     // Record the submission without logging personal data, then send the

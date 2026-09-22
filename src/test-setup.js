@@ -88,3 +88,36 @@ vi.mock("react-icons/si", () => ({
 vi.mock("react-icons/im", () => ({
   ImPhone: function (props) { return React.createElement("span", Object.assign({ "data-testid": "icon-im-phone" }, props), "PHONE"); },
 }));
+
+// ── next/script ──
+// Renders a plain script element and wires the load and error handlers with
+// addEventListener, the way a real script element behaves, so a test can fire
+// them explicitly with fireEvent.load / fireEvent.error. GoogleAnalytics.test.js
+// registers its own mock, which takes precedence inside that file.
+vi.mock("next/script", () => ({
+  default: function Script({ id, src, onLoad, onError, children }) {
+    const attach = (el) => {
+      if (!el) return;
+      if (onLoad) el.addEventListener("load", onLoad);
+      if (onError) el.addEventListener("error", onError);
+    };
+    return React.createElement(
+      "script",
+      { id, src, ref: attach, "data-testid": "next-script" },
+      children
+    );
+  },
+}));
+
+// ── Contact form bot protection (ADR 0015) ──
+// Guarantee no test can reach Cloudflare by accident: clear any ambient secret
+// and replace the network with a strict stub. Tests that exercise verification
+// set the env vars and mock fetch explicitly.
+delete process.env.TURNSTILE_SECRET;
+delete process.env.TURNSTILE_HOSTNAMES;
+
+if (!vi.isMockFunction(globalThis.fetch)) {
+  globalThis.fetch = vi.fn(() =>
+    Promise.reject(new Error("Unexpected network call in tests: fetch is not mocked."))
+  );
+}

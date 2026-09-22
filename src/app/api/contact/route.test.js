@@ -377,6 +377,321 @@ describe("Contact API route (POST /api/contact)", () => {
     });
   });
 
+  describe("Bot protection (AC-2, AC-3, AC-4, AC-5)", () => {
+    const originalSecret = process.env.TURNSTILE_SECRET;
+    const originalHostnames = process.env.TURNSTILE_HOSTNAMES;
+
+    const VALID_BODY = {
+      name: "Bivek",
+      email: "bivek@test.com",
+      message: "Hello, I would like to connect with you!",
+    };
+
+    let fetchMock;
+    let consoleWarnSpy;
+    let consoleErrorSpy;
+    let consoleLogSpy;
+
+    function setTurnstileEnv({ secret, hostnames } = {}) {
+      if (secret === undefined) delete process.env.TURNSTILE_SECRET;
+      else process.env.TURNSTILE_SECRET = secret;
+      if (hostnames === undefined) delete process.env.TURNSTILE_HOSTNAMES;
+      else process.env.TURNSTILE_HOSTNAMES = hostnames;
+    }
+
+    function restoreTurnstileEnv() {
+      if (originalSecret === undefined) delete process.env.TURNSTILE_SECRET;
+      else process.env.TURNSTILE_SECRET = originalSecret;
+      if (originalHostnames === undefined) delete process.env.TURNSTILE_HOSTNAMES;
+      else process.env.TURNSTILE_HOSTNAMES = originalHostnames;
+    }
+
+    function siteverifyResponse(body, { ok = true, status = 200 } = {}) {
+      return Promise.resolve({ ok, status, json: async () => body });
+    }
+
+    function siteverifyParams(callIndex = 0) {
+      const body = fetchMock.mock.calls[callIndex][1].body;
+      return body instanceof URLSearchParams ? Object.fromEntries(body) : body;
+    }
+
+    function submitWithToken(token, ips = uniqueIP()) {
+      const body = token === undefined ? { ...VALID_BODY } : { ...VALID_BODY, captchaToken: token };
+      return createRequest(body, { "x-forwarded-for": ips });
+    }
+
+    beforeEach(() => {
+      fetchMock = vi.fn();
+      vi.stubGlobal("fetch", fetchMock);
+      consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      restoreTurnstileEnv();
+      vi.unstubAllGlobals();
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+      consoleLogSpy.mockRestore();
+    });
+
+    it("AC-2, AC-3 accepts a passing token and calls siteverify with the secret, token and IP", async () => {
+      setTurnstileEnv({ secret: "test-secret", hostnames: "bivekgurung.com,www.bivekgurung.com" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "bivekgurung.com" })
+      );
+
+      const ip = uniqueIP();
+      const res = await POST(submitWithToken("token-abc", ip));
+
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.success).toBe(true);
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+      );
+      expect(fetchMock.mock.calls[0][1].method).toBe("POST");
+      const params = siteverifyParams();
+      expect(params.secret).toBe("test-secret");
+      expect(params.response).toBe("token-abc");
+      expect(params.remoteip).toBe(ip);
+    });
+
+    it("AC-4 rejects with 403 and the { error } shape when the token is missing", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+
+      const res = await POST(submitWithToken(undefined));
+
+      expect(res.status).toBe(403);
+      const data = await res.json();
+      expect(data.error).toBeDefined();
+      expect(data.errors).toBeUndefined();
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it("AC-4 rejects an oversized token without calling Cloudflare", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+
+      const res = await POST(submitWithToken("a".repeat(2049)));
+
+      expect(res.status).toBe(403);
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it("AC-4 rejects when success is false and logs the Cloudflare error codes", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: false, "error-codes": ["invalid-input-response"] })
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(403);
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining("invalid-input-response")
+      );
+    });
+
+    it("AC-4 rejects when the action does not match", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "login", hostname: "bivekgurung.com" })
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(403);
+      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining("unexpected action"));
+    });
+
+    it("AC-4 rejects when the hostname is outside the allowlist", async () => {
+      setTurnstileEnv({ secret: "test-secret", hostnames: "bivekgurung.com" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "evil.example" })
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(403);
+    });
+
+    it("AC-3 skips the hostname check when TURNSTILE_HOSTNAMES is unset", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "anything.example" })
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(200);
+    });
+
+    it("AC-5 accepts and logs when TURNSTILE_SECRET is missing", async () => {
+      setTurnstileEnv({});
+
+      const res = await POST(submitWithToken(undefined));
+
+      expect(res.status).toBe(200);
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        expect.stringContaining("TURNSTILE_SECRET not set")
+      );
+    });
+
+    it("AC-5 accepts and logs when the siteverify request fails", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() => Promise.reject(new Error("network down")));
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(200);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("fail open"),
+        expect.anything()
+      );
+    });
+
+    it("AC-5 accepts and logs when siteverify times out", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        Promise.reject(new DOMException("The operation was aborted.", "TimeoutError"))
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(200);
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+
+    it("AC-5 accepts and logs when siteverify answers non 200", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() => siteverifyResponse({}, { ok: false, status: 502 }));
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(200);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining("fail open"));
+    });
+
+    it("AC-5 omits remoteip when no client IP header is present", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "bivekgurung.com" })
+      );
+
+      const res = await POST(createRequest({ ...VALID_BODY, captchaToken: "token-abc" }));
+
+      expect(res.status).toBe(200);
+      const params = siteverifyParams();
+      expect(params.remoteip).toBeUndefined();
+      expect(params.response).toBe("token-abc");
+    });
+
+    it("AC-2 falls back to x-real-ip when it is the only IP header", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "bivekgurung.com" })
+      );
+
+      const res = await POST(
+        createRequest({ ...VALID_BODY, captchaToken: "token-abc" }, { "x-real-ip": "203.0.113.42" })
+      );
+
+      expect(res.status).toBe(200);
+      expect(siteverifyParams().remoteip).toBe("203.0.113.42");
+    });
+
+    it("AC-2 runs the cheap guards first: a validation failure never calls siteverify", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "bivekgurung.com" })
+      );
+
+      const res = await POST(
+        createRequest(
+          { name: "A", email: "not-an-email", message: "short", captchaToken: "token-abc" },
+          { "x-forwarded-for": uniqueIP() }
+        )
+      );
+
+      expect(res.status).toBe(400);
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it("AC-2 runs the cheap guards first: a rate limited request never calls siteverify", async () => {
+      setTurnstileEnv({ secret: "test-secret" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({ success: true, action: "contact", hostname: "bivekgurung.com" })
+      );
+
+      const ip = uniqueIP();
+      for (let i = 0; i < 3; i++) {
+        const res = await POST(submitWithToken("token-" + i, ip));
+        expect(res.status).toBe(200);
+      }
+
+      const limited = await POST(submitWithToken("token-4", ip));
+
+      expect(limited.status).toBe(429);
+      // Three siteverify calls for the three accepted slots, none for the 429.
+      expect(fetchMock).toHaveBeenCalledTimes(3);
+    });
+
+    it("AC-4 keeps the Cloudflare error codes and the secret out of the response body", async () => {
+      setTurnstileEnv({ secret: "super-secret-value" });
+      fetchMock.mockImplementation(() =>
+        siteverifyResponse({
+          success: false,
+          hostname: "bivekgurung.com",
+          "error-codes": ["invalid-input-response"],
+        })
+      );
+
+      const res = await POST(submitWithToken("token-abc"));
+
+      expect(res.status).toBe(403);
+      const raw = JSON.stringify(await res.json());
+      expect(raw).toContain("We could not verify your submission");
+      expect(raw).not.toContain("invalid-input-response");
+      expect(raw).not.toContain("super-secret-value");
+      expect(raw).not.toContain("siteverify");
+    });
+
+    it("AC-4 a rejected submission is never emailed to the owner", async () => {
+      const originalUser = process.env.SMTP_USER;
+      const originalPass = process.env.SMTP_PASS;
+      process.env.SMTP_USER = "owner@gmail.com";
+      process.env.SMTP_PASS = "app-password";
+      emailMocks.createTransport.mockClear();
+      emailMocks.sendMail.mockClear();
+      emailMocks.createTransport.mockReturnValue({ sendMail: emailMocks.sendMail });
+
+      try {
+        setTurnstileEnv({ secret: "test-secret" });
+        fetchMock.mockImplementation(() => siteverifyResponse({ success: false }));
+
+        const res = await POST(submitWithToken("token-abc"));
+
+        expect(res.status).toBe(403);
+        // The transport is built inside sendEmails, so an untouched mock proves
+        // the rejection returned before any email work started.
+        expect(emailMocks.createTransport).not.toHaveBeenCalled();
+        expect(emailMocks.sendMail).not.toHaveBeenCalled();
+      } finally {
+        if (originalUser === undefined) delete process.env.SMTP_USER;
+        else process.env.SMTP_USER = originalUser;
+        if (originalPass === undefined) delete process.env.SMTP_PASS;
+        else process.env.SMTP_PASS = originalPass;
+      }
+    });
+  });
+
 });
 
 // NOT_COVERED: real inbox delivery stays manual because it needs a live SMTP account and inbox.
+// NOT_COVERED: a real Turnstile token cannot be minted without a browser and a live widget,
+// so the live Cloudflare answer is confirmed by /verify instead.
+// Turnstile branch coverage for the helper itself lives in src/app/api/contact/turnstile.test.js.

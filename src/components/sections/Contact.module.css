@@ -138,6 +138,12 @@
   font-weight: 700;
 }
 
+/* ── Bot protection widget ── */
+/* Reserves the widget's height so the form does not jump when it appears. */
+.turnstile {
+  min-height: 65px;
+}
+
 .submitBtn {
   align-self: flex-start;
   padding: 12px 32px;
